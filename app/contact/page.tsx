@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     "Contact GSTradeLink for product enquiries, weighing machine service, and spare parts support in Chitwan.",
 };
 
-const WA_BASE = "https://wa.me/9779765662427?text=";
+const WA_BASE = "https://wa.me/9779845541939?text=";
 
 const WA_TEMPLATES = [
   {
@@ -466,7 +466,7 @@ export default function ContactPage() {
               {
                 icon: MapPin,
                 label: "Store Location",
-                value: "Bharatpur-10, Chitwan, Nepal",
+                value: "Bharatpur-3, Chitwan, Nepal",
                 href: "https://maps.google.com/?q=Bharatpur+Chitwan+Nepal",
                 iconBg: "#3E5E85",
                 accent: "#EEF4FB",
@@ -1035,7 +1035,7 @@ export default function ContactPage() {
                         lineHeight: 1.5,
                       }}
                     >
-                      Bharatpur-10, Chitwan, Nepal
+                      Bharatpur-3, Chitwan, Nepal
                     </p>
                     <a
                       href="https://maps.google.com/?q=Bharatpur+Chitwan+Nepal"

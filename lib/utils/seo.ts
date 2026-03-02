@@ -8,7 +8,7 @@ export const BUSINESS_INFO: BusinessInfo = {
   description:
     "Authorized dealer for digital scales, beam balances, and weighing equipment in Bharatpur, Chitwan. Expert repair services and genuine spare parts available.",
   address: {
-    street: "Bharatpur-10",
+    street: "Bharatpur-3",
     city: "Bharatpur",
     district: "Chitwan",
     country: "Nepal",
@@ -132,8 +132,8 @@ export function generateMetadata(seo: SEOProps): Metadata {
     // Canonical URL
     alternates: canonical
       ? {
-          canonical,
-        }
+        canonical,
+      }
       : undefined,
 
     // Additional meta tags

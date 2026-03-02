@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     "Professional weighing scale repair, OIML calibration, and maintenance services in Bharatpur, Chitwan. On-site service with 24-hour response time.",
 };
 
-const WA_BASE = "https://wa.me/9779765662427?text=";
+const WA_BASE = "https://wa.me/9779845541939?text=";
 
 const MAIN_SERVICES = [
   {

@@ -168,7 +168,7 @@ export const Navbar = () => {
               <span>Open all days except Monday · 10:00 AM – 6:00 PM</span>
             </div>
             <a
-              href="https://wa.me/9779765662427"
+              href="https://wa.me/9779845541939"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-sm transition-colors hover:text-white"
@@ -297,7 +297,7 @@ export const Navbar = () => {
 
               <div className="ml-4 pl-8 border-l border-border-primary flex items-center gap-3">
                 <a
-                  href="https://wa.me/9779765662427"
+                  href="https://wa.me/9779845541939"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold transition-all whitespace-nowrap hover:-translate-y-0.5"
@@ -362,20 +362,47 @@ export const Navbar = () => {
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={toggleMenu}
-              className="lg:hidden p-2 rounded-lg text-foreground-secondary hover:text-foreground-primary hover:bg-background-secondary transition-colors"
-              aria-label="Toggle menu"
-              aria-expanded={isOpen}
-            >
-              <motion.div
-                animate={{ rotate: isOpen ? 90 : 0 }}
-                transition={{ duration: 0.2 }}
+            <div className="flex items-center gap-3 lg:hidden">
+              {/* Auth: Avatar / Login for Mobile */}
+              {user ? (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-primary-200"
+                  style={{ background: "#3E5E85", color: "#fff" }}
+                  title={user.email ?? "Account"}
+                >
+                  {user.user_metadata?.avatar_url ? (
+                    <Image src={user.user_metadata.avatar_url} alt="Avatar" width={32} height={32} className="w-full h-full rounded-full object-cover" />
+                  ) : (
+                    user.email?.[0]?.toUpperCase() ?? <User size={14} />
+                  )}
+                </button>
+              ) : (
+                <Link
+                  href="/admin/login"
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-primary-50"
+                  style={{ border: "1.5px solid #CBDCEB", color: "#3E5E85" }}
+                  title="Admin Login"
+                >
+                  <User size={14} />
+                </Link>
+              )}
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={toggleMenu}
+                className="p-2 rounded-lg text-foreground-secondary hover:text-foreground-primary hover:bg-background-secondary transition-colors"
+                aria-label="Toggle menu"
+                aria-expanded={isOpen}
               >
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </motion.div>
-            </button>
+                <motion.div
+                  animate={{ rotate: isOpen ? 90 : 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isOpen ? <X size={24} /> : <Menu size={24} />}
+                </motion.div>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -689,7 +716,7 @@ export const Navbar = () => {
                     }}
                   >
                     <a
-                      href="https://wa.me/9779765662427"
+                      href="https://wa.me/9779845541939"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => setIsOpen(false)}

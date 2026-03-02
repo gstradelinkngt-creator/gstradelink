@@ -233,7 +233,7 @@ export default async function Home() {
               Shop Products <ArrowRight size={15} />
             </Link>
             <a
-              href="https://wa.me/9779765662427"
+              href="https://wa.me/9779845541939"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:-translate-y-0.5 transition-all"
@@ -562,7 +562,7 @@ export default async function Home() {
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
                 {featuredProducts.map((product) => {
                   const waMsg = `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`;
-                  const waLink = `https://wa.me/9779765662427?text=${encodeURIComponent(waMsg)}`;
+                  const waLink = `https://wa.me/9779845541939?text=${encodeURIComponent(waMsg)}`;
                   return (
                     <div
                       key={product.id}
@@ -814,7 +814,7 @@ export default async function Home() {
                 {
                   icon: MapPin,
                   title: "Walk-in Store",
-                  desc: "Visit us at Bharatpur-10, Chitwan — showroom open Mon to Sat, 10 AM – 6 PM.",
+                  desc: "Visit us at Bharatpur-3, Chitwan — showroom open Mon to Sat, 10 AM – 6 PM.",
                   iconBg: "#3E5E85",
                   cardBorder: "#CBDCEB",
                 },
@@ -955,7 +955,7 @@ export default async function Home() {
               }}
             >
               <a
-                href="https://wa.me/9779765662427"
+                href="https://wa.me/9779845541939"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:-translate-y-0.5 transition-all"

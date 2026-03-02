@@ -49,7 +49,7 @@ export default async function ProductDetailPage(props: {
   if (error || !product) notFound();
 
   const waMsg = `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`;
-  const waLink = `https://wa.me/9779765662427?text=${encodeURIComponent(waMsg)}`;
+  const waLink = `https://wa.me/9779845541939?text=${encodeURIComponent(waMsg)}`;
 
   return (
     <div className="min-h-screen bg-background-secondary pb-28 md:pb-12">
@@ -280,34 +280,8 @@ export default async function ProductDetailPage(props: {
         </div>
       </section>
 
-      {/* ── Mobile sticky CTA ───────────────────────────────────── */}
-      <div
-        className="fixed bottom-0 left-0 w-full px-4 sm:px-6 pb-6 pt-4 md:hidden z-40"
-        style={{
-          background: "linear-gradient(to top, #E8EBE3 60%, transparent)",
-        }}
-      >
-        <div className="max-w-lg mx-auto">
-          <a
-            href={waLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 font-bold active:scale-[0.98] transition-all"
-            style={{
-              height: "48px",
-              borderRadius: "4px",
-              background: "#25D366",
-              color: "#ffffff",
-              fontSize: "0.9rem",
-              textDecoration: "none",
-              boxShadow: "0 4px 16px rgba(37,211,102,0.4)",
-            }}
-          >
-            <MessageCircle size={18} fill="white" />
-            Enquire on WhatsApp
-          </a>
-        </div>
-      </div>
+      {/* Mobile spacing padding to prevent bottom nav collision */}
+      <div className="h-10 md:hidden" />
     </div>
   );
 }
