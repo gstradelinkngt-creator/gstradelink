@@ -267,8 +267,8 @@ export const Footer = ({ className }: { className?: string }) => {
             {[
               {
                 icon: MapPin,
-                text: "Bharatpur-10, Chitwan, Nepal",
-                href: undefined,
+                text: "Bharatpur-3, Chitwan, Nepal",
+                href: "https://www.google.com/maps/place/G.+S+Trade+link+(+Taraju+pasa)/@27.6920136,84.4236706,19z/data=!4m10!1m2!2m1!1sgs+trade+link+chitwan!3m6!1s0x3994fb007174d2ff:0x18e2ebfc7038baf7!8m2!3d27.6920149!4d84.4244971!15sChVncyB0cmFkZSBsaW5rIGNoaXR3YW6SAQp3aG9sZXNhbGVy4AEA!16s%2Fg%2F11lf1yxdwc?entry=ttu",
               },
               {
                 icon: Phone,

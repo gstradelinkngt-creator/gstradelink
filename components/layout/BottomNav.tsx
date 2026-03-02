@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Home, Package, Phone, ChevronUp, ChevronDown } from "lucide-react";
+import { Home, Package, Phone, ChevronUp, ChevronDown, GripHorizontal } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 export const BottomNav = () => {
   const pathname = usePathname();
@@ -17,32 +18,46 @@ export const BottomNav = () => {
   ];
 
   return (
-    <div
+    <motion.div
+      drag
+      dragMomentum={false}
+      dragElastic={0.05}
+      whileDrag={{ scale: 1.02, cursor: "grabbing" }}
       className={cn(
-        "fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ease-out",
+        "fixed z-50 transition-[bottom] duration-300 ease-out cursor-grab active:cursor-grabbing",
         isCollapsed ? "bottom-3" : "bottom-5",
       )}
+      style={{ left: "50%", x: "-50%" }}
     >
-      {/* Collapse/Expand Toggle Button */}
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute -top-3 left-1/2 -translate-x-1/2 w-8 h-5 bg-[#1A2433] rounded-t-lg flex items-center justify-center text-white/60 hover:text-white transition-colors z-10"
-        style={{
-          boxShadow: "0 -4px 12px rgba(26, 36, 51, 0.3)",
-        }}
-        aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
+      {/* Drag Indicator / Collapse Toggle Section */}
+      <div
+        className="absolute -top-4 w-full flex justify-center pb-1 cursor-grab active:cursor-grabbing"
       >
-        {isCollapsed ? (
-          <ChevronUp size={14} strokeWidth={2.5} />
-        ) : (
-          <ChevronDown size={14} strokeWidth={2.5} />
-        )}
-      </button>
+        <div className="bg-[#1A2433] rounded-t-xl px-2.5 pt-0.5 pb-2 flex flex-col items-center gap-0.5"
+          style={{ boxShadow: "0 -4px 12px rgba(26, 36, 51, 0.3)" }}
+        >
+          <GripHorizontal size={14} className="text-white/40 mb-1" />
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsCollapsed(!isCollapsed);
+            }}
+            className="w-full flex items-center justify-center text-white/60 hover:text-white transition-colors z-10"
+            aria-label={isCollapsed ? "Expand navigation" : "Collapse navigation"}
+          >
+            {isCollapsed ? (
+              <ChevronUp size={14} strokeWidth={2.5} />
+            ) : (
+              <ChevronDown size={14} strokeWidth={2.5} />
+            )}
+          </button>
+        </div>
+      </div>
 
       {/* Main Navigation Bar */}
       <div
         className={cn(
-          "bg-[#1A2433] flex items-center justify-around transition-all duration-300 ease-out overflow-hidden",
+          "bg-[#1A2433] flex items-center justify-around transition-all duration-300 ease-out overflow-hidden relative",
           isCollapsed ? "w-[160px] px-3 py-2" : "w-[92vw] max-w-sm px-4 py-2.5",
         )}
         style={{
@@ -61,7 +76,7 @@ export const BottomNav = () => {
               : pathname.startsWith(item.href) && item.href !== "/";
 
           const itemClassName = cn(
-            "relative flex items-center justify-center transition-all duration-300",
+            "relative flex items-center justify-center transition-all duration-300 pointer-events-auto",
             isCollapsed
               ? "px-2 py-1.5"
               : "flex-col gap-0.5 px-4 py-2 min-w-[56px]",
@@ -112,6 +127,7 @@ export const BottomNav = () => {
                 className={itemClassName}
                 aria-label={item.label}
                 title={isCollapsed ? item.label : undefined}
+                onPointerDown={(e) => e.stopPropagation()}
               >
                 {content}
               </a>
@@ -125,12 +141,13 @@ export const BottomNav = () => {
               className={itemClassName}
               aria-label={item.label}
               title={isCollapsed ? item.label : undefined}
+              onPointerDown={(e) => e.stopPropagation()}
             >
               {content}
             </Link>
           );
         })}
       </div>
-    </div>
+    </motion.div>
   );
 };

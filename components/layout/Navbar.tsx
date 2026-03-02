@@ -674,7 +674,7 @@ export const Navbar = () => {
                           style={{ color: "#93B2D6" }}
                         >
                           <MapPin size={15} style={{ color: "#DCA963" }} />
-                          <span className="text-sm">Bharatpur-10, Chitwan</span>
+                          <span className="text-sm">Bharatpur-3, Chitwan</span>
                         </div>
                       </div>
                     </div>
