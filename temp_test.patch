@@ -1,0 +1,9 @@
+--- middleware.ts
++++ middleware.ts
+@@ -23,6 +23,8 @@
+     } = await supabase.auth.getUser();
+ 
++    console.log("[middleware] checking user:", userError, user?.id);
++
+     if (userError || !user) {
+       const loginUrl = new URL("/admin/login", request.url);

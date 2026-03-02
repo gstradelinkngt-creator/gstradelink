@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Menu,
@@ -18,8 +18,13 @@ import {
   MapPin,
   Clock,
   MessageCircle,
+  User,
+  LogOut,
+  Shield,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface NavItem {
   label: string;
@@ -31,7 +36,28 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  // Auth state listener
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    setShowUserMenu(false);
+    router.refresh();
+  };
 
   const navItems: NavItem[] = [
     { label: "Home", href: "/" },
@@ -269,7 +295,7 @@ export const Navbar = () => {
                 </div>
               ))}
 
-              <div className="ml-4 pl-8 border-l border-border-primary flex items-center">
+              <div className="ml-4 pl-8 border-l border-border-primary flex items-center gap-3">
                 <a
                   href="https://wa.me/9779765662427"
                   target="_blank"
@@ -285,6 +311,54 @@ export const Navbar = () => {
                 >
                   Get Quote
                 </a>
+
+                {/* Auth: Avatar / Login */}
+                {user ? (
+                  <div className="relative">
+                    <button
+                      onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-primary-200"
+                      style={{ background: "#3E5E85", color: "#fff" }}
+                      title={user.email ?? "Account"}
+                    >
+                      {user.user_metadata?.avatar_url ? (
+                        <Image src={user.user_metadata.avatar_url} alt="Avatar" width={36} height={36} className="w-full h-full rounded-full object-cover" />
+                      ) : (
+                        user.email?.[0]?.toUpperCase() ?? <User size={16} />
+                      )}
+                    </button>
+                    <AnimatePresence>
+                      {showUserMenu && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute top-full right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-border-primary p-2 z-50"
+                        >
+                          <div className="px-3 py-2 mb-1 border-b border-border-primary">
+                            <p className="text-xs font-semibold text-foreground-primary truncate">{user.email}</p>
+                          </div>
+                          <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-foreground-secondary hover:text-primary-600 hover:bg-primary-50 transition-colors" onClick={() => setShowUserMenu(false)}>
+                            <Shield size={14} /> Admin Panel
+                          </Link>
+                          <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
+                            <LogOut size={14} /> Sign Out
+                          </button>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    href="/admin/login"
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-primary-50"
+                    style={{ border: "1.5px solid #CBDCEB", color: "#3E5E85" }}
+                    title="Admin Login"
+                  >
+                    <User size={16} />
+                  </Link>
+                )}
               </div>
             </div>
 
@@ -476,7 +550,7 @@ export const Navbar = () => {
                                     className={cn(
                                       "transition-transform duration-200",
                                       activeDropdown === item.label &&
-                                        "rotate-180",
+                                      "rotate-180",
                                     )}
                                     style={{
                                       color: isActive

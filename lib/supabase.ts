@@ -1,13 +1,11 @@
-import { createClient } from "@supabase/supabase-js";
+/**
+ * Backward-compatible re-export.
+ *
+ * Client components that `import { supabase } from "@/lib/supabase"`
+ * continue to work. New code should import from:
+ *   - `@/lib/supabase/client` for browser components ("use client")
+ *   - `@/lib/supabase/server` for Server Components / Route Handlers
+ */
+import { createClient } from "./supabase/client";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error(
-    "Missing Supabase environment variables.\n" +
-      "Ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set in .env.local",
-  );
-}
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient();

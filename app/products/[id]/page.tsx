@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import {
   ArrowLeft,
   MessageCircle,
@@ -17,6 +17,7 @@ export async function generateMetadata(props: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await props.params;
+  const supabase = await createClient();
   const { data: product } = await supabase
     .from("products")
     .select("name, short_description, category")
@@ -37,6 +38,7 @@ export default async function ProductDetailPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await props.params;
+  const supabase = await createClient();
 
   const { data: product, error } = await supabase
     .from("products")

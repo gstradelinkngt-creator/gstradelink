@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -22,6 +22,7 @@ import { InteractiveMarquee } from "@/components/ui/InteractiveMarquee";
 export const revalidate = 60;
 
 async function getFeaturedCategories() {
+  const supabase = await createClient();
   const categories = [
     "Precision & Pocket Mini Scales",
     "Kitchen & Compact Tabletop Scales",
@@ -47,6 +48,7 @@ async function getFeaturedCategories() {
 }
 
 async function getFeaturedProducts() {
+  const supabase = await createClient();
   const { data } = await supabase
     .from("products")
     .select("id, name, short_description, category, image_url")

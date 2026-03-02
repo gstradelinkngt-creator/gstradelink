@@ -22,5 +22,8 @@ export default function AdminLayout({
 }) {
   // SiteShell (root layout) detects /admin pathname and renders
   // children directly — no public Navbar or Footer is injected.
-  return <>{children}</>;
+  // The admin-dark class activates dark-scoped CSS var overrides so
+  // global light-mode input/select styles don't bleed into the dark UI.
+  return <div className="admin-dark">{children}</div>;
 }
+

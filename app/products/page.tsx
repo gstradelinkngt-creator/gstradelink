@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoryFilterBar } from "@/components/products/CategoryFilterBar";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { Search, Sparkles, Wrench, X } from "lucide-react";
 import type { Product } from "@/types";
 import type { CategoryChip } from "@/components/products/CategoryFilterBar";
@@ -55,6 +55,7 @@ export default async function ProductsPage(props: {
   const searchQuery = rawQuery.slice(0, 60);
 
   // ── Fetch products ──────────────────────────────────────────────────────────
+  const supabase = await createClient();
   let request = supabase
     .from("products")
     .select("id, name, short_description, category, image_url, is_active")
