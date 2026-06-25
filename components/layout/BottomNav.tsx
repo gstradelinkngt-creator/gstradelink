@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Home, Package, Phone, ChevronUp, ChevronDown, GripHorizontal } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,6 +10,8 @@ import { motion } from "framer-motion";
 export const BottomNav = () => {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  // Full-viewport reference so framer keeps the floating nav on-screen.
+  const constraintsRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
     { icon: Home, href: "/", label: "Home", external: false },
@@ -18,8 +20,15 @@ export const BottomNav = () => {
   ];
 
   return (
+    <>
+    <div
+      ref={constraintsRef}
+      aria-hidden="true"
+      className="fixed inset-0 z-40 pointer-events-none"
+    />
     <motion.div
       drag
+      dragConstraints={constraintsRef}
       dragMomentum={false}
       dragElastic={0.05}
       whileDrag={{ scale: 1.02, cursor: "grabbing" }}
@@ -149,5 +158,6 @@ export const BottomNav = () => {
         })}
       </div>
     </motion.div>
+    </>
   );
 };

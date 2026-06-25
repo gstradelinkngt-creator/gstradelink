@@ -22,7 +22,7 @@ import {
   LogOut,
   Shield,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getStoreOpenState } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
@@ -38,8 +38,18 @@ export const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  // Live store-open state (closed Mon · 10 AM–6 PM). Computed client-side so it
+  // reflects the visitor's current time; re-checked every minute.
+  const [storeOpen, setStoreOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const update = () => setStoreOpen(getStoreOpenState().open);
+    update();
+    const id = setInterval(update, 60_000);
+    return () => clearInterval(id);
+  }, []);
 
   // Auth state listener
   useEffect(() => {
@@ -491,12 +501,14 @@ export const Navbar = () => {
                         <div
                           className="w-2 h-2 rounded-full"
                           style={{
-                            background: "#25D366",
-                            boxShadow: "0 0 8px rgba(37,211,102,0.6)",
+                            background: storeOpen ? "#25D366" : "#EF4444",
+                            boxShadow: storeOpen
+                              ? "0 0 8px rgba(37,211,102,0.6)"
+                              : "0 0 8px rgba(239,68,68,0.5)",
                           }}
                         />
                         <span style={{ color: "rgba(255,255,255,0.7)" }}>
-                          Open Now
+                          {storeOpen ? "Open now" : "Closed now"}
                         </span>
                       </div>
                       <div

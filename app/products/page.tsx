@@ -110,7 +110,7 @@ export default async function ProductsPage(props: {
 
   return (
     <div
-      className="min-h-screen pb-28 md:pb-16"
+      className="min-h-screen md:pb-16"
       style={{ background: "#F4F6F2" }}
     >
       {/* ═══════════════════════════════════════════════════════════════════════

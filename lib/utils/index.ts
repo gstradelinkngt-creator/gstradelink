@@ -583,3 +583,22 @@ export async function retry<T>(
 
   throw lastError!;
 }
+
+// ===== STORE HOURS =====
+/**
+ * GSTradeLink store hours: open every day EXCEPT Monday, 10:00 AM – 6:00 PM.
+ * Returns whether the store is currently open plus a short human label.
+ * Note: uses the visitor's local time (customers are local to Chitwan).
+ */
+export function getStoreOpenState(now: Date = new Date()): {
+  open: boolean;
+  label: string;
+} {
+  const day = now.getDay(); // 0 = Sunday … 6 = Saturday
+  const minutes = now.getHours() * 60 + now.getMinutes();
+  const OPEN_AT = 10 * 60; // 10:00
+  const CLOSE_AT = 18 * 60; // 18:00
+  const isClosedDay = day === 1; // Monday
+  const open = !isClosedDay && minutes >= OPEN_AT && minutes < CLOSE_AT;
+  return { open, label: open ? "Open now" : "Closed" };
+}

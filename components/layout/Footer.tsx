@@ -342,11 +342,11 @@ export const Footer = ({ className }: { className?: string }) => {
           style={{ maxWidth: "72rem", margin: "0 auto" }}
           className="flex flex-col sm:flex-row items-center justify-between gap-2"
         >
-          <p style={{ fontSize: "0.75rem", color: "#4A6070" }}>
+          <p style={{ fontSize: "0.75rem", color: "#8D9CAF" }}>
             © {new Date().getFullYear()} GSTradeLink. All rights reserved.
           </p>
           <div className="flex items-center gap-3">
-            <p style={{ fontSize: "0.75rem", color: "#4A6070" }}>
+            <p style={{ fontSize: "0.75rem", color: "#8D9CAF" }}>
               Bharatpur, Chitwan, Nepal
             </p>
             {/* Discreet admin access — intentionally low-visibility */}

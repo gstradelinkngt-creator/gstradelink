@@ -52,7 +52,7 @@ export default async function ProductDetailPage(props: {
   const waLink = `https://wa.me/9779845541939?text=${encodeURIComponent(waMsg)}`;
 
   return (
-    <div className="min-h-screen bg-background-secondary pb-28 md:pb-12">
+    <div className="min-h-screen bg-background-secondary md:pb-12">
       {/* ── Breadcrumb bar ──────────────────────────────────────── */}
       <section style={{ background: "#1A2433" }} className="text-white">
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
@@ -280,8 +280,6 @@ export default async function ProductDetailPage(props: {
         </div>
       </section>
 
-      {/* Mobile spacing padding to prevent bottom nav collision */}
-      <div className="h-10 md:hidden" />
     </div>
   );
 }

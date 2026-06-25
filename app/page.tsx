@@ -340,7 +340,7 @@ export default async function Home() {
                   className="hidden sm:block"
                   style={{
                     fontSize: "0.68rem",
-                    color: "#5C6B7B",
+                    color: "#93B2D6",
                     lineHeight: 1.3,
                   }}
                 >
@@ -647,7 +647,7 @@ export default async function Home() {
                           <p
                             className="line-clamp-1"
                             style={{
-                              color: "#AAAAAA",
+                              color: "#5C6B7B",
                               fontSize: "0.72rem",
                               marginBottom: "10px",
                             }}

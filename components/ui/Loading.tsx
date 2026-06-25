@@ -113,13 +113,13 @@ export function LoadingBar({
   const colorClasses = {
     primary: "bg-brand-primary",
     accent: "bg-brand-accent",
-    success: "bg-status-success",
+    success: "bg-success-500",
   };
 
   return (
     <div
       className={cn(
-        "w-full bg-bg-alt rounded-full overflow-hidden",
+        "w-full bg-background-secondary rounded-full overflow-hidden",
         heightClasses[height],
         className
       )}
@@ -176,7 +176,7 @@ export function Skeleton({
   return (
     <div
       className={cn(
-        "bg-bg-alt",
+        "bg-background-secondary",
         variantClasses[variant],
         animated && "animate-pulse",
         className
@@ -220,7 +220,7 @@ export function FullPageLoading({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg-main">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background-secondary">
       <div className="text-center space-y-6">
         {showLogo && (
           <div className="flex flex-col items-center space-y-4">
@@ -290,7 +290,7 @@ export function LoadingOverlay({
 // ===== CARD LOADING SKELETON =====
 export function CardLoadingSkeleton() {
   return (
-    <div className="bg-bg-card rounded-xl p-6 shadow-card animate-pulse">
+    <div className="bg-background-card rounded-xl p-6 shadow-card animate-pulse">
       <div className="space-y-4">
         <Skeleton variant="rectangular" height="200px" />
         <div className="space-y-2">
@@ -409,7 +409,7 @@ export function LoadingWithRetry({
     return (
       <div className="text-center py-12">
         <div className="space-y-4">
-          <p className="text-status-error font-medium">
+          <p className="text-danger-500 font-medium">
             {error}
           </p>
           {onRetry && (

@@ -6,14 +6,14 @@ import { cn } from "@/lib/utils";
 import { Eye, EyeOff, AlertCircle, CheckCircle, Info } from "lucide-react";
 
 const inputVariants = cva(
-  "flex w-full rounded-lg border bg-bg-card px-3 py-2 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-text-muted focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+  "flex w-full rounded-lg border bg-background-card px-3 py-2 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-foreground-muted focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
         default: "border-brand-muted focus-visible:border-brand-accent focus-visible:ring-2 focus-visible:ring-brand-accent/20",
-        error: "border-status-error focus-visible:border-status-error focus-visible:ring-2 focus-visible:ring-status-error/20 bg-status-error/5",
-        success: "border-status-success focus-visible:border-status-success focus-visible:ring-2 focus-visible:ring-status-success/20 bg-status-success/5",
-        warning: "border-status-warning focus-visible:border-status-warning focus-visible:ring-2 focus-visible:ring-status-warning/20 bg-status-warning/5",
+        error: "border-danger-500 focus-visible:border-danger-500 focus-visible:ring-2 focus-visible:ring-danger-500/20 bg-danger-500/5",
+        success: "border-success-500 focus-visible:border-success-500 focus-visible:ring-2 focus-visible:ring-success-500/20 bg-success-500/5",
+        warning: "border-warning-500 focus-visible:border-warning-500 focus-visible:ring-2 focus-visible:ring-warning-500/20 bg-warning-500/5",
       },
       size: {
         sm: "h-9 px-3 text-sm",
@@ -33,10 +33,10 @@ const labelVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-text-primary",
-        error: "text-status-error",
-        success: "text-status-success",
-        warning: "text-status-warning",
+        default: "text-foreground-primary",
+        error: "text-danger-500",
+        success: "text-success-500",
+        warning: "text-warning-500",
       },
     },
     defaultVariants: {
@@ -124,7 +124,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const getRightIcon = () => {
       if (loading) {
         return (
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-brand-primary"></div>
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
         );
       }
 
@@ -133,7 +133,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="text-text-muted hover:text-text-primary transition-colors focus:outline-none focus:text-text-primary"
+            className="text-foreground-muted hover:text-foreground-primary transition-colors focus:outline-none focus:text-foreground-primary"
             aria-label={showPassword ? "Hide password" : "Show password"}
             tabIndex={-1}
           >
@@ -143,15 +143,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       }
 
       if (error) {
-        return <AlertCircle size={16} className="text-status-error" aria-hidden="true" />;
+        return <AlertCircle size={16} className="text-danger-500" aria-hidden="true" />;
       }
 
       if (success) {
-        return <CheckCircle size={16} className="text-status-success" aria-hidden="true" />;
+        return <CheckCircle size={16} className="text-success-500" aria-hidden="true" />;
       }
 
       if (warning) {
-        return <Info size={16} className="text-status-warning" aria-hidden="true" />;
+        return <Info size={16} className="text-warning-500" aria-hidden="true" />;
       }
 
       return rightIcon;
@@ -169,7 +169,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           >
             {label}
             {required && (
-              <span className="text-status-error ml-1" aria-label="Required">
+              <span className="text-danger-500 ml-1" aria-label="Required">
                 *
               </span>
             )}
@@ -178,7 +178,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative">
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-muted pointer-events-none">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted pointer-events-none">
               {leftIcon}
             </div>
           )}
@@ -228,9 +228,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div
               className={cn(
                 "absolute inset-0 rounded-lg pointer-events-none border-2",
-                currentVariant === "error" && "border-status-error/30",
-                currentVariant === "success" && "border-status-success/30",
-                currentVariant === "warning" && "border-status-warning/30",
+                currentVariant === "error" && "border-danger-500/30",
+                currentVariant === "success" && "border-success-500/30",
+                currentVariant === "warning" && "border-warning-500/30",
                 currentVariant === "default" && "border-brand-accent/30"
               )}
               aria-hidden="true"
@@ -242,7 +242,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {hint && !error && !success && !warning && (
           <p
             id={`${inputId}-hint`}
-            className={cn("text-xs text-text-muted", hintClassName)}
+            className={cn("text-xs text-foreground-muted", hintClassName)}
           >
             {hint}
           </p>
@@ -253,7 +253,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <p
             id={`${inputId}-error`}
             className={cn(
-              "text-xs text-status-error flex items-center gap-1",
+              "text-xs text-danger-500 flex items-center gap-1",
               errorClassName
             )}
             role="alert"
@@ -268,7 +268,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {success && (
           <p
             id={`${inputId}-success`}
-            className="text-xs text-status-success flex items-center gap-1"
+            className="text-xs text-success-500 flex items-center gap-1"
             role="status"
             aria-live="polite"
           >
@@ -281,7 +281,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {warning && (
           <p
             id={`${inputId}-warning`}
-            className="text-xs text-status-warning flex items-center gap-1"
+            className="text-xs text-warning-500 flex items-center gap-1"
             role="alert"
             aria-live="polite"
           >
@@ -367,7 +367,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           >
             {label}
             {required && (
-              <span className="text-status-error ml-1" aria-label="Required">
+              <span className="text-danger-500 ml-1" aria-label="Required">
                 *
               </span>
             )}
@@ -418,9 +418,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             <div
               className={cn(
                 "absolute inset-0 rounded-lg pointer-events-none border-2",
-                currentVariant === "error" && "border-status-error/30",
-                currentVariant === "success" && "border-status-success/30",
-                currentVariant === "warning" && "border-status-warning/30",
+                currentVariant === "error" && "border-danger-500/30",
+                currentVariant === "success" && "border-success-500/30",
+                currentVariant === "warning" && "border-warning-500/30",
                 currentVariant === "default" && "border-brand-accent/30"
               )}
               aria-hidden="true"
@@ -429,7 +429,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
           {loading && (
             <div className="absolute right-3 top-3">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-brand-primary"></div>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
             </div>
           )}
         </div>
@@ -438,7 +438,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {hint && !error && !success && !warning && (
           <p
             id={`${textareaId}-hint`}
-            className={cn("text-xs text-text-muted", hintClassName)}
+            className={cn("text-xs text-foreground-muted", hintClassName)}
           >
             {hint}
           </p>
@@ -449,7 +449,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           <p
             id={`${textareaId}-error`}
             className={cn(
-              "text-xs text-status-error flex items-center gap-1",
+              "text-xs text-danger-500 flex items-center gap-1",
               errorClassName
             )}
             role="alert"
@@ -464,7 +464,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {success && (
           <p
             id={`${textareaId}-success`}
-            className="text-xs text-status-success flex items-center gap-1"
+            className="text-xs text-success-500 flex items-center gap-1"
             role="status"
             aria-live="polite"
           >
@@ -477,7 +477,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {warning && (
           <p
             id={`${textareaId}-warning`}
-            className="text-xs text-status-warning flex items-center gap-1"
+            className="text-xs text-warning-500 flex items-center gap-1"
             role="alert"
             aria-live="polite"
           >

@@ -82,8 +82,8 @@ export default function Loading() {
       </section>
 
       {/* ── Product grid skeleton ───────────────────────────────── */}
-      <section className="max-w-[1600px] w-full px-4 sm:px-6 lg:px-8 xl:px-12 mt-4 sm:mt-5 mx-auto">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-3 sm:gap-4 md:gap-5">
+      <section className="max-w-[1400px] w-full px-4 sm:px-6 lg:px-8 mt-4 sm:mt-5 mx-auto">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5 lg:gap-6">
           {Array.from({ length: 12 }).map((_, i) => (
             <div
               key={i}
@@ -99,7 +99,7 @@ export default function Loading() {
               <div
                 className="animate-pulse"
                 style={{
-                  aspectRatio: "1/1",
+                  aspectRatio: "4/3",
                   background: `rgba(62,94,133,${0.04 + (i % 3) * 0.02})`,
                 }}
               />

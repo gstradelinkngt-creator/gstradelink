@@ -83,7 +83,7 @@ export default function ContactPage() {
 
   return (
     <div
-      className="min-h-screen pb-24 md:pb-12"
+      className="min-h-screen md:pb-12"
       style={{ background: "#E8EBE3" }}
     >
       {/* ═══════════════════════════════════════════════════════════

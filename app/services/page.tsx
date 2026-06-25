@@ -140,7 +140,7 @@ const PROCESS_STEPS = [
 export default function ServicesPage() {
   return (
     <div
-      className="min-h-screen pb-24 md:pb-16"
+      className="min-h-screen md:pb-16"
       style={{ background: "#F4F6F2" }}
     >
       {/* ═══════════════════════════════════════════════════════════════════════
@@ -305,7 +305,7 @@ export default function ServicesPage() {
       <section className="max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
         <ScrollReveal direction="up" delay={0} distance={30}>
           <div
-            className="grid grid-cols-4 divide-x divide-[#E8EDF3]"
+            className="grid grid-cols-2 gap-y-8 sm:grid-cols-4 sm:gap-y-0 sm:divide-x sm:divide-[#E8EDF3]"
             style={{
               background: "#FFFFFF",
               borderRadius: "20px",
