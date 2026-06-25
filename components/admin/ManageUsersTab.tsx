@@ -46,11 +46,14 @@ export function ManageUsersTab() {
     const handleDeleteUser = async (id: string) => {
         setDeletingUser(id); setConfirmDelete(null);
         try {
-            const { error } = await supabase.from("profiles").delete().eq("id", id);
-            if (error) throw error;
+            const res = await fetch(`/api/admin/users/${id}`, { method: "DELETE" });
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok) throw new Error(body.error || "Failed to remove user.");
             setUsers(prev => prev.filter(u => u.id !== id));
             toast("success", "User removed.");
-        } catch { toast("error", "Failed to remove user."); }
+        } catch (err) {
+            toast("error", err instanceof Error ? err.message : "Failed to remove user.");
+        }
         finally { setDeletingUser(null); }
     };
 

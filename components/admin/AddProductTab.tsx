@@ -1,37 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, FileText, Tag, ImageIcon, FolderPlus, CheckCircle2 } from "lucide-react";
+import { Plus, FileText, Tag, ImageIcon, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "./AdminToast";
 import { ImageDropzone } from "./ImageDropzone";
 import { FieldLabel, FieldInput, FieldTextarea, FieldSelect } from "./AdminFields";
-
-const DEFAULT_CATEGORIES = [
-    { value: "Precision & Pocket Mini Scales", label: "Precision Scales" },
-    { value: "Kitchen & Compact Tabletop Scales", label: "Kitchen Scales" },
-    { value: "Portable & Luggage Scales", label: "Luggage Scales" },
-    { value: "Heavy-Duty Hanging & Crane Scales", label: "Industrial Scales" },
-    { value: "Personal Health & Bathroom Scales", label: "Health Scales" },
-    { value: "Packaging & Miscellaneous Equipment", label: "Packaging Equipment" },
-    { value: "Service", label: "Repair & Service" },
-];
+import { CATEGORY_OPTIONS, DEFAULT_CATEGORY } from "@/lib/categories";
 
 export function AddProductTab() {
     const { toast } = useToast();
     const [uploading, setUploading] = useState(false);
     const [name, setName] = useState("");
-    const [category, setCategory] = useState("Precision & Pocket Mini Scales");
+    const [category, setCategory] = useState<string>(DEFAULT_CATEGORY);
     const [desc, setDesc] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [dragActive, setDragActive] = useState(false);
-
-    // Category mgmt
-    const [categories, setCategories] = useState(DEFAULT_CATEGORIES);
-    const [showAddCategory, setShowAddCategory] = useState(false);
-    const [newLabel, setNewLabel] = useState("");
-    const [newValue, setNewValue] = useState("");
 
     const handleFileChange = (f: File | null) => {
         setFile(f);
@@ -49,15 +34,6 @@ export function AddProductTab() {
         if (e.dataTransfer.files?.[0]) handleFileChange(e.dataTransfer.files[0]);
     };
 
-    const handleAddCategory = () => {
-        const v = newValue.trim(), l = newLabel.trim();
-        if (!v || !l) { toast("error", "Both fields are required."); return; }
-        if (categories.some(c => c.value.toLowerCase() === v.toLowerCase())) { toast("error", "Category already exists."); return; }
-        setCategories(prev => [...prev, { value: v, label: l }]);
-        setCategory(v); setNewValue(""); setNewLabel(""); setShowAddCategory(false);
-        toast("success", `Category "${l}" added.`);
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!file) { toast("error", "Please select an image."); return; }
@@ -71,7 +47,7 @@ export function AddProductTab() {
             const { error: dbError } = await supabase.from("products").insert([{ name, category, short_description: desc, image_url: publicUrl, is_active: true }]);
             if (dbError) throw dbError;
             toast("success", `"${name}" published!`);
-            setName(""); setDesc(""); setFile(null); setPreview(null); setCategory("Precision & Pocket Mini Scales");
+            setName(""); setDesc(""); setFile(null); setPreview(null); setCategory(DEFAULT_CATEGORY);
         } catch (err) { toast("error", err instanceof Error ? err.message : "Unexpected error."); }
         finally { setUploading(false); }
     };
@@ -101,30 +77,12 @@ export function AddProductTab() {
                                 <FieldInput value={name} onChange={e => setName(e.target.value)} placeholder="e.g., Heavy Duty Platform Scale" required />
                             </div>
                             <div>
-                                <div className="flex items-center justify-between mb-2">
-                                    <label className="flex items-center gap-2">
-                                        <Tag size={13} className="text-accent-500" />
-                                        <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-200/60">Category</span>
-                                    </label>
-                                    <button type="button" onClick={() => setShowAddCategory(v => !v)} className="flex items-center gap-1 h-7 px-3 rounded-lg text-xs font-semibold transition-all hover:bg-white/10 text-accent-500 border border-accent-500/30 hover:border-accent-500/50">
-                                        <FolderPlus size={14} />New
-                                    </button>
+                                <div className="flex items-center gap-2 mb-2">
+                                    <Tag size={13} className="text-accent-500" />
+                                    <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-200/60">Category</span>
                                 </div>
-                                {showAddCategory && (
-                                    <div className="mb-4 p-5 rounded-2xl space-y-4 bg-accent-500/5 border border-accent-500/20">
-                                        <p className="text-[11px] font-semibold uppercase tracking-wider text-accent-500">New Category</p>
-                                        <div className="space-y-4">
-                                            <FieldInput value={newLabel} onChange={e => setNewLabel(e.target.value)} placeholder="Display name (e.g., Lab Scales)" />
-                                            <FieldInput value={newValue} onChange={e => setNewValue(e.target.value)} placeholder="Database value (e.g., Lab & Scientific Scales)" />
-                                        </div>
-                                        <div className="grid grid-cols-2 gap-3 pt-2">
-                                            <button type="button" onClick={handleAddCategory} className="py-2.5 rounded-xl text-xs font-semibold bg-accent-500/20 text-accent-400 hover:bg-accent-500/30 transition-colors">Add Category</button>
-                                            <button type="button" onClick={() => { setShowAddCategory(false); setNewLabel(""); setNewValue(""); }} className="py-2.5 rounded-xl text-xs font-semibold hover:bg-white/10 text-primary-200/60 border border-white/10 transition-colors">Cancel</button>
-                                        </div>
-                                    </div>
-                                )}
                                 <FieldSelect value={category} onChange={e => setCategory(e.target.value)}>
-                                    {categories.map(({ value, label }) => (<option key={value} value={value} className="bg-primary-900 text-slate-100">{label}</option>))}
+                                    {CATEGORY_OPTIONS.map(({ value, label }) => (<option key={value} value={value} className="bg-primary-900 text-slate-100">{label}</option>))}
                                 </FieldSelect>
                             </div>
                             <div>

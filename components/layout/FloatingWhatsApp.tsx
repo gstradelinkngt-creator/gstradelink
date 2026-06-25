@@ -13,7 +13,7 @@ export const FloatingWhatsApp = () => {
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.45, type: "spring", stiffness: 220, damping: 18 }}
-        className="pointer-events-auto flex items-center justify-center bg-white text-primary-900 border border-primary-100 w-12 h-12 md:w-auto md:h-auto md:pl-4 md:pr-5 md:py-3 rounded-full shadow-lg md:shadow-xl hover:bg-slate-50 hover:-translate-y-0.5 transition-all group"
+        className="btn-glass pointer-events-auto flex items-center justify-center text-white w-12 h-12 md:w-auto md:h-auto md:pl-4 md:pr-5 md:py-3 rounded-full shadow-lg md:shadow-xl hover:-translate-y-0.5 transition-all group"
         aria-label="Read our Google Reviews"
       >
         <Star size={22} className="shrink-0 text-accent-500 fill-accent-500 md:w-5 md:h-5" />

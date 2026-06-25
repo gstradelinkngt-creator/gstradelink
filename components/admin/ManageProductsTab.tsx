@@ -11,6 +11,7 @@ import { useToast } from "./AdminToast";
 import { ImageDropzone } from "./ImageDropzone";
 import { FieldLabel, FieldInput, FieldTextarea, FieldSelect } from "./AdminFields";
 import { ProductListSkeleton } from "./AdminSkeletons";
+import { CATEGORY_OPTIONS } from "@/lib/categories";
 
 interface Product {
     id: string; name: string; category: string;
@@ -18,15 +19,20 @@ interface Product {
     is_active: boolean; created_at: string;
 }
 
-const CATEGORIES = [
-    { value: "Precision & Pocket Mini Scales", label: "Precision Scales" },
-    { value: "Kitchen & Compact Tabletop Scales", label: "Kitchen Scales" },
-    { value: "Portable & Luggage Scales", label: "Luggage Scales" },
-    { value: "Heavy-Duty Hanging & Crane Scales", label: "Industrial Scales" },
-    { value: "Personal Health & Bathroom Scales", label: "Health Scales" },
-    { value: "Packaging & Miscellaneous Equipment", label: "Packaging Equipment" },
-    { value: "Service", label: "Repair & Service" },
-];
+
+/**
+ * Extracts the in-bucket object path from a public storage URL.
+ * e.g. ".../object/public/product-images/1700000000.png" → "1700000000.png"
+ * Returns null for non-storage / empty URLs.
+ */
+function storagePathFromUrl(url: string | null): string | null {
+    if (!url) return null;
+    const marker = "/product-images/";
+    const idx = url.indexOf(marker);
+    if (idx === -1) return null;
+    const path = url.slice(idx + marker.length).split("?")[0];
+    return path || null;
+}
 
 export function ManageProductsTab() {
     const { toast } = useToast();
@@ -67,9 +73,17 @@ export function ManageProductsTab() {
 
     const handleDelete = async (id: string) => {
         setDeletingId(id); setConfirmDeleteId(null);
+        const imageUrl = products.find(p => p.id === id)?.image_url ?? null;
         try {
             const { error } = await supabase.from("products").delete().eq("id", id);
             if (error) throw error;
+            // Best-effort: remove the orphaned image from storage. Don't fail
+            // the delete if cleanup fails — the product row is already gone.
+            const path = storagePathFromUrl(imageUrl);
+            if (path) {
+                const { error: storageError } = await supabase.storage.from("product-images").remove([path]);
+                if (storageError) console.warn("[ManageProducts] image cleanup failed:", storageError.message);
+            }
             setProducts(prev => prev.filter(p => p.id !== id));
             toast("success", "Product deleted.");
         } catch { toast("error", "Failed to delete product."); }
@@ -115,10 +129,8 @@ export function ManageProductsTab() {
             let imageUrl = editingProduct.image_url;
             if (editFile) {
                 // Delete old image from storage if it exists
-                if (editingProduct.image_url) {
-                    const oldPath = editingProduct.image_url.split("/").pop();
-                    if (oldPath) await supabase.storage.from("product-images").remove([oldPath]);
-                }
+                const oldPath = storagePathFromUrl(editingProduct.image_url);
+                if (oldPath) await supabase.storage.from("product-images").remove([oldPath]);
                 const ext = editFile.name.split(".").pop();
                 const fileName = `${Date.now()}.${ext}`;
                 const { error: uploadError } = await supabase.storage.from("product-images").upload(fileName, editFile);
@@ -274,7 +286,7 @@ export function ManageProductsTab() {
                             <div>
                                 <FieldLabel icon={Tag}>Category</FieldLabel>
                                 <FieldSelect value={editCategory} onChange={e => setEditCategory(e.target.value)}>
-                                    {CATEGORIES.map(({ value, label }) => (<option key={value} value={value} className="bg-primary-900 text-slate-100">{label}</option>))}
+                                    {CATEGORY_OPTIONS.map(({ value, label }) => (<option key={value} value={value} className="bg-primary-900 text-slate-100">{label}</option>))}
                                 </FieldSelect>
                             </div>
                             <div><FieldLabel icon={FileText}>Short Description</FieldLabel><FieldTextarea value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Key specs and features…" style={{ minHeight: "100px" }} /></div>

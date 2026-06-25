@@ -65,40 +65,93 @@ const CATEGORY_META: Record<
   "Precision & Pocket Mini Scales": {
     label: "Precision Scales",
     emoji: "💎",
-    bg: "#EEF4FB",
+    bg: "#1B2A3F",
     desc: "High accuracy up to 0.001g",
   },
   "Kitchen & Compact Tabletop Scales": {
     label: "Kitchen Scales",
     emoji: "🥗",
-    bg: "#FFFBF0",
+    bg: "#2A2418",
     desc: "For homes & bakeries",
   },
   "Portable & Luggage Scales": {
     label: "Luggage Scales",
     emoji: "🧳",
-    bg: "#F0F7F0",
+    bg: "#16271F",
     desc: "Travel & handheld",
   },
   "Heavy-Duty Hanging & Crane Scales": {
     label: "Crane & Industrial",
     emoji: "🏗️",
-    bg: "#FFF5EE",
+    bg: "#2A1F18",
     desc: "Heavy-duty platforms",
   },
   "Personal Health & Bathroom Scales": {
     label: "Health & Baby",
     emoji: "👶",
-    bg: "#EEF4FB",
+    bg: "#1B2A3F",
     desc: "Personal weighing",
   },
   "Packaging & Miscellaneous Equipment": {
     label: "Packaging Equip",
     emoji: "📦",
-    bg: "#F5F0FF",
+    bg: "#241B33",
     desc: "Sealers & blowers",
   },
 };
+
+const TRUST_ITEMS = [
+  { Icon: Shield, label: "Authorized dealer" },
+  { Icon: Wrench, label: "Expert repair" },
+  { Icon: CheckCircle, label: "OIML calibration" },
+];
+
+const STATS = [
+  { value: "500+", label: "Happy Customers", sub: "Businesses served", Icon: Users },
+  { value: "8+", label: "Years Experience", sub: "In Bharatpur since 2015", Icon: Award },
+  { value: "24h", label: "Response Time", sub: "Fast on-site service", Icon: Zap },
+];
+
+const WHY_US = [
+  {
+    icon: Wrench,
+    title: "Expert Repair",
+    desc: "All major brands serviced by certified technicians with years of hands-on experience.",
+    tint: "#6D94C5",
+  },
+  {
+    icon: Shield,
+    title: "Genuine Parts",
+    desc: "Authorized distributor stocking only original, manufacturer-approved spare parts.",
+    tint: "#DCA963",
+  },
+  {
+    icon: CheckCircle,
+    title: "OIML Calibration",
+    desc: "Govt-recognized calibration certificates accepted by legal & commercial authorities.",
+    tint: "#6D94C5",
+  },
+  {
+    icon: Clock,
+    title: "24h Response",
+    desc: "Fast on-site service across all of Chitwan — we come to you when you need us most.",
+    tint: "#DCA963",
+  },
+  {
+    icon: Star,
+    title: "500+ Customers",
+    desc: "Serving retail shops, factories, and institutions across Chitwan since 2015.",
+    tint: "#6D94C5",
+  },
+  {
+    icon: MapPin,
+    title: "Walk-in Store",
+    desc: "Visit us at Bharatpur-3, Chitwan — showroom open Sun–Sat (except Mon), 10 AM – 6 PM.",
+    tint: "#DCA963",
+  },
+];
+
+const WA = "https://wa.me/9779845541939";
 
 export default async function Home() {
   const [featuredCategories, featuredProducts] = await Promise.all([
@@ -107,294 +160,187 @@ export default async function Home() {
   ]);
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ background: "#E8EBE3" }}
-    >
-      {/* ── HERO ─────────────────────────────────────────────────── */}
-      <section
-        className="relative text-white overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, #2B4D72 0%, #3E5E85 60%, #4A6E99 100%)",
-          minHeight: "520px",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        {/* Dot-grid pattern */}
+    <div className="aurora min-h-screen w-full overflow-hidden">
+      {/* ═══════════════════════════════ HERO ═══════════════════════════════ */}
+      <section className="aurora-grid relative overflow-hidden">
+        {/* Glow orbs */}
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff'%3E%3Ccircle cx='4' cy='4' r='1.5'/%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: "40px 40px",
-            opacity: 0.06,
-          }}
-        />
-        {/* Decorative glows */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            right: 0,
-            top: 0,
-            width: "400px",
-            height: "400px",
-            background:
-              "radial-gradient(circle, rgba(230,240,250,0.15) 0%, transparent 70%)",
-            transform: "translate(30%, -40%)",
-          }}
+          className="aurora-orb aurora-orb--blue"
+          style={{ width: 420, height: 420, top: -140, left: -100 }}
         />
         <div
-          className="absolute pointer-events-none"
-          style={{
-            left: 0,
-            bottom: 0,
-            width: "320px",
-            height: "320px",
-            background:
-              "radial-gradient(circle, rgba(203,220,235,0.1) 0%, transparent 70%)",
-            transform: "translate(-30%, 40%)",
-          }}
+          className="aurora-orb aurora-orb--gold"
+          style={{ width: 360, height: 360, top: 20, right: -120 }}
+        />
+        <div
+          className="aurora-orb aurora-orb--deep"
+          style={{ width: 520, height: 520, bottom: -260, left: "28%" }}
         />
 
-        <div
-          className="relative z-10 w-full px-5 sm:px-8 py-16 sm:py-20"
-          style={{ maxWidth: "48rem", margin: "0 auto", textAlign: "center" }}
-        >
-          {/* Badge */}
-          <div
-            className="inline-flex items-center gap-2 text-xs sm:text-sm font-medium mb-6 sm:mb-8"
-            style={{
-              padding: "6px 16px",
-              borderRadius: "4px",
-              background: "rgba(255,255,255,0.10)",
-              border: "1px solid rgba(255,255,255,0.20)",
-            }}
-          >
-            <CheckCircle
-              size={13}
-              style={{ color: "#DCA963", flexShrink: 0 }}
-            />
-            <span>Trusted Since 2015 • Bharatpur, Chitwan</span>
-          </div>
+        <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-24">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+            {/* Content */}
+            <div className="text-center lg:text-left">
+              <span className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium sm:text-sm">
+                <CheckCircle size={14} style={{ color: "#DCA963" }} />
+                <span className="text-white/90">
+                  Trusted Since 2015 · Bharatpur, Chitwan
+                </span>
+              </span>
 
-          <h1
-            className="font-bold text-white mb-5"
-            style={{
-              fontSize: "clamp(2rem, 5vw, 3.5rem)",
-              lineHeight: 1.1,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            Professional <span style={{ color: "#DCA963" }}>Weighing</span>{" "}
-            Solutions in Chitwan
-          </h1>
+              <h1
+                className="mb-5 font-bold tracking-tight"
+                style={{ fontSize: "clamp(2.2rem, 5.5vw, 4rem)", lineHeight: 1.08 }}
+              >
+                <span className="text-white">Professional </span>
+                <span className="text-gradient-gold">Weighing</span>
+                <br className="hidden sm:block" />
+                <span className="text-white"> Solutions in </span>
+                <span className="text-aurora">Chitwan</span>
+              </h1>
 
-          <p
-            className="mb-10"
-            style={{
-              fontSize: "clamp(0.9rem, 2vw, 1.05rem)",
-              color: "#E6F0FA",
-              lineHeight: 1.7,
-              maxWidth: "36rem",
-              margin: "0 auto 2.5rem",
-            }}
-          >
-            Authorized dealer for digital scales &amp; beam balances. Expert
-            repair services and genuine spare parts in Bharatpur.
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "12px",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Link
-              href="/products"
-              className="hover:-translate-y-0.5 transition-all"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "13px 28px",
-                borderRadius: "4px",
-                background: "#FFFFFF",
-                color: "#3E5E85",
-                fontWeight: 700,
-                fontSize: "0.9rem",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
-                textDecoration: "none",
-              }}
-            >
-              Shop Products <ArrowRight size={15} />
-            </Link>
-            <a
-              href="https://wa.me/9779845541939"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:-translate-y-0.5 transition-all"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-                padding: "13px 28px",
-                borderRadius: "4px",
-                background: "#25D366",
-                color: "#ffffff",
-                fontWeight: 700,
-                fontSize: "0.9rem",
-                boxShadow: "0 4px 16px rgba(37,211,102,0.3)",
-                textDecoration: "none",
-              }}
-            >
-              <MessageCircle size={15} fill="white" /> WhatsApp Us
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS BAR ────────────────────────────────────────────── */}
-      <section
-        style={{
-          background: "#1A2433",
-          borderBottom: "1px solid rgba(255,255,255,0.05)",
-        }}
-      >
-        <div style={{ maxWidth: "960px", margin: "0 auto", padding: "0 16px" }}>
-          <div className="grid grid-cols-3">
-            {[
-              {
-                value: "500+",
-                label: "Happy Customers",
-                sub: "Businesses served",
-                Icon: Users,
-              },
-              {
-                value: "8+",
-                label: "Years Experience",
-                sub: "In Bharatpur since 2015",
-                Icon: Award,
-              },
-              {
-                value: "24h",
-                label: "Response Time",
-                sub: "Fast on-site service",
-                Icon: Zap,
-              },
-            ].map(({ value, label, sub, Icon }, i) => (
-              <div
-                key={label}
+              <p
+                className="mx-auto mb-8 max-w-xl lg:mx-0"
                 style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "clamp(20px, 4vw, 36px) clamp(8px, 2vw, 16px)",
-                  textAlign: "center",
-                  borderRight:
-                    i < 2 ? "1px solid rgba(255,255,255,0.08)" : "none",
-                  gap: "6px",
+                  color: "#AECAE9",
+                  fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
+                  lineHeight: 1.7,
                 }}
               >
-                <div
-                  style={{
-                    width: "clamp(32px, 5vw, 44px)",
-                    height: "clamp(32px, 5vw, 44px)",
-                    borderRadius: "50%",
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginBottom: "4px",
-                    flexShrink: 0,
-                  }}
+                Authorized dealer for digital scales &amp; beam balances. Expert
+                repair services and genuine spare parts in Bharatpur.
+              </p>
+
+              <div className="flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
+                <Link
+                  href="/products"
+                  className="ui-btn ui-btn-lg btn-gold w-full sm:w-auto"
                 >
-                  <Icon size={16} style={{ color: "#CBDCEB" }} />
+                  Shop Products <ArrowRight size={16} />
+                </Link>
+                <a
+                  href={WA}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ui-btn ui-btn-lg btn-glass w-full sm:w-auto"
+                >
+                  <MessageCircle size={16} fill="white" /> WhatsApp Us
+                </a>
+              </div>
+
+              {/* Mini trust row */}
+              <div className="mt-9 flex flex-wrap justify-center gap-x-6 gap-y-3 lg:justify-start">
+                {TRUST_ITEMS.map(({ Icon, label }) => (
+                  <div
+                    key={label}
+                    className="inline-flex items-center gap-2 text-sm"
+                    style={{ color: "#93B2D6" }}
+                  >
+                    <Icon size={15} style={{ color: "#DCA963" }} />
+                    {label}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Focal glass visual (desktop) */}
+            <div className="relative hidden items-center justify-center lg:flex">
+              <div className="relative w-full max-w-sm">
+                <div className="glass-strong animate-glass-float relative flex aspect-square items-center justify-center rounded-[2.5rem]">
+                  <div className="glow-blue flex h-36 w-36 items-center justify-center rounded-3xl" style={{ background: "linear-gradient(135deg,#3E5E85,#2B4D72)" }}>
+                    <svg
+                      className="h-20 w-20 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={1.4}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75C6.583 21.58 5 22.328 5 23.25v.75c0 .414.336.75.75.75h12.5c.414 0 .75-.336.75-.75v-.75c0-.922-1.583-1.67-2.815-2.25C15.882 20.515 14.472 20.25 13 20.25H12zM12 3L8.25 8.25h7.5L12 3z"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Floating verified badge */}
+                  <div className="glass-gold absolute -right-3 -top-3 flex h-14 w-14 items-center justify-center rounded-2xl">
+                    <CheckCircle size={26} style={{ color: "#DCA963" }} />
+                  </div>
+                  {/* Floating location badge */}
+                  <div className="glass absolute -bottom-3 -left-3 flex h-12 w-12 items-center justify-center rounded-2xl">
+                    <MapPin size={20} style={{ color: "#AECAE9" }} />
+                  </div>
                 </div>
-                <div
-                  style={{
-                    fontSize: "clamp(1.4rem, 4vw, 2.5rem)",
-                    fontWeight: 800,
-                    color: "#ffffff",
-                    lineHeight: 1,
-                  }}
-                >
-                  {value}
-                </div>
-                <div
-                  style={{
-                    fontSize: "clamp(0.62rem, 1.5vw, 0.85rem)",
-                    fontWeight: 600,
-                    color: "#93B2D6",
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {label}
-                </div>
-                <div
-                  className="hidden sm:block"
-                  style={{
-                    fontSize: "0.68rem",
-                    color: "#93B2D6",
-                    lineHeight: 1.3,
-                  }}
-                >
-                  {sub}
+
+                {/* Open-status info chip */}
+                <div className="glass absolute -bottom-5 left-6 right-6 flex items-center gap-3 rounded-2xl px-5 py-4">
+                  <span className="h-2.5 w-2.5 rounded-full bg-[#25D366] animate-pulse" />
+                  <span className="text-sm font-semibold text-white">
+                    Precision you can trust
+                  </span>
+                  <span className="ml-auto text-xs" style={{ color: "#93B2D6" }}>
+                    Mon–Sat
+                  </span>
                 </div>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── CATEGORIES ───────────────────────────────────────────── */}
-      <section className="py-16 lg:py-24" style={{ background: "#F0F2EE" }}>
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 mx-auto">
-          <ScrollReveal direction="up" delay={0} distance={24}>
-            <div className="text-center mb-10 sm:mb-12">
-              <p
-                style={{
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  color: "#557BAA",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  marginBottom: "8px",
-                }}
+      {/* ═══════════════════════════ STATS STRIP ═══════════════════════════ */}
+      <section className="relative z-20 mx-auto -mt-6 w-full max-w-5xl px-5 sm:px-8 sm:-mt-10">
+        <div className="glass-strong grid grid-cols-3 overflow-hidden rounded-3xl">
+          {STATS.map(({ value, label, sub, Icon }, i) => (
+            <div
+              key={label}
+              className={`flex flex-col items-center justify-center gap-1.5 px-2 py-6 text-center sm:px-4 sm:py-8 ${
+                i < 2 ? "border-r border-white/10" : ""
+              }`}
+            >
+              <span className="mb-1 flex h-9 w-9 items-center justify-center rounded-full bg-white/5 sm:h-11 sm:w-11" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                <Icon size={16} style={{ color: "#DCA963" }} />
+              </span>
+              <span
+                className="font-extrabold leading-none text-white"
+                style={{ fontSize: "clamp(1.4rem, 4vw, 2.4rem)" }}
               >
+                {value}
+              </span>
+              <span
+                className="font-semibold leading-tight"
+                style={{ fontSize: "clamp(0.62rem, 1.5vw, 0.85rem)", color: "#AECAE9" }}
+              >
+                {label}
+              </span>
+              <span className="hidden text-[0.68rem] leading-tight sm:block" style={{ color: "#7E93AB" }}>
+                {sub}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════════════════════ CATEGORIES ═══════════════════════════ */}
+      <section className="relative py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
+          <ScrollReveal direction="up" delay={0} distance={24}>
+            <div className="mb-10 text-center sm:mb-12">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#DCA963" }}>
                 What We Offer
               </p>
-              <h2
-                className="font-bold mb-3"
-                style={{
-                  fontSize: "clamp(1.5rem, 4vw, 2.4rem)",
-                  color: "#111111",
-                  letterSpacing: "-0.025em",
-                }}
-              >
+              <h2 className="font-bold text-white" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
                 Browse by Category
               </h2>
-              <p
-                style={{
-                  color: "#5C6B7B",
-                  fontSize: "0.9rem",
-                  maxWidth: "28rem",
-                  margin: "0 auto",
-                  lineHeight: 1.6,
-                }}
-              >
-                From retail counters to heavy-duty industrial platforms — we
-                have it all.
+              <p className="mx-auto mt-3 max-w-md" style={{ color: "#AECAE9", fontSize: "0.9rem", lineHeight: 1.6 }}>
+                From retail counters to heavy-duty industrial platforms — we have
+                it all.
               </p>
             </div>
           </ScrollReveal>
 
-          <div className="relative w-full py-4">
+          <div className="relative w-full py-2">
             <InteractiveMarquee
               speed={35}
               gap={20}
@@ -407,14 +353,11 @@ export default async function Home() {
                   <Link
                     key={`${category}-${idx}`}
                     href={`/products?category=${encodeURIComponent(category)}`}
-                    className="relative shrink-0 overflow-hidden transition-all duration-300 hover:-translate-y-1.5"
+                    className="glass glass-hover group relative block shrink-0 overflow-hidden rounded-2xl"
                     style={{
-                      width: "calc(100vw / 2.2)", // Mobile: show ~2 cards
-                      maxWidth: "280px", // Desktop: fixed sensible width
-                      borderRadius: "4px",
+                      width: "calc(100vw / 2.2)",
+                      maxWidth: "280px",
                       aspectRatio: "3/4",
-                      boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
-                      display: "block",
                     }}
                   >
                     {product?.image_url ? (
@@ -422,7 +365,7 @@ export default async function Home() {
                         src={product.image_url}
                         alt={meta.label}
                         fill
-                        className="object-cover transition-transform duration-500 hover:scale-110"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                         sizes="(max-width: 640px) 50vw, 25vw"
                       />
                     ) : (
@@ -433,44 +376,29 @@ export default async function Home() {
                         {meta.emoji}
                       </div>
                     )}
-                    {/* gradient overlay */}
                     <div
-                      className="absolute inset-0 pointer-events-none"
+                      className="pointer-events-none absolute inset-0"
                       style={{
                         background:
-                          "linear-gradient(to top, rgba(26,36,51,0.92) 0%, rgba(26,36,51,0.25) 50%, transparent 100%)",
+                          "linear-gradient(to top, rgba(8,15,24,0.94) 0%, rgba(8,15,24,0.3) 50%, transparent 100%)",
                       }}
                     />
-                    <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5 pointer-events-none">
+                    <div className="pointer-events-none absolute bottom-0 left-0 right-0 p-4 sm:p-5">
                       <span
-                        className="text-white font-bold block"
-                        style={{
-                          fontSize: "clamp(0.8rem, 2vw, 1rem)",
-                          lineHeight: 1.3,
-                        }}
+                        className="block font-bold text-white"
+                        style={{ fontSize: "clamp(0.8rem, 2vw, 1rem)", lineHeight: 1.3 }}
                       >
                         {meta.label}
                       </span>
                       <span
-                        style={{
-                          color: "rgba(255,255,255,0.65)",
-                          fontSize: "0.72rem",
-                          display: "block",
-                          marginTop: "3px",
-                        }}
+                        className="mt-0.5 block"
+                        style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.72rem" }}
                       >
                         {meta.desc}
                       </span>
                       <span
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "3px",
-                          marginTop: "8px",
-                          color: "#DCA963",
-                          fontSize: "0.72rem",
-                          fontWeight: 700,
-                        }}
+                        className="mt-2 inline-flex items-center gap-1 font-bold"
+                        style={{ color: "#DCA963", fontSize: "0.72rem" }}
                       >
                         View all <ChevronRight size={11} />
                       </span>
@@ -480,110 +408,57 @@ export default async function Home() {
               })}
             </InteractiveMarquee>
 
-            {/* Hint for users */}
-            <div
-              className="flex items-center justify-center gap-2 mt-4 text-xs"
-              style={{ color: "#8798AD" }}
-            >
-              <span
-                className="inline-block w-8 h-0.5 rounded-full"
-                style={{ background: "#CBDCEB" }}
-              />
+            <div className="mt-4 flex items-center justify-center gap-2 text-xs" style={{ color: "#7E93AB" }}>
+              <span className="inline-block h-0.5 w-8 rounded-full bg-white/15" />
               <span>Drag to explore or wait for auto-scroll</span>
-              <span
-                className="inline-block w-8 h-0.5 rounded-full"
-                style={{ background: "#CBDCEB" }}
-              />
+              <span className="inline-block h-0.5 w-8 rounded-full bg-white/15" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── FEATURED PRODUCTS ────────────────────────────────────── */}
+      {/* ════════════════════════ FEATURED PRODUCTS ════════════════════════ */}
       {featuredProducts.length > 0 && (
-        <section className="py-16 lg:py-24" style={{ background: "#E8EBE3" }}>
-          <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 mx-auto">
-            {/* Section header */}
+        <section className="relative py-16 sm:py-20 lg:py-24">
+          <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
             <ScrollReveal direction="up" delay={0} distance={24}>
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-10 sm:mb-12">
+              <div className="mb-10 flex flex-col justify-between gap-3 sm:mb-12 sm:flex-row sm:items-end">
                 <div>
-                  <p
-                    style={{
-                      fontSize: "0.72rem",
-                      fontWeight: 700,
-                      color: "#557BAA",
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
-                      marginBottom: "8px",
-                    }}
-                  >
+                  <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#DCA963" }}>
                     Top Picks
                   </p>
-                  <h2
-                    className="font-bold"
-                    style={{
-                      fontSize: "clamp(1.5rem, 4vw, 2.4rem)",
-                      color: "#111111",
-                      letterSpacing: "-0.025em",
-                    }}
-                  >
+                  <h2 className="font-bold text-white" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
                     Featured Products
                   </h2>
-                  <p
-                    style={{
-                      color: "#5C6B7B",
-                      fontSize: "0.875rem",
-                      marginTop: "6px",
-                    }}
-                  >
+                  <p className="mt-1.5" style={{ color: "#AECAE9", fontSize: "0.875rem" }}>
                     Our most popular weighing equipment
                   </p>
                 </div>
                 <Link
                   href="/products"
-                  className="inline-flex items-center gap-1.5 group shrink-0"
-                  style={{
-                    fontSize: "0.875rem",
-                    fontWeight: 700,
-                    color: "#557BAA",
-                    textDecoration: "none",
-                  }}
+                  className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-bold"
+                  style={{ color: "#DCA963" }}
                 >
-                  Browse all products{" "}
-                  <ArrowRight
-                    size={14}
-                    className="group-hover:translate-x-0.5 transition-transform"
-                  />
+                  Browse all products
+                  <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
                 </Link>
               </div>
             </ScrollReveal>
 
             <ScrollReveal direction="up" delay={60} distance={20}>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5">
                 {featuredProducts.map((product) => {
                   const waMsg = `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`;
-                  const waLink = `https://wa.me/9779845541939?text=${encodeURIComponent(waMsg)}`;
+                  const waLink = `${WA}?text=${encodeURIComponent(waMsg)}`;
                   return (
                     <div
                       key={product.id}
-                      className="group flex flex-col transition-all duration-300 hover:-translate-y-1"
-                      style={{
-                        background: "#FFFFFF",
-                        borderRadius: "4px",
-                        overflow: "hidden",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                        border: "1px solid #CBDCEB",
-                      }}
+                      className="glass glass-hover ui-card group rounded-2xl"
                     >
-                      {/* Product image */}
                       <Link
                         href={`/products/${product.id}`}
-                        className="block relative"
-                        style={{
-                          aspectRatio: "4/3",
-                          background: "#EEF4FB",
-                          overflow: "hidden",
-                        }}
+                        className="ui-media ui-media-4-3 block"
+                        style={{ background: "rgba(255,255,255,0.04)" }}
                       >
                         {product.image_url ? (
                           <Image
@@ -594,85 +469,33 @@ export default async function Home() {
                             sizes="(max-width: 640px) 50vw, 33vw"
                           />
                         ) : (
-                          <div
-                            className="w-full h-full flex items-center justify-center"
-                            style={{
-                              fontSize: "2.5rem",
-                              background: "#EEF4FB",
-                            }}
-                          >
+                          <div className="flex h-full w-full items-center justify-center text-4xl">
                             ⚖️
                           </div>
                         )}
-                        {/* Category badge */}
-                        <div
-                          className="absolute top-2.5 left-2.5"
-                          style={{
-                            fontSize: "9px",
-                            fontWeight: 700,
-                            padding: "3px 8px",
-                            borderRadius: "9999px",
-                            background: "rgba(62,94,133,0.85)",
-                            color: "#ffffff",
-                            backdropFilter: "blur(4px)",
-                            letterSpacing: "0.04em",
-                          }}
-                        >
+                        <span className="glass-subtle absolute left-2.5 top-2.5 rounded-full px-2 py-1 text-[9px] font-bold tracking-wide text-white">
                           {product.category}
-                        </div>
+                        </span>
                       </Link>
 
-                      {/* Product info */}
-                      <div
-                        className="flex flex-col flex-1"
-                        style={{ padding: "14px 14px 14px" }}
-                      >
-                        <Link
-                          href={`/products/${product.id}`}
-                          style={{ textDecoration: "none" }}
-                        >
+                      <div className="ui-card-body p-3.5">
+                        <Link href={`/products/${product.id}`}>
                           <h3
-                            className="font-semibold line-clamp-2 hover:text-primary-600 transition-colors"
-                            style={{
-                              fontSize: "clamp(0.78rem, 1.5vw, 0.9rem)",
-                              color: "#111111",
-                              lineHeight: 1.4,
-                              marginBottom: "4px",
-                            }}
+                            className="mb-1 line-clamp-2 font-semibold text-white transition-colors group-hover:text-[#DCA963]"
+                            style={{ fontSize: "clamp(0.78rem, 1.5vw, 0.9rem)", lineHeight: 1.4 }}
                           >
                             {product.name}
                           </h3>
                         </Link>
                         {product.short_description && (
-                          <p
-                            className="line-clamp-1"
-                            style={{
-                              color: "#5C6B7B",
-                              fontSize: "0.72rem",
-                              marginBottom: "10px",
-                            }}
-                          >
+                          <p className="line-clamp-1" style={{ color: "#8FA6C2", fontSize: "0.72rem" }}>
                             {product.short_description}
                           </p>
                         )}
-                        <div className="mt-auto flex gap-2">
+                        <div className="mt-auto flex gap-2 pt-3">
                           <Link
                             href={`/products/${product.id}`}
-                            style={{
-                              flex: 1,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              padding: "8px 0",
-                              borderRadius: "4px",
-                              border: "1.5px solid #CBDCEB",
-                              color: "#3E5E85",
-                              fontSize: "0.72rem",
-                              fontWeight: 600,
-                              textDecoration: "none",
-                              background: "transparent",
-                              transition: "all 0.15s",
-                            }}
+                            className="ui-btn ui-btn-sm btn-glass flex-1"
                           >
                             Details
                           </Link>
@@ -680,23 +503,9 @@ export default async function Home() {
                             href={waLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            style={{
-                              flex: 1,
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              gap: "5px",
-                              padding: "8px 0",
-                              borderRadius: "4px",
-                              background: "#3E5E85",
-                              color: "#ffffff",
-                              fontSize: "0.72rem",
-                              fontWeight: 700,
-                              textDecoration: "none",
-                              transition: "all 0.15s",
-                            }}
+                            className="ui-btn ui-btn-sm btn-gold flex-1"
                           >
-                            <MessageCircle size={12} fill="white" /> Enquire
+                            <MessageCircle size={12} fill="currentColor" /> Enquire
                           </a>
                         </div>
                       </div>
@@ -706,22 +515,11 @@ export default async function Home() {
               </div>
             </ScrollReveal>
 
-            {/* View all CTA */}
             <ScrollReveal direction="up" delay={0} distance={16}>
               <div className="mt-10 text-center">
                 <Link
                   href="/products"
-                  className="inline-flex items-center gap-2 transition-all hover:-translate-y-0.5"
-                  style={{
-                    padding: "13px 32px",
-                    borderRadius: "4px",
-                    background: "#3E5E85",
-                    color: "#ffffff",
-                    fontWeight: 700,
-                    fontSize: "0.9rem",
-                    textDecoration: "none",
-                    boxShadow: "0 4px 16px rgba(62,94,133,0.25)",
-                  }}
+                  className="ui-btn ui-btn-lg btn-glass"
                 >
                   View All Products <ArrowRight size={15} />
                 </Link>
@@ -731,42 +529,18 @@ export default async function Home() {
         </section>
       )}
 
-      {/* ── WHY CHOOSE US ────────────────────────────────────────── */}
-      <section className="py-16 lg:py-24" style={{ background: "#F0F2EE" }}>
-        <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-12 mx-auto">
+      {/* ═══════════════════════════ WHY CHOOSE US ═══════════════════════════ */}
+      <section className="relative py-16 sm:py-20 lg:py-24">
+        <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
           <ScrollReveal direction="up" delay={0} distance={24}>
-            <div className="text-center mb-10 sm:mb-14">
-              <p
-                style={{
-                  fontSize: "0.72rem",
-                  fontWeight: 700,
-                  color: "#557BAA",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  marginBottom: "8px",
-                }}
-              >
+            <div className="mb-10 text-center sm:mb-14">
+              <p className="mb-2 text-xs font-bold uppercase tracking-[0.2em]" style={{ color: "#DCA963" }}>
                 Our Strengths
               </p>
-              <h2
-                className="font-bold mb-3"
-                style={{
-                  fontSize: "clamp(1.5rem, 4vw, 2.4rem)",
-                  color: "#111111",
-                  letterSpacing: "-0.025em",
-                }}
-              >
+              <h2 className="font-bold text-white" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
                 Why Choose GSTradeLink?
               </h2>
-              <p
-                style={{
-                  color: "#5C6B7B",
-                  fontSize: "0.9rem",
-                  maxWidth: "28rem",
-                  margin: "0 auto",
-                  lineHeight: 1.6,
-                }}
-              >
+              <p className="mx-auto mt-3 max-w-md" style={{ color: "#AECAE9", fontSize: "0.9rem", lineHeight: 1.6 }}>
                 8+ years of weighing expertise in Bharatpur — built on trust,
                 quality, and service.
               </p>
@@ -774,96 +548,25 @@ export default async function Home() {
           </ScrollReveal>
 
           <ScrollReveal direction="up" delay={80} distance={20}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-              {[
-                {
-                  icon: Wrench,
-                  title: "Expert Repair",
-                  desc: "All major brands serviced by certified technicians with years of hands-on experience.",
-                  iconBg: "#3E5E85",
-                  cardBorder: "#CBDCEB",
-                },
-                {
-                  icon: Shield,
-                  title: "Genuine Parts",
-                  desc: "Authorized distributor stocking only original, manufacturer-approved spare parts.",
-                  iconBg: "#DCA963",
-                  cardBorder: "#E8DFCA",
-                },
-                {
-                  icon: CheckCircle,
-                  title: "OIML Calibration",
-                  desc: "Govt-recognized calibration certificates accepted by legal & commercial authorities.",
-                  iconBg: "#1A2433",
-                  cardBorder: "#CBDCEB",
-                },
-                {
-                  icon: Clock,
-                  title: "24h Response",
-                  desc: "Fast on-site service across all of Chitwan — we come to you when you need us most.",
-                  iconBg: "#557BAA",
-                  cardBorder: "#CBDCEB",
-                },
-                {
-                  icon: Star,
-                  title: "500+ Customers",
-                  desc: "Serving retail shops, factories, and institutions across Chitwan since 2015.",
-                  iconBg: "#C28D44",
-                  cardBorder: "#E8DFCA",
-                },
-                {
-                  icon: MapPin,
-                  title: "Walk-in Store",
-                  desc: "Visit us at Bharatpur-3, Chitwan — showroom open Mon to Sat, 10 AM – 6 PM.",
-                  iconBg: "#3E5E85",
-                  cardBorder: "#CBDCEB",
-                },
-              ].map(({ icon: Icon, title, desc, iconBg, cardBorder }) => (
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+              {WHY_US.map(({ icon: Icon, title, desc, tint }) => (
                 <div
                   key={title}
-                  className="group flex flex-col transition-all duration-300 hover:-translate-y-1"
-                  style={{
-                    padding: "24px 28px",
-                    background: "#FFFFFF",
-                    borderRadius: "4px",
-                    border: `1px solid ${cardBorder}`,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                  }}
+                  className="glass glass-hover ui-card group rounded-2xl p-6 sm:p-7"
                 >
-                  {/* Icon */}
                   <div
-                    className="group-hover:scale-105 transition-transform"
+                    className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform group-hover:scale-105"
                     style={{
-                      width: "48px",
-                      height: "48px",
-                      background: iconBg,
-                      borderRadius: "4px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      marginBottom: "14px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
+                      background: `${tint}26`,
+                      border: `1px solid ${tint}55`,
                     }}
                   >
-                    <Icon size={22} color="white" />
+                    <Icon size={22} style={{ color: tint }} />
                   </div>
-                  <h3
-                    style={{
-                      fontWeight: 700,
-                      color: "#111111",
-                      fontSize: "1rem",
-                      marginBottom: "6px",
-                    }}
-                  >
+                  <h3 className="mb-1.5 font-bold text-white" style={{ fontSize: "1rem" }}>
                     {title}
                   </h3>
-                  <p
-                    style={{
-                      color: "#5C6B7B",
-                      fontSize: "0.875rem",
-                      lineHeight: 1.65,
-                    }}
-                  >
+                  <p style={{ color: "#AECAE9", fontSize: "0.875rem", lineHeight: 1.65 }}>
                     {desc}
                   </p>
                 </div>
@@ -873,127 +576,49 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── WHATSAPP CTA ─────────────────────────────────────────── */}
-      <section
-        className="py-16 lg:py-24 relative overflow-hidden"
-        style={{ background: "#1A2433" }}
-      >
-        {/* Decorative blobs */}
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            right: 0,
-            top: 0,
-            width: "300px",
-            height: "300px",
-            background: "rgba(255,255,255,0.04)",
-            borderRadius: "50%",
-            transform: "translate(40%, -50%)",
-          }}
-        />
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            left: 0,
-            bottom: 0,
-            width: "250px",
-            height: "250px",
-            background: "rgba(242,192,71,0.08)",
-            borderRadius: "50%",
-            transform: "translate(-30%, 50%)",
-          }}
-        />
-
+      {/* ═══════════════════════════ FINAL CTA ═══════════════════════════ */}
+      <section className="relative px-5 pb-20 pt-4 sm:px-8 sm:pb-28">
         <ScrollReveal direction="up" delay={0} distance={28}>
-          <div
-            className="relative z-10 text-center"
-            style={{ maxWidth: "36rem", margin: "0 auto", padding: "0 20px" }}
-          >
+          <div className="glass-strong relative mx-auto w-full max-w-4xl overflow-hidden rounded-3xl px-6 py-14 text-center sm:px-12 sm:py-16">
             <div
-              className="inline-flex items-center gap-2 mb-5"
-              style={{
-                padding: "6px 16px",
-                borderRadius: "4px",
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(255,255,255,0.15)",
-                fontSize: "0.72rem",
-                color: "#ffffff",
-                fontWeight: 600,
-                letterSpacing: "0.05em",
-                textTransform: "uppercase",
-              }}
-            >
-              <MessageCircle size={12} fill="white" /> Quick Response Guaranteed
-            </div>
-            <h2
-              className="font-bold text-white mb-3"
-              style={{
-                fontSize: "clamp(1.5rem, 4vw, 2.4rem)",
-                letterSpacing: "-0.025em",
-              }}
-            >
-              Ready to get a quote?
-            </h2>
-            <p
-              style={{
-                color: "#AECAE9",
-                fontSize: "0.9rem",
-                marginBottom: "36px",
-                lineHeight: 1.7,
-              }}
-            >
-              Message us on WhatsApp — we respond within 24 hours and deliver
-              across all of Chitwan.
-            </p>
+              className="aurora-orb aurora-orb--gold"
+              style={{ width: 280, height: 280, top: -120, right: -60, opacity: 0.5 }}
+            />
             <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "14px",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <a
-                href="https://wa.me/9779845541939"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:-translate-y-0.5 transition-all"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "13px 28px",
-                  borderRadius: "4px",
-                  background: "#25D366",
-                  color: "#ffffff",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  textDecoration: "none",
-                  boxShadow: "0 4px 16px rgba(37,211,102,0.3)",
-                }}
-              >
-                <MessageCircle size={17} fill="white" /> Chat on WhatsApp
-              </a>
-              <a
-                href="tel:+9779845541939"
-                className="hover:-translate-y-0.5 transition-all"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "13px 28px",
-                  borderRadius: "4px",
-                  background: "rgba(255,255,255,0.10)",
-                  border: "1px solid rgba(255,255,255,0.22)",
-                  color: "#ffffff",
-                  fontWeight: 700,
-                  fontSize: "0.9rem",
-                  textDecoration: "none",
-                }}
-              >
-                <Phone size={15} /> Call Now
-              </a>
+              className="aurora-orb aurora-orb--blue"
+              style={{ width: 260, height: 260, bottom: -140, left: -60, opacity: 0.5 }}
+            />
+            <div className="relative z-10 mx-auto max-w-xl">
+              <span className="glass-gold mb-5 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[0.72rem] font-semibold uppercase tracking-wider" style={{ color: "#F2D89A" }}>
+                <MessageCircle size={12} fill="currentColor" /> Quick Response Guaranteed
+              </span>
+              <h2 className="mb-3 font-bold text-white" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
+                Ready to get a quote?
+              </h2>
+              <p className="mb-9" style={{ color: "#AECAE9", fontSize: "0.95rem", lineHeight: 1.7 }}>
+                Message us on WhatsApp — we respond within 24 hours and deliver
+                across all of Chitwan.
+              </p>
+              <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <a
+                  href={WA}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ui-btn ui-btn-lg w-full text-white transition-transform hover:-translate-y-0.5 sm:w-auto"
+                  style={{
+                    background: "linear-gradient(135deg,#25D366,#128C7E)",
+                    boxShadow: "0 10px 30px -8px rgba(37,211,102,0.55)",
+                  }}
+                >
+                  <MessageCircle size={17} fill="white" /> Chat on WhatsApp
+                </a>
+                <a
+                  href="tel:+9779845541939"
+                  className="ui-btn ui-btn-lg btn-glass w-full sm:w-auto"
+                >
+                  <Phone size={15} /> Call Now
+                </a>
+              </div>
             </div>
           </div>
         </ScrollReveal>

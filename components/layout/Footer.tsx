@@ -18,6 +18,8 @@ export const Footer = ({ className }: { className?: string }) => {
           "linear-gradient(160deg, #0F1825 0%, #1A2433 50%, #0F1825 100%)",
         color: "#AECAE9",
         marginTop: "auto",
+        borderTop: "1px solid rgba(220,169,99,0.18)",
+        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.04)",
       }}
     >
       {/* ── CTA Banner removed per user request ──────────────── */}

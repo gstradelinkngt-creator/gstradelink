@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} antialiased bg-background-secondary text-foreground-primary flex flex-col min-h-screen`}
+        className={`${inter.variable} antialiased bg-[#0d1622] text-foreground-primary flex flex-col min-h-screen`}
       >
         <SiteShell>{children}</SiteShell>
       </body>

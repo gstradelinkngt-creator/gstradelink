@@ -393,11 +393,279 @@ textarea::placeholder {
     box-shadow: var(--shadow-md);
 }
 
-/* Steel-blue glass effect */
+/* Steel-blue glass effect (legacy — kept for backward compat) */
 .glass-effect {
     background: rgba(238, 244, 251, 0.85);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(174, 202, 233, 0.4);
+}
+
+/* ===================================================================
+   GLASSMORPHISM DESIGN SYSTEM — "Deep Navy Aurora"
+   =================================================================== */
+
+/* ── Aurora backdrop ──────────────────────────────────────────────
+   A deep navy gradient mesh. Apply to a page/section root; pair with
+   .aurora-orb decorative blobs for the glow. `isolation` keeps the
+   blurred orbs from bleeding outside. */
+.aurora {
+    position: relative;
+    isolation: isolate;
+    background:
+        radial-gradient(
+            120% 80% at 15% 0%,
+            rgba(62, 94, 133, 0.35) 0%,
+            transparent 55%
+        ),
+        radial-gradient(
+            90% 70% at 90% 10%,
+            rgba(220, 169, 99, 0.14) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            100% 90% at 80% 100%,
+            rgba(43, 77, 114, 0.45) 0%,
+            transparent 55%
+        ),
+        linear-gradient(180deg, #0d1622 0%, #111d2e 45%, #0d1622 100%);
+    color: #ffffff;
+}
+
+/* Floating blurred glow orbs — purely decorative */
+.aurora-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(64px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+    will-change: transform;
+}
+.aurora-orb--blue {
+    background: radial-gradient(circle, rgba(109, 148, 197, 0.55), transparent 70%);
+}
+.aurora-orb--gold {
+    background: radial-gradient(circle, rgba(220, 169, 99, 0.4), transparent 70%);
+}
+.aurora-orb--deep {
+    background: radial-gradient(circle, rgba(62, 94, 133, 0.6), transparent 70%);
+}
+
+/* Subtle dotted texture overlay for aurora sections */
+.aurora-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(
+        rgba(255, 255, 255, 0.5) 1px,
+        transparent 1px
+    );
+    background-size: 22px 22px;
+    opacity: 0.04;
+}
+
+/* ── Glass surfaces ───────────────────────────────────────────────
+   Frosted panels for the dark aurora. The inset highlight + soft
+   shadow give the "lifted glass" feel. */
+.glass {
+    background: rgba(255, 255, 255, 0.06);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.36),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-strong {
+    background: rgba(255, 255, 255, 0.1);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+/* Faint glass — for big background panels / nav */
+.glass-subtle {
+    background: rgba(17, 29, 46, 0.55);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Gold-tinted glass — for accent/CTA panels */
+.glass-gold {
+    background: rgba(220, 169, 99, 0.12);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(220, 169, 99, 0.32);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Interactive lift for glass cards */
+.glass-hover {
+    transition:
+        transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.3s ease,
+        background 0.3s ease;
+}
+.glass-hover:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* ── Glass buttons ────────────────────────────────────────────── */
+.btn-glass {
+    background: rgba(255, 255, 255, 0.08);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    transition: all 0.2s ease;
+}
+.btn-glass:hover {
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-gold {
+    background: linear-gradient(135deg, #dca963 0%, #c28d44 100%);
+    color: #1a1206;
+    box-shadow: 0 8px 24px -6px rgba(220, 169, 99, 0.6);
+    transition: all 0.2s ease;
+}
+.btn-gold:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 30px -6px rgba(220, 169, 99, 0.7);
+}
+
+/* ── Button sizing system (flex-based, fixed heights) ─────────────
+   Pair a size class with a colour skin (.btn-glass / .btn-gold / etc.):
+       <a class="ui-btn ui-btn-lg btn-gold"> … </a>
+   Fixed heights mean a button never changes size when an icon or
+   longer label is added. Add `flex-1` (in a flex row) or
+   `w-full sm:w-auto` to make a group equal-width. */
+.ui-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+    user-select: none;
+}
+.ui-btn > svg {
+    flex-shrink: 0;
+}
+.ui-btn-sm {
+    height: 2.25rem; /* 36px */
+    padding: 0 0.875rem;
+    font-size: 0.75rem;
+}
+.ui-btn-md {
+    height: 2.75rem; /* 44px */
+    padding: 0 1.25rem;
+    font-size: 0.875rem;
+}
+.ui-btn-lg {
+    height: 3rem; /* 48px */
+    padding: 0 1.75rem;
+    font-size: 0.9rem;
+}
+
+/* ── Card sizing helpers ─────────────────────────────────────────
+   .ui-card guarantees a full-height flex column so cards in a grid
+   row are always equal height; .ui-card-body takes the remaining
+   space and `.mt-auto` on a footer pins actions to the bottom. */
+.ui-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+.ui-card-body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+}
+/* Fixed-ratio media box so every card's image area is identical */
+.ui-media {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+.ui-media-4-3 {
+    aspect-ratio: 4 / 3;
+}
+.ui-media-3-4 {
+    aspect-ratio: 3 / 4;
+}
+.ui-media-square {
+    aspect-ratio: 1 / 1;
+}
+
+/* ── Accent gradient text ─────────────────────────────────────── */
+.text-aurora {
+    background: linear-gradient(120deg, #ffffff 0%, #aecae9 55%, #6d94c5 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Soft ambient glow ring (for icons / focal points) */
+.glow-blue {
+    box-shadow: 0 0 0 1px rgba(109, 148, 197, 0.3),
+        0 8px 32px -4px rgba(62, 94, 133, 0.55);
+}
+.glow-gold {
+    box-shadow: 0 0 0 1px rgba(220, 169, 99, 0.35),
+        0 8px 32px -4px rgba(220, 169, 99, 0.5);
+}
+
+/* Slow float for hero focal glass */
+@keyframes glassFloat {
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-14px) rotate(1.5deg);
+    }
+}
+.animate-glass-float {
+    animation: glassFloat 8s ease-in-out infinite;
+}
+
+/* Graceful fallback when backdrop-filter is unsupported */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass,
+    .glass-subtle,
+    .btn-glass {
+        background: rgba(26, 36, 51, 0.92);
+    }
+    .glass-strong {
+        background: rgba(26, 36, 51, 0.96);
+    }
 }
 
 /* ===== ANIMATIONS ===== */

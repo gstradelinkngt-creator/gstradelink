@@ -2,59 +2,36 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 
 export default function NotFound() {
-    return (
-        <div className="min-h-[80vh] flex items-center justify-center p-6 bg-background-secondary">
-            <div className="max-w-md w-full text-center space-y-6">
-                <div
-                    className="mx-auto flex items-center justify-center"
-                    style={{
-                        width: "80px",
-                        height: "80px",
-                        borderRadius: "50%",
-                        background: "#EEF4FB",
-                    }}
-                >
-                    <Search size={36} style={{ color: "#3E5E85" }} />
-                </div>
+  return (
+    <div className="aurora relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden p-6">
+      <div className="aurora-orb aurora-orb--blue" style={{ width: 360, height: 360, top: -100, left: -80 }} />
+      <div className="aurora-orb aurora-orb--gold" style={{ width: 300, height: 300, bottom: -120, right: -80, opacity: 0.5 }} />
 
-                <div>
-                    <h1
-                        className="font-bold mb-2"
-                        style={{ fontSize: "2rem", color: "#1A2433", lineHeight: 1.2 }}
-                    >
-                        Page Not Found
-                    </h1>
-                    <p style={{ color: "#5C6B7B", fontSize: "1rem", lineHeight: 1.6 }}>
-                        We couldn't find the page you were looking for. It might have been
-                        removed, renamed, or didn't exist in the first place.
-                    </p>
-                </div>
-
-                <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">
-                    <Link
-                        href="/"
-                        className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-full transition-all hover:-translate-y-0.5"
-                        style={{
-                            background: "#3E5E85",
-                            color: "#FFF",
-                            boxShadow: "0 4px 14px rgba(62,94,133,0.25)",
-                        }}
-                    >
-                        Return Home
-                    </Link>
-                    <Link
-                        href="/products"
-                        className="inline-flex items-center justify-center px-6 py-3 font-semibold rounded-full transition-all hover:-translate-y-0.5"
-                        style={{
-                            background: "white",
-                            color: "#3E5E85",
-                            border: "1px solid #CBDCEB",
-                        }}
-                    >
-                        View Catalogue
-                    </Link>
-                </div>
-            </div>
+      <div className="glass-strong relative z-10 w-full max-w-md rounded-3xl px-8 py-12 text-center">
+        <div
+          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full"
+          style={{ background: "rgba(109,148,197,0.16)", border: "1px solid rgba(109,148,197,0.3)" }}
+        >
+          <Search size={36} style={{ color: "#DCA963" }} />
         </div>
-    );
+
+        <h1 className="mb-2 font-bold text-white" style={{ fontSize: "2rem", lineHeight: 1.2 }}>
+          Page Not Found
+        </h1>
+        <p style={{ color: "#AECAE9", fontSize: "1rem", lineHeight: 1.6 }}>
+          We couldn&apos;t find the page you were looking for. It might have been
+          removed, renamed, or didn&apos;t exist in the first place.
+        </p>
+
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <Link href="/" className="ui-btn ui-btn-md btn-gold w-full sm:w-auto">
+            Return Home
+          </Link>
+          <Link href="/products" className="ui-btn ui-btn-md btn-glass w-full sm:w-auto">
+            View Catalogue
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
 }

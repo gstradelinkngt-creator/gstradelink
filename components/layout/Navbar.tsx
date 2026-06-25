@@ -196,13 +196,16 @@ export const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300",
+          "sticky top-0 z-50 w-full transition-all duration-300 glass-subtle",
           isScrolled
-            ? "backdrop-blur-md shadow-sm border-b border-border-primary"
+            ? "shadow-[0_12px_36px_-12px_rgba(0,0,0,0.65)]"
             : "",
         )}
         style={{
-          background: isScrolled ? "rgba(255,255,255,0.97)" : "#FFFFFF",
+          borderBottom: "1px solid rgba(255,255,255,0.08)",
+          background: isScrolled
+            ? "rgba(13,22,34,0.82)"
+            : "rgba(13,22,34,0.55)",
         }}
       >
         <div className="container-fluid">
@@ -213,24 +216,28 @@ export const Navbar = () => {
               className="flex items-center gap-3 group"
               onClick={() => setIsOpen(false)}
             >
-              <Image
-                src="/logo.png"
-                alt="GSTradeLink Logo"
-                width={200}
-                height={56}
-                className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                priority
-              />
+              <span
+                className="flex items-center justify-center h-11 w-11 shrink-0 rounded-xl bg-white p-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover:scale-105"
+              >
+                <Image
+                  src="/logo.png"
+                  alt="GSTradeLink Logo"
+                  width={200}
+                  height={56}
+                  className="h-full w-full object-contain"
+                  priority
+                />
+              </span>
               <div className="hidden sm:block">
                 <div
                   className="font-bold text-xl transition-colors"
-                  style={{ color: "#1A2433" }}
+                  style={{ color: "#FFFFFF" }}
                 >
                   GSTradeLink
                 </div>
                 <div
                   className="text-[10px] uppercase tracking-widest font-semibold"
-                  style={{ color: "#8798AD" }}
+                  style={{ color: "#93B2D6" }}
                 >
                   Bharatpur · Chitwan
                 </div>
@@ -248,8 +255,8 @@ export const Navbar = () => {
                         className={cn(
                           "flex items-center gap-1.5 px-2 py-2 text-sm font-semibold transition-colors",
                           isActivePath(item.href)
-                            ? "text-primary-600"
-                            : "text-foreground-secondary hover:text-primary-600",
+                            ? "text-white"
+                            : "text-[#AECAE9] hover:text-white",
                         )}
                       >
                         <span>{item.label}</span>
@@ -269,17 +276,17 @@ export const Navbar = () => {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
                             transition={{ duration: 0.15 }}
-                            className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-border-primary p-2 z-50 overflow-hidden"
+                            className="glass-strong absolute top-full left-0 mt-2 w-56 rounded-2xl p-2 z-50 overflow-hidden"
                           >
                             {item.children.map((child) => (
                               <Link
                                 key={child.href}
                                 href={child.href}
                                 className={cn(
-                                  "block px-4 py-2 rounded-md text-sm font-medium transition-colors",
+                                  "block px-4 py-2 rounded-lg text-sm font-medium transition-colors",
                                   isActivePath(child.href)
-                                    ? "text-primary-600 bg-primary-50"
-                                    : "text-foreground-secondary hover:text-primary-600 hover:bg-primary-50",
+                                    ? "text-white bg-white/10"
+                                    : "text-[#AECAE9] hover:text-white hover:bg-white/5",
                                 )}
                               >
                                 {child.label}
@@ -295,8 +302,8 @@ export const Navbar = () => {
                       className={cn(
                         "px-2 py-2 text-sm font-semibold transition-colors",
                         isActivePath(item.href)
-                          ? "text-primary-600"
-                          : "text-foreground-secondary hover:text-primary-600",
+                          ? "text-white"
+                          : "text-[#AECAE9] hover:text-white",
                       )}
                     >
                       {item.label}
@@ -305,17 +312,14 @@ export const Navbar = () => {
                 </div>
               ))}
 
-              <div className="ml-4 pl-8 border-l border-border-primary flex items-center gap-3">
+              <div className="ml-4 pl-8 border-l border-white/10 flex items-center gap-3">
                 <a
                   href="https://wa.me/9779845541939"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold transition-all whitespace-nowrap hover:-translate-y-0.5"
+                  className="btn-gold inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold transition-all whitespace-nowrap"
                   style={{
-                    background: "#3E5E85",
-                    color: "#ffffff",
                     borderRadius: "9999px",
-                    boxShadow: "0 4px 14px rgba(62,94,133,0.35)",
                     textDecoration: "none",
                   }}
                 >
@@ -327,8 +331,8 @@ export const Navbar = () => {
                   <div className="relative">
                     <button
                       onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-primary-200"
-                      style={{ background: "#3E5E85", color: "#fff" }}
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-white/30"
+                      style={{ background: "rgba(255,255,255,0.1)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }}
                       title={user.email ?? "Account"}
                     >
                       {user.user_metadata?.avatar_url ? (
@@ -344,15 +348,15 @@ export const Navbar = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -10, scale: 0.95 }}
                           transition={{ duration: 0.15 }}
-                          className="absolute top-full right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-border-primary p-2 z-50"
+                          className="glass-strong absolute top-full right-0 mt-2 w-56 rounded-2xl p-2 z-50"
                         >
-                          <div className="px-3 py-2 mb-1 border-b border-border-primary">
-                            <p className="text-xs font-semibold text-foreground-primary truncate">{user.email}</p>
+                          <div className="px-3 py-2 mb-1 border-b border-white/10">
+                            <p className="text-xs font-semibold text-white truncate">{user.email}</p>
                           </div>
-                          <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-foreground-secondary hover:text-primary-600 hover:bg-primary-50 transition-colors" onClick={() => setShowUserMenu(false)}>
+                          <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#AECAE9] hover:text-white hover:bg-white/5 transition-colors" onClick={() => setShowUserMenu(false)}>
                             <Shield size={14} /> Admin Panel
                           </Link>
-                          <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm font-medium text-red-500 hover:bg-red-50 transition-colors">
+                          <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-red-300 hover:bg-red-500/15 transition-colors">
                             <LogOut size={14} /> Sign Out
                           </button>
                         </motion.div>
@@ -362,8 +366,8 @@ export const Navbar = () => {
                 ) : (
                   <Link
                     href="/admin/login"
-                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-primary-50"
-                    style={{ border: "1.5px solid #CBDCEB", color: "#3E5E85" }}
+                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
+                    style={{ border: "1.5px solid rgba(255,255,255,0.2)", color: "#AECAE9" }}
                     title="Admin Login"
                   >
                     <User size={16} />
@@ -377,8 +381,8 @@ export const Navbar = () => {
               {user ? (
                 <button
                   onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-primary-200"
-                  style={{ background: "#3E5E85", color: "#fff" }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-white/30"
+                  style={{ background: "rgba(255,255,255,0.1)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }}
                   title={user.email ?? "Account"}
                 >
                   {user.user_metadata?.avatar_url ? (
@@ -390,8 +394,8 @@ export const Navbar = () => {
               ) : (
                 <Link
                   href="/admin/login"
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-primary-50"
-                  style={{ border: "1.5px solid #CBDCEB", color: "#3E5E85" }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
+                  style={{ border: "1.5px solid rgba(255,255,255,0.2)", color: "#AECAE9" }}
                   title="Admin Login"
                 >
                   <User size={14} />
@@ -401,7 +405,7 @@ export const Navbar = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
-                className="p-2 rounded-lg text-foreground-secondary hover:text-foreground-primary hover:bg-background-secondary transition-colors"
+                className="p-2 rounded-lg text-[#AECAE9] hover:text-white hover:bg-white/10 transition-colors"
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >

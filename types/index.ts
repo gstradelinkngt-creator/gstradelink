@@ -1,4 +1,11 @@
 // ===== DATABASE TYPES =====
+// Canonical category list/type lives in lib/categories.ts (single source of
+// truth, mirrored by the DB CHECK constraint). Re-exported here for the types
+// that reference it below.
+import { PRODUCT_CATEGORIES as CATEGORY_VALUES } from '@/lib/categories';
+export type { ProductCategory } from '@/lib/categories';
+import type { ProductCategory } from '@/lib/categories';
+
 export interface Product {
   id: string;
   created_at: string;
@@ -8,12 +15,6 @@ export interface Product {
   image_url: string | null;
   is_active: boolean;
 }
-
-export type ProductCategory =
-  | 'Retail Scale'
-  | 'Industrial Scale'
-  | 'Spare Part'
-  | 'Service';
 
 export interface ProductInsert {
   name: string;
@@ -387,12 +388,8 @@ export interface FeatureFlags {
 }
 
 // ===== CONSTANTS =====
-export const PRODUCT_CATEGORIES: readonly ProductCategory[] = [
-  'Retail Scale',
-  'Industrial Scale',
-  'Spare Part',
-  'Service'
-] as const;
+// Re-exported from the single source of truth (lib/categories.ts).
+export const PRODUCT_CATEGORIES: readonly ProductCategory[] = CATEGORY_VALUES;
 
 export const SORT_OPTIONS = [
   { value: 'name', label: 'Name' },

@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createMiddlewareClient } from "@/lib/supabase/middleware";
 
 /**
- * Middleware: Protect /admin/* routes server-side with real JWT verification.
+ * Proxy (formerly Next.js Middleware): protect /admin/* routes server-side
+ * with real JWT verification.
  *
  * 1. Verifies JWT via Supabase's getUser() (not cookie sniffing)
  * 2. Checks profiles.role = 'admin' with auto-bootstrap
@@ -11,25 +12,34 @@ import { createMiddlewareClient } from "@/lib/supabase/middleware";
  *
  * Note: OAuth callback is handled by /auth/callback Route Handler, not here.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const { supabase, response } = createMiddlewareClient(request);
 
   // ── Protect /admin routes (not /admin/login) ─────────────────────────────
   if (pathname.startsWith("/admin") && !pathname.startsWith("/admin/login")) {
-    // 1. Verify JWT server-side
     const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
 
+    const redirectWithCookies = (url: URL) => {
+      const redirectResponse = NextResponse.redirect(url);
+      const cookiesToSet = response.headers.getSetCookie();
+      for (const cookie of cookiesToSet) {
+        redirectResponse.headers.append("Set-Cookie", cookie);
+      }
+      return redirectResponse;
+    };
+
     if (userError || !user) {
+      console.log("[middleware] No user found or error:", userError?.message || "User is null", "Redirecting to login");
       const loginUrl = new URL("/admin/login", request.url);
       loginUrl.searchParams.set("next", pathname);
-      return NextResponse.redirect(loginUrl);
+      return redirectWithCookies(loginUrl);
     }
 
-    // 2. Role check with auto-bootstrap
+    // Role check
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("role")
@@ -37,6 +47,7 @@ export async function middleware(request: NextRequest) {
       .single();
 
     if (profileError || !profile) {
+      console.log(`[middleware] Error fetching profile for ${user.id}:`, profileError?.message);
       // Profile missing → auto-create. First user = admin.
       const { count } = await supabase
         .from("profiles")
@@ -44,24 +55,25 @@ export async function middleware(request: NextRequest) {
 
       const isFirstUser = (count ?? 0) === 0;
       const assignedRole = isFirstUser ? "admin" : "user";
+      console.log(`[middleware] Auto-creating profile for ${user.id} with role: ${assignedRole}`);
 
       const { error: insertError } = await supabase
         .from("profiles")
         .insert({ id: user.id, email: user.email, role: assignedRole });
 
       if (insertError) {
-        // Table likely doesn't exist — allow access for bootstrap
         console.warn("[middleware] profiles insert failed:", insertError.message);
       } else if (assignedRole !== "admin") {
-        return NextResponse.redirect(
-          new URL("/?auth=not-authorized", request.url),
-        );
+        console.log(`[middleware] New user ${user.email} is not admin, redirecting to home.`);
+        return redirectWithCookies(new URL("/?auth=not-authorized", request.url));
       }
     } else if (profile.role !== "admin") {
-      return NextResponse.redirect(
-        new URL("/?auth=not-authorized", request.url),
-      );
+      console.log(`[middleware] User ${user.email} has role '${profile.role}', denying admin access.`);
+      return redirectWithCookies(new URL("/?auth=not-authorized", request.url));
     }
+
+    // Admin user authenticated successfully
+    console.log(`[middleware] Admin access granted to ${user.email}`);
   }
 
   // ── Security headers for admin ───────────────────────────────────────────
