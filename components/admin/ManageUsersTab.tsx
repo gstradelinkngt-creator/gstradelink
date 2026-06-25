@@ -57,7 +57,7 @@ export function ManageUsersTab() {
         finally { setDeletingUser(null); }
     };
 
-    const filtered = users.filter(u => u.email?.toLowerCase().includes(search.toLowerCase()) ?? false);
+    const filtered = users.filter(u => !search || (u.email?.toLowerCase().includes(search.toLowerCase()) ?? false));
     const totalAdmins = users.filter(u => u.role === "admin").length;
 
     if (loading) return <UserListSkeleton />;

@@ -246,75 +246,76 @@ body {
     }
 }
 
-/* ===== LINKS ===== */
-a {
-    color: var(--color-primary-600);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-    outline: none;
-}
+/* ===== LINKS & FORM ELEMENTS (Moved into base layer) ===== */
+@layer base {
+    a {
+        color: var(--color-primary-600);
+        text-decoration: none;
+        transition: color var(--transition-fast);
+        outline: none;
+    }
 
-a:hover,
-a:focus-visible {
-    color: var(--color-primary-700);
-}
+    a:hover,
+    a:focus-visible {
+        color: var(--color-primary-700);
+    }
 
-a:focus-visible {
-    outline: 2px solid var(--color-primary-600);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-}
+    a:focus-visible {
+        outline: 2px solid var(--color-primary-600);
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
+    }
 
-/* ===== FORM ELEMENTS ===== */
-button {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    cursor: pointer;
-    border: none;
-    background: none;
-    transition: all var(--transition-fast);
-    outline: none;
-}
+    button {
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        cursor: pointer;
+        border: none;
+        background: none;
+        transition: all var(--transition-fast);
+        outline: none;
+    }
 
-button:focus-visible {
-    outline: 2px solid var(--color-primary-600);
-    outline-offset: 2px;
-    border-radius: var(--radius-sm);
-}
+    button:focus-visible {
+        outline: 2px solid var(--color-primary-600);
+        outline-offset: 2px;
+        border-radius: var(--radius-sm);
+    }
 
-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.6;
-}
+    button:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
 
-input,
-textarea,
-select {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    background: var(--background-card);
-    border: 1px solid var(--border-primary);
-    border-radius: var(--radius-lg);
-    color: var(--foreground-primary);
-    transition:
-        border-color var(--transition-fast),
-        box-shadow var(--transition-fast);
-    outline: none;
-}
+    input,
+    textarea,
+    select {
+        font-family: inherit;
+        font-size: inherit;
+        line-height: inherit;
+        background: var(--background-card);
+        border: 1px solid var(--border-primary);
+        border-radius: var(--radius-lg);
+        color: var(--foreground-primary);
+        transition:
+            border-color var(--transition-fast),
+            box-shadow var(--transition-fast);
+        outline: none;
+    }
 
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: var(--color-primary-600);
-    /* Steel-blue focus ring */
-    box-shadow: 0 0 0 3px rgba(62, 94, 133, 0.18);
-}
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: var(--color-primary-600);
+        /* Steel-blue focus ring */
+        box-shadow: 0 0 0 3px rgba(62, 94, 133, 0.18);
+    }
 
-input::placeholder,
-textarea::placeholder {
-    color: var(--foreground-muted);
+    input::placeholder,
+    textarea::placeholder {
+        color: var(--foreground-muted);
+    }
 }
 
 /* ===== SCROLLBAR ===== */
@@ -1113,27 +1114,27 @@ textarea::placeholder {
 .admin-dark input,
 .admin-dark textarea,
 .admin-dark select {
-    background: rgba(255, 255, 255, 0.04);
-    border-color: rgba(255, 255, 255, 0.09);
-    color: #ffffff;
+    background: rgba(30, 41, 59, 0.8); /* slate-800/80 */
+    border-color: #334155; /* slate-700 */
+    color: #e2e8f0; /* slate-200 */
 }
 
 .admin-dark input:focus,
 .admin-dark textarea:focus,
 .admin-dark select:focus {
-    border-color: rgba(62, 94, 133, 0.7);
-    box-shadow: 0 0 0 3px rgba(62, 94, 133, 0.18);
-    background: rgba(255, 255, 255, 0.06);
+    border-color: #f59e0b; /* amber-500 */
+    box-shadow: 0 0 0 1px #f59e0b; /* ring-1 amber-500 */
+    background: rgba(30, 41, 59, 0.9);
 }
 
 .admin-dark input::placeholder,
 .admin-dark textarea::placeholder {
-    color: rgba(255, 255, 255, 0.2);
+    color: #64748b; /* slate-500 */
 }
 
 .admin-dark select option {
-    background: #0e1a2b;
-    color: #ffffff;
+    background: #1e293b; /* slate-800 */
+    color: #e2e8f0;
 }
 
 /* Admin scrollbar — dark variant */

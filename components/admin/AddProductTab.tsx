@@ -54,14 +54,14 @@ export function AddProductTab() {
 
     return (
         <div className="space-y-6">
-            <div className="rounded-3xl overflow-hidden bg-white/5 border border-white/10 shadow-lg transition-all duration-300 hover:shadow-2xl hover:shadow-black/30 animate-slide-up" style={{ animationFillMode: 'both', animationDelay: '100ms' }}>
+            <div className="rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-sm transition-shadow duration-300 hover:shadow-lg hover:shadow-black/20 animate-slide-up" style={{ animationFillMode: 'both', animationDelay: '100ms' }}>
                 <form onSubmit={handleSubmit}>
                     <div className="grid lg:grid-cols-[1fr_1.2fr]">
                         {/* Image column */}
-                        <div className="p-6 sm:p-8 lg:p-10 border-b border-white/10 lg:border-b-0 lg:border-r">
+                        <div className="p-5 sm:p-6 md:p-8 border-b border-slate-800 lg:border-b-0 lg:border-r">
                             <div className="flex items-center gap-2 mb-6">
-                                <ImageIcon size={14} className="text-accent-500" />
-                                <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-200/60">Product Image</span>
+                                <ImageIcon size={14} className="text-amber-500" />
+                                <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-300">Product Image</span>
                             </div>
                             <ImageDropzone
                                 preview={preview} dragActive={dragActive}
@@ -78,11 +78,11 @@ export function AddProductTab() {
                             </div>
                             <div>
                                 <div className="flex items-center gap-2 mb-2">
-                                    <Tag size={13} className="text-accent-500" />
-                                    <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-200/60">Category</span>
+                                    <Tag size={13} className="text-amber-500" />
+                                    <span className="text-[11px] font-semibold uppercase tracking-widest text-slate-300">Category</span>
                                 </div>
                                 <FieldSelect value={category} onChange={e => setCategory(e.target.value)}>
-                                    {CATEGORY_OPTIONS.map(({ value, label }) => (<option key={value} value={value} className="bg-primary-900 text-slate-100">{label}</option>))}
+                                    {CATEGORY_OPTIONS.map(({ value, label }) => (<option key={value} value={value} className="bg-slate-800 text-slate-100">{label}</option>))}
                                 </FieldSelect>
                             </div>
                             <div>
@@ -91,23 +91,23 @@ export function AddProductTab() {
                             </div>
                             <button
                                 type="submit" disabled={uploading}
-                                className="w-full h-14 rounded-2xl font-semibold text-sm text-white flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none mt-4 bg-gradient-to-br from-accent-500 to-accent-600 shadow-[0_4px_20px_rgba(220,169,99,0.3)] hover:shadow-[0_6px_24px_rgba(220,169,99,0.4)]"
+                                className="w-full h-14 rounded-md font-semibold text-sm text-slate-900 flex items-center justify-center gap-2 transition-all duration-200 hover:bg-amber-400 active:scale-[0.99] disabled:opacity-50 disabled:pointer-events-none mt-4 bg-amber-500 shadow-[0_4px_20px_rgba(245,158,11,0.3)] hover:shadow-[0_6px_24px_rgba(245,158,11,0.4)] focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-slate-900"
                             >
-                                {uploading ? <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />Uploading…</> : <><Plus size={18} />Publish Product</>}
+                                {uploading ? <><div className="w-5 h-5 border-2 border-slate-900/30 border-t-slate-900 rounded-full animate-spin" />Uploading…</> : <><Plus size={18} />Publish Product</>}
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
             {/* Tips */}
-            <div className="flex gap-3 p-5 rounded-2xl bg-primary-600/10 border border-primary-600/20 animate-slide-up" style={{ animationFillMode: 'both', animationDelay: '200ms' }}>
-                <CheckCircle2 size={16} className="shrink-0 mt-0.5 text-primary-400" />
+            <div className="flex gap-3 p-5 rounded-md bg-blue-900/20 border border-blue-500/30 animate-slide-up" style={{ animationFillMode: 'both', animationDelay: '200ms' }}>
+                <CheckCircle2 size={16} className="shrink-0 mt-0.5 text-blue-300" />
                 <div>
-                    <p className="text-xs font-semibold mb-2 text-primary-200/70">Tips for better listings</p>
+                    <p className="text-xs font-semibold mb-2 text-blue-300">Tips for better listings</p>
                     <ul className="space-y-1.5">
                         {["Use high-quality images with a clean background", "Include specs — capacity, accuracy, and material", "Choose the most specific category available"].map(t => (
-                            <li key={t} className="flex items-start gap-2 text-xs text-primary-200/50">
-                                <span className="shrink-0 mt-0.5 text-accent-500/70">·</span>{t}
+                            <li key={t} className="flex items-start gap-2 text-xs text-blue-300/80">
+                                <span className="shrink-0 mt-0.5 text-blue-400">·</span>{t}
                             </li>
                         ))}
                     </ul>

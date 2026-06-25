@@ -52,7 +52,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       initial="hidden"
       animate="visible"
       className={cn(
-        "glass glass-hover ui-card group rounded-2xl",
+        "bg-slate-900 border border-slate-800 transition-colors hover:border-slate-700 group rounded-2xl flex flex-col overflow-hidden shadow-sm hover:shadow-md",
         !product.is_active && "opacity-60",
         className,
       )}
@@ -60,8 +60,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Image */}
       <Link
         href={`/products/${product.id}`}
-        className="ui-media ui-media-4-3 block"
-        style={{ background: "rgba(255,255,255,0.04)" }}
+        className="relative block aspect-[4/3] bg-slate-800 overflow-hidden shrink-0"
       >
         {product.image_url ? (
           <Image
@@ -69,61 +68,52 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-contain transition-transform duration-500 group-hover:scale-105"
             priority={false}
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">
-            <Package size={36} style={{ color: "rgba(174,202,233,0.5)" }} />
+            <Package size={40} className="text-slate-600" />
           </div>
         )}
 
         {/* Category badge */}
-        <span className="glass-subtle absolute left-3 top-3 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
+        <span className="absolute left-3 top-3 rounded-md bg-slate-900/90 backdrop-blur-sm border border-slate-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
           {getCategoryLabel(product.category)}
         </span>
-
-        {/* Hover overlay */}
-        <div
-          className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style={{ background: "rgba(8,15,24,0.45)", backdropFilter: "blur(2px)" }}
-        >
-          <span className="glass-strong flex h-11 w-11 items-center justify-center rounded-full text-white">
-            <ArrowRight size={20} />
-          </span>
-        </div>
       </Link>
 
       {/* Content */}
-      <div className="ui-card-body p-4">
-        <Link href={`/products/${product.id}`} className="flex-1">
+      <div className="flex flex-col flex-1 p-5">
+        <Link href={`/products/${product.id}`} className="flex flex-col flex-1">
           <h3
-            className="mb-1.5 line-clamp-2 font-semibold text-white transition-colors group-hover:text-[#DCA963]"
-            style={{ fontSize: "0.9rem", lineHeight: 1.4, letterSpacing: "-0.01em" }}
+            className="mb-2 line-clamp-2 font-bold text-slate-100 transition-colors group-hover:text-amber-500"
+            style={{ fontSize: "1.05rem", lineHeight: 1.4 }}
           >
             {product.name}
           </h3>
-          <p className="inline-flex items-center gap-1 text-xs" style={{ color: "#8FA6C2" }}>
-            View details
-            <ArrowRight
-              size={12}
-              className="transition-transform duration-200 group-hover:translate-x-1"
-            />
-          </p>
+          <div className="mt-auto pt-2">
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 group-hover:text-slate-200 transition-colors">
+              View details
+              <ArrowRight
+                size={14}
+                className="transition-transform duration-200 group-hover:translate-x-1"
+              />
+            </span>
+          </div>
         </Link>
 
         {/* Admin actions */}
         {showActions && (onEdit || onDelete) && (
-          <div className="relative z-20 mt-4 flex gap-2">
+          <div className="mt-4 flex gap-2 pt-4 border-t border-slate-800">
             {onEdit && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onEdit}
-                className="h-8 flex-1 text-xs"
-                style={{ borderColor: "rgba(255,255,255,0.2)", color: "#AECAE9" }}
+                className="h-9 flex-1 text-xs bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-slate-50"
               >
-                <Pencil size={13} className="mr-1" /> Edit
+                <Pencil size={14} className="mr-1.5" /> Edit
               </Button>
             )}
             {onDelete && (
@@ -131,9 +121,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 variant="danger"
                 size="sm"
                 onClick={onDelete}
-                className="h-8 flex-1 border-none bg-red-500/15 text-xs text-red-300 hover:bg-red-500/25"
+                className="h-9 flex-1 border-none bg-red-500/10 text-xs font-medium text-red-400 hover:bg-red-500/20 hover:text-red-300"
               >
-                <Trash2 size={13} className="mr-1" /> Delete
+                <Trash2 size={14} className="mr-1.5" /> Delete
               </Button>
             )}
           </div>

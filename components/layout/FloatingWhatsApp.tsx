@@ -4,7 +4,7 @@ import { Phone, Star, MessageCircle } from "lucide-react";
 
 export const FloatingWhatsApp = () => {
   return (
-    <div className="flex fixed bottom-[88px] md:bottom-10 right-4 md:right-6 z-[45] flex-col items-end gap-3 pointer-events-none">
+    <div className="hidden md:flex fixed bottom-10 right-6 z-[45] flex-col items-end gap-3 pointer-events-none">
       {/* Review button */}
       <motion.a
         href="https://www.google.com/search?q=G.+S+Trade+link+%28+Taraju+pasa%29+Reviews&sa=X&ved=2ahUKEwjqsdqxtICTAxXESWwGHXBNLhoQ0bkNegQIIRAI&biw=2046&bih=918&dpr=0.67"

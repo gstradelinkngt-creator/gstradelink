@@ -38,8 +38,7 @@ export const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  // Live store-open state (closed Mon · 10 AM–6 PM). Computed client-side so it
-  // reflects the visitor's current time; re-checked every minute.
+  
   const [storeOpen, setStoreOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -51,7 +50,6 @@ export const Navbar = () => {
     return () => clearInterval(id);
   }, []);
 
-  // Auth state listener
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
@@ -76,26 +74,11 @@ export const Navbar = () => {
       href: "/products",
       children: [
         { label: "All Products", href: "/products" },
-        {
-          label: "Precision Scales",
-          href: "/products?category=Precision%20%26%20Pocket%20Mini%20Scales",
-        },
-        {
-          label: "Kitchen Scales",
-          href: "/products?category=Kitchen%20%26%20Compact%20Tabletop%20Scales",
-        },
-        {
-          label: "Luggage Scales",
-          href: "/products?category=Portable%20%26%20Luggage%20Scales",
-        },
-        {
-          label: "Industrial & Crane Scales",
-          href: "/products?category=Heavy-Duty%20Hanging%20%26%20Crane%20Scales",
-        },
-        {
-          label: "Health & Baby",
-          href: "/products?category=Personal%20Health%20%26%20Bathroom%20Scales",
-        },
+        { label: "Precision Scales", href: "/products?category=Precision%20%26%20Pocket%20Mini%20Scales" },
+        { label: "Kitchen Scales", href: "/products?category=Kitchen%20%26%20Compact%20Tabletop%20Scales" },
+        { label: "Luggage Scales", href: "/products?category=Portable%20%26%20Luggage%20Scales" },
+        { label: "Industrial & Crane Scales", href: "/products?category=Heavy-Duty%20Hanging%20%26%20Crane%20Scales" },
+        { label: "Health & Baby", href: "/products?category=Personal%20Health%20%26%20Bathroom%20Scales" },
       ],
     },
     { label: "Services", href: "/services" },
@@ -108,20 +91,22 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // BUG FIX: Only pathname in dep array to avoid infinite loop.
-  // Previously isOpen & activeDropdown were listed, causing setIsOpen → re-render → effect → setIsOpen loop.
   useEffect(() => {
     setIsOpen(false);
     setActiveDropdown(null);
+    setShowUserMenu(false);
   }, [pathname]);
 
   useEffect(() => {
-    const handleClickOutside = () => setActiveDropdown(null);
-    if (activeDropdown) {
+    const handleClickOutside = () => {
+      setActiveDropdown(null);
+      setShowUserMenu(false);
+    };
+    if (activeDropdown || showUserMenu) {
       document.addEventListener("click", handleClickOutside);
       return () => document.removeEventListener("click", handleClickOutside);
     }
-  }, [activeDropdown]);
+  }, [activeDropdown, showUserMenu]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -131,9 +116,7 @@ export const Navbar = () => {
 
     document.body.style.overflow = "hidden";
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setIsOpen(false);
-      }
+      if (e.key === "Escape") setIsOpen(false);
     };
 
     document.addEventListener("keydown", handleEscape);
@@ -152,7 +135,6 @@ export const Navbar = () => {
 
   const isActivePath = (href: string) => {
     if (href === "/") return pathname === "/";
-    // Strip query string — pathname never contains query params
     const hrefPath = href.split("?")[0];
     return pathname.startsWith(hrefPath);
   };
@@ -160,29 +142,22 @@ export const Navbar = () => {
   return (
     <div>
       {/* Top contact bar */}
-      <div
-        className="hidden xl:block py-2 border-b border-white/10"
-        style={{ background: "#1A2433" }}
-      >
-        <div className="container-fluid">
-          <div
-            className="flex items-center justify-between text-sm"
-            style={{ color: "#AECAE9" }}
-          >
+      <div className="hidden xl:block py-2.5 border-b border-slate-800 bg-slate-950">
+        <div className="container-fluid px-6">
+          <div className="flex items-center justify-between text-sm text-slate-300">
             <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2">
-                <Phone size={13} />
+              <div className="flex items-center space-x-2 font-medium">
+                <Phone size={14} className="text-slate-400" />
                 <span>+977 9845541939</span>
               </div>
-              <span className="text-white/20">•</span>
-              <span>Open all days except Monday · 10:00 AM – 6:00 PM</span>
+              <span className="text-slate-700">•</span>
+              <span className="text-slate-400">Open all days except Monday · 10:00 AM – 6:00 PM</span>
             </div>
             <a
               href="https://wa.me/9779845541939"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm transition-colors hover:text-white"
-              style={{ color: "#DCA963" }}
+              className="flex items-center gap-1.5 text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors"
             >
               <span>Fast response on WhatsApp ↗</span>
             </a>
@@ -196,19 +171,13 @@ export const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300 glass-subtle",
+          "sticky top-0 z-50 w-full transition-all duration-300 border-b",
           isScrolled
-            ? "shadow-[0_12px_36px_-12px_rgba(0,0,0,0.65)]"
-            : "",
+            ? "shadow-sm shadow-black/20 bg-slate-950/90 backdrop-blur-md border-slate-800"
+            : "bg-slate-950/70 backdrop-blur-md border-slate-800/60"
         )}
-        style={{
-          borderBottom: "1px solid rgba(255,255,255,0.08)",
-          background: isScrolled
-            ? "rgba(13,22,34,0.82)"
-            : "rgba(13,22,34,0.55)",
-        }}
       >
-        <div className="container-fluid">
+        <div className="container-fluid px-6">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link
@@ -216,29 +185,21 @@ export const Navbar = () => {
               className="flex items-center gap-3 group"
               onClick={() => setIsOpen(false)}
             >
-              <span
-                className="flex items-center justify-center h-11 w-11 shrink-0 rounded-xl bg-white p-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.25)] transition-transform duration-300 group-hover:scale-105"
-              >
+              <div className="aspect-square h-12 w-12 overflow-hidden rounded-lg bg-slate-800 flex items-center justify-center p-1.5 border border-slate-700/60 shadow-sm transition-transform duration-300 group-hover:scale-105">
                 <Image
                   src="/logo.png"
                   alt="GSTradeLink Logo"
                   width={200}
                   height={56}
-                  className="h-full w-full object-contain"
+                  className="w-full h-full object-contain"
                   priority
                 />
-              </span>
+              </div>
               <div className="hidden sm:block">
-                <div
-                  className="font-bold text-xl transition-colors"
-                  style={{ color: "#FFFFFF" }}
-                >
+                <div className="font-bold text-xl text-slate-50 tracking-tight transition-colors">
                   GSTradeLink
                 </div>
-                <div
-                  className="text-[10px] uppercase tracking-widest font-semibold"
-                  style={{ color: "#93B2D6" }}
-                >
+                <div className="text-[10px] uppercase tracking-widest font-semibold text-slate-400">
                   Bharatpur · Chitwan
                 </div>
               </div>
@@ -253,10 +214,10 @@ export const Navbar = () => {
                       <button
                         onClick={(e) => toggleDropdown(item.label, e)}
                         className={cn(
-                          "flex items-center gap-1.5 px-2 py-2 text-sm font-semibold transition-colors",
+                          "flex items-center gap-1.5 px-2 py-2 text-sm font-medium transition-colors",
                           isActivePath(item.href)
-                            ? "text-white"
-                            : "text-[#AECAE9] hover:text-white",
+                            ? "text-slate-50 font-semibold"
+                            : "text-slate-300 hover:text-slate-50"
                         )}
                       >
                         <span>{item.label}</span>
@@ -264,7 +225,7 @@ export const Navbar = () => {
                           size={16}
                           className={cn(
                             "transition-transform duration-200",
-                            activeDropdown === item.label && "rotate-180",
+                            activeDropdown === item.label && "rotate-180"
                           )}
                         />
                       </button>
@@ -276,17 +237,17 @@ export const Navbar = () => {
                             animate={{ opacity: 1, y: 0, scale: 1 }}
                             exit={{ opacity: 0, y: -10, scale: 0.95 }}
                             transition={{ duration: 0.15 }}
-                            className="glass-strong absolute top-full left-0 mt-2 w-56 rounded-2xl p-2 z-50 overflow-hidden"
+                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 rounded-lg p-2 z-50 bg-slate-900 border border-slate-800 shadow-xl overflow-hidden"
                           >
                             {item.children.map((child) => (
                               <Link
                                 key={child.href}
                                 href={child.href}
                                 className={cn(
-                                  "block px-4 py-2 rounded-lg text-sm font-medium transition-colors",
+                                  "block px-4 py-2.5 rounded-lg text-sm transition-colors",
                                   isActivePath(child.href)
-                                    ? "text-white bg-white/10"
-                                    : "text-[#AECAE9] hover:text-white hover:bg-white/5",
+                                    ? "font-semibold text-slate-50 bg-slate-800"
+                                    : "font-medium text-slate-300 hover:text-slate-50 hover:bg-slate-800/60"
                                 )}
                               >
                                 {child.label}
@@ -300,10 +261,10 @@ export const Navbar = () => {
                     <Link
                       href={item.href}
                       className={cn(
-                        "px-2 py-2 text-sm font-semibold transition-colors",
+                        "px-2 py-2 text-sm font-medium transition-colors",
                         isActivePath(item.href)
-                          ? "text-white"
-                          : "text-[#AECAE9] hover:text-white",
+                          ? "text-slate-50 font-semibold"
+                          : "text-slate-300 hover:text-slate-50"
                       )}
                     >
                       {item.label}
@@ -312,16 +273,12 @@ export const Navbar = () => {
                 </div>
               ))}
 
-              <div className="ml-4 pl-8 border-l border-white/10 flex items-center gap-3">
+              <div className="ml-4 pl-8 border-l border-slate-800 flex items-center gap-4">
                 <a
                   href="https://wa.me/9779845541939"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-gold inline-flex items-center gap-1.5 px-5 py-2.5 text-sm font-bold transition-all whitespace-nowrap"
-                  style={{
-                    borderRadius: "9999px",
-                    textDecoration: "none",
-                  }}
+                  className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold px-5 py-2 rounded-lg transition-colors duration-200 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap text-sm"
                 >
                   Get Quote
                 </a>
@@ -331,12 +288,11 @@ export const Navbar = () => {
                   <div className="relative">
                     <button
                       onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-white/30"
-                      style={{ background: "rgba(255,255,255,0.1)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }}
+                      className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-amber-500/50 bg-slate-800 border border-slate-700 text-slate-50 overflow-hidden"
                       title={user.email ?? "Account"}
                     >
                       {user.user_metadata?.avatar_url ? (
-                        <Image src={user.user_metadata.avatar_url} alt="Avatar" width={36} height={36} className="w-full h-full rounded-full object-cover" />
+                        <Image src={user.user_metadata.avatar_url} alt="Avatar" width={40} height={40} className="w-full h-full object-cover" />
                       ) : (
                         user.email?.[0]?.toUpperCase() ?? <User size={16} />
                       )}
@@ -348,16 +304,16 @@ export const Navbar = () => {
                           animate={{ opacity: 1, y: 0, scale: 1 }}
                           exit={{ opacity: 0, y: -10, scale: 0.95 }}
                           transition={{ duration: 0.15 }}
-                          className="glass-strong absolute top-full right-0 mt-2 w-56 rounded-2xl p-2 z-50"
+                          className="absolute top-full right-0 mt-3 w-56 rounded-lg p-2 z-50 bg-slate-900 border border-slate-800 shadow-xl"
                         >
-                          <div className="px-3 py-2 mb-1 border-b border-white/10">
-                            <p className="text-xs font-semibold text-white truncate">{user.email}</p>
+                          <div className="px-3 py-2 mb-2 border-b border-slate-800">
+                            <p className="text-xs font-semibold text-slate-50 truncate">{user.email}</p>
                           </div>
-                          <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-[#AECAE9] hover:text-white hover:bg-white/5 transition-colors" onClick={() => setShowUserMenu(false)}>
-                            <Shield size={14} /> Admin Panel
+                          <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-slate-50 hover:bg-slate-800/80 transition-colors" onClick={() => setShowUserMenu(false)}>
+                            <Shield size={16} /> Admin Panel
                           </Link>
-                          <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-red-300 hover:bg-red-500/15 transition-colors">
-                            <LogOut size={14} /> Sign Out
+                          <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-red-400 hover:bg-slate-800/80 transition-colors mt-1">
+                            <LogOut size={16} /> Sign Out
                           </button>
                         </motion.div>
                       )}
@@ -366,8 +322,7 @@ export const Navbar = () => {
                 ) : (
                   <Link
                     href="/admin/login"
-                    className="w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
-                    style={{ border: "1.5px solid rgba(255,255,255,0.2)", color: "#AECAE9" }}
+                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-slate-50"
                     title="Admin Login"
                   >
                     <User size={16} />
@@ -379,23 +334,44 @@ export const Navbar = () => {
             <div className="flex items-center gap-3 lg:hidden">
               {/* Auth: Avatar / Login for Mobile */}
               {user ? (
-                <button
-                  onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-white/30"
-                  style={{ background: "rgba(255,255,255,0.1)", color: "#fff", border: "1px solid rgba(255,255,255,0.18)" }}
-                  title={user.email ?? "Account"}
-                >
-                  {user.user_metadata?.avatar_url ? (
-                    <Image src={user.user_metadata.avatar_url} alt="Avatar" width={32} height={32} className="w-full h-full rounded-full object-cover" />
-                  ) : (
-                    user.email?.[0]?.toUpperCase() ?? <User size={14} />
-                  )}
-                </button>
+                <div className="relative">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-amber-500/50 bg-slate-800 border border-slate-700 text-slate-50 overflow-hidden"
+                    title={user.email ?? "Account"}
+                  >
+                    {user.user_metadata?.avatar_url ? (
+                      <Image src={user.user_metadata.avatar_url} alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
+                    ) : (
+                      user.email?.[0]?.toUpperCase() ?? <User size={14} />
+                    )}
+                  </button>
+                  <AnimatePresence>
+                    {showUserMenu && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute top-full right-0 mt-3 w-56 rounded-lg p-2 z-50 bg-slate-900 border border-slate-800 shadow-xl"
+                      >
+                        <div className="px-3 py-2 mb-2 border-b border-slate-800">
+                          <p className="text-xs font-semibold text-slate-50 truncate">{user.email}</p>
+                        </div>
+                        <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-slate-50 hover:bg-slate-800/80 transition-colors" onClick={() => setShowUserMenu(false)}>
+                          <Shield size={16} /> Admin Panel
+                        </Link>
+                        <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-red-400 hover:bg-slate-800/80 transition-colors mt-1">
+                          <LogOut size={16} /> Sign Out
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               ) : (
                 <Link
                   href="/admin/login"
-                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
-                  style={{ border: "1.5px solid rgba(255,255,255,0.2)", color: "#AECAE9" }}
+                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-slate-50"
                   title="Admin Login"
                 >
                   <User size={14} />
@@ -405,7 +381,7 @@ export const Navbar = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
-                className="p-2 rounded-lg text-[#AECAE9] hover:text-white hover:bg-white/10 transition-colors"
+                className="p-2 rounded-lg text-slate-300 hover:text-slate-50 hover:bg-slate-800/80 transition-colors"
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >
@@ -420,7 +396,7 @@ export const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation - Premium Design */}
+        {/* Mobile Navigation */}
         <AnimatePresence>
           {isOpen && (
             <>
@@ -429,7 +405,7 @@ export const Navbar = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-[#0F1825]/60 backdrop-blur-md z-40 lg:hidden"
+                className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
                 onClick={() => setIsOpen(false)}
               />
 
@@ -439,328 +415,207 @@ export const Navbar = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: "100%" }}
                 transition={{ type: "spring", stiffness: 350, damping: 35 }}
-                className="fixed top-0 right-0 h-full w-[85%] max-w-[320px] z-50 lg:hidden"
-                style={{
-                  background:
-                    "linear-gradient(180deg, #1A2433 0%, #0F1825 100%)",
-                  boxShadow: "-8px 0 40px rgba(0,0,0,0.4)",
-                }}
+                className="fixed top-0 right-0 h-full w-[85%] max-w-[360px] z-50 lg:hidden bg-slate-950 border-l border-slate-800 shadow-2xl flex flex-col"
               >
-                <div className="flex flex-col h-full">
-                  {/* Header with Logo */}
-                  <div className="relative px-5 pt-5 pb-4">
-                    {/* Close button */}
-                    <button
-                      onClick={() => setIsOpen(false)}
-                      className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:bg-white/10"
-                      style={{ color: "rgba(255,255,255,0.5)" }}
-                    >
-                      <X size={20} />
-                    </button>
-
-                    {/* Logo & Brand */}
-                    <div className="flex items-center gap-3">
-                      <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center p-1.5 shrink-0"
-                        style={{
-                          background: "#FFFFFF",
-                          boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-                        }}
-                      >
-                        <Image
-                          src="/logo.png"
-                          alt="GSTradeLink Logo"
-                          width={48}
-                          height={48}
-                          className="w-full h-full object-contain"
-                        />
-                      </div>
-                      <div>
-                        <div
-                          className="font-bold text-lg leading-tight"
-                          style={{ color: "#FFFFFF" }}
-                        >
-                          GSTradeLink
-                        </div>
-                        <div
-                          className="text-[10px] uppercase tracking-[0.15em] font-medium mt-0.5"
-                          style={{ color: "#DCA963" }}
-                        >
-                          Bharatpur · Chitwan
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quick Info Bar */}
-                  <div
-                    className="mx-4 mb-4 px-4 py-3 rounded-xl"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.08)",
-                    }}
+                {/* Header with Logo */}
+                <div className="relative px-6 pt-6 pb-5">
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="absolute top-5 right-5 w-9 h-9 rounded-lg flex items-center justify-center transition-all bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800"
                   >
-                    <div className="flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2">
-                        <div
-                          className="w-2 h-2 rounded-full"
-                          style={{
-                            background: storeOpen ? "#25D366" : "#EF4444",
-                            boxShadow: storeOpen
-                              ? "0 0 8px rgba(37,211,102,0.6)"
-                              : "0 0 8px rgba(239,68,68,0.5)",
-                          }}
-                        />
-                        <span style={{ color: "rgba(255,255,255,0.7)" }}>
-                          {storeOpen ? "Open now" : "Closed now"}
-                        </span>
+                    <X size={20} />
+                  </button>
+
+                  <div className="flex items-center gap-3">
+                    <div className="aspect-square h-12 w-12 overflow-hidden rounded-lg bg-slate-800 flex items-center justify-center p-1.5 border border-slate-700/60 shadow-sm shrink-0">
+                      <Image
+                        src="/logo.png"
+                        alt="GSTradeLink Logo"
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-contain"
+                      />
+                    </div>
+                    <div>
+                      <div className="font-bold text-xl text-slate-50 tracking-tight">
+                        GSTradeLink
                       </div>
-                      <div
-                        className="flex items-center gap-1.5"
-                        style={{ color: "rgba(255,255,255,0.5)" }}
-                      >
-                        <Clock size={12} />
-                        <span>10 AM – 6 PM</span>
+                      <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-amber-500 mt-0.5">
+                        Bharatpur · Chitwan
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Navigation Items */}
-                  <div className="flex-1 overflow-y-auto px-4 pb-4">
-                    <nav className="space-y-1.5">
-                      {[
-                        { icon: Home, label: "Home", href: "/" },
-                        {
-                          icon: Package,
-                          label: "Products",
-                          href: "/products",
-                          hasChildren: true,
-                        },
-                        { icon: Wrench, label: "Services", href: "/services" },
-                        { icon: Mail, label: "Contact", href: "/contact" },
-                      ].map((item, index) => {
-                        const Icon = item.icon;
-                        const isActive = isActivePath(item.href);
-                        const navItem = navItems.find(
-                          (n) => n.label === item.label,
-                        );
-                        const hasChildren =
-                          item.hasChildren && navItem?.children;
+                {/* Quick Info Bar */}
+                <div className="mx-6 mb-6 px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={cn("w-2 h-2 rounded-full", storeOpen ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]")}
+                    />
+                    <span className="text-slate-300 font-medium">
+                      {storeOpen ? "Open now" : "Closed now"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <Clock size={14} />
+                    <span>10 AM – 6 PM</span>
+                  </div>
+                </div>
 
-                        return (
-                          <motion.div
-                            key={item.label}
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 + index * 0.05 }}
-                          >
-                            {hasChildren ? (
-                              <div>
-                                <button
-                                  onClick={(e) => toggleDropdown(item.label, e)}
-                                  className={cn(
-                                    "w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200",
-                                    isActive
-                                      ? "bg-[#3E5E85]"
-                                      : "hover:bg-white/5",
-                                  )}
-                                >
-                                  <div
-                                    className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                                    style={{
-                                      background: isActive
-                                        ? "rgba(255,255,255,0.15)"
-                                        : "rgba(255,255,255,0.08)",
-                                    }}
-                                  >
-                                    <Icon
-                                      size={18}
-                                      style={{
-                                        color: isActive ? "#FFFFFF" : "#AECAE9",
-                                      }}
-                                    />
-                                  </div>
-                                  <span
-                                    className="flex-1 text-left font-medium text-[15px]"
-                                    style={{
-                                      color: isActive ? "#FFFFFF" : "#AECAE9",
-                                    }}
-                                  >
-                                    {item.label}
-                                  </span>
-                                  <ChevronDown
-                                    size={16}
-                                    className={cn(
-                                      "transition-transform duration-200",
-                                      activeDropdown === item.label &&
-                                      "rotate-180",
-                                    )}
-                                    style={{
-                                      color: isActive
-                                        ? "#FFFFFF"
-                                        : "rgba(174,202,233,0.5)",
-                                    }}
-                                  />
-                                </button>
+                {/* Navigation Items */}
+                <div className="flex-1 overflow-y-auto px-6 pb-6">
+                  <nav className="flex flex-col space-y-2">
+                    {[
+                      { icon: Home, label: "Home", href: "/" },
+                      {
+                        icon: Package,
+                        label: "Products",
+                        href: "/products",
+                        hasChildren: true,
+                      },
+                      { icon: Wrench, label: "Services", href: "/services" },
+                      { icon: Mail, label: "Contact", href: "/contact" },
+                    ].map((item, index) => {
+                      const Icon = item.icon;
+                      const isActive = isActivePath(item.href);
+                      const navItem = navItems.find((n) => n.label === item.label);
+                      const hasChildren = item.hasChildren && navItem?.children;
 
-                                <AnimatePresence>
-                                  {activeDropdown === item.label &&
-                                    navItem?.children && (
-                                      <motion.div
-                                        initial={{ height: 0, opacity: 0 }}
-                                        animate={{ height: "auto", opacity: 1 }}
-                                        exit={{ height: 0, opacity: 0 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="overflow-hidden"
-                                      >
-                                        <div
-                                          className="ml-6 mt-1.5 pl-4 py-2 space-y-1"
-                                          style={{
-                                            borderLeft:
-                                              "2px solid rgba(62,94,133,0.4)",
-                                          }}
-                                        >
-                                          {navItem.children.map((child) => (
-                                            <Link
-                                              key={child.href}
-                                              href={child.href}
-                                              className={cn(
-                                                "flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm transition-all",
-                                                isActivePath(child.href)
-                                                  ? "bg-[#3E5E85]/50 text-white"
-                                                  : "text-[#93B2D6] hover:text-white hover:bg-white/5",
-                                              )}
-                                              onClick={() => setIsOpen(false)}
-                                            >
-                                              <ChevronRight
-                                                size={14}
-                                                style={{ opacity: 0.5 }}
-                                              />
-                                              {child.label}
-                                            </Link>
-                                          ))}
-                                        </div>
-                                      </motion.div>
-                                    )}
-                                </AnimatePresence>
-                              </div>
-                            ) : (
-                              <Link
-                                href={item.href}
+                      return (
+                        <motion.div
+                          key={item.label}
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 + index * 0.05 }}
+                        >
+                          {hasChildren ? (
+                            <div className="flex flex-col">
+                              <button
+                                onClick={(e) => toggleDropdown(item.label, e)}
                                 className={cn(
-                                  "flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200",
+                                  "w-full flex items-center gap-3 px-4 py-3.5 rounded-lg transition-colors",
                                   isActive
-                                    ? "bg-[#3E5E85]"
-                                    : "hover:bg-white/5",
+                                    ? "bg-slate-800 border border-slate-700 text-slate-50"
+                                    : "bg-transparent text-slate-300 hover:bg-slate-900 border border-transparent hover:border-slate-800"
                                 )}
-                                onClick={() => setIsOpen(false)}
                               >
-                                <div
-                                  className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
-                                  style={{
-                                    background: isActive
-                                      ? "rgba(255,255,255,0.15)"
-                                      : "rgba(255,255,255,0.08)",
-                                  }}
-                                >
-                                  <Icon
-                                    size={18}
-                                    style={{
-                                      color: isActive ? "#FFFFFF" : "#AECAE9",
-                                    }}
-                                  />
+                                <div className={cn("w-8 h-8 rounded-md flex items-center justify-center shrink-0", isActive ? "bg-slate-700" : "bg-slate-800/50")}>
+                                  <Icon size={18} className={isActive ? "text-slate-50" : "text-slate-400"} />
                                 </div>
-                                <span
-                                  className="font-medium text-[15px]"
-                                  style={{
-                                    color: isActive ? "#FFFFFF" : "#AECAE9",
-                                  }}
-                                >
+                                <span className={cn("flex-1 text-left font-medium text-[15px]", isActive ? "text-slate-50" : "text-slate-300")}>
                                   {item.label}
                                 </span>
-                              </Link>
-                            )}
-                          </motion.div>
-                        );
-                      })}
-                    </nav>
+                                <ChevronDown
+                                  size={16}
+                                  className={cn(
+                                    "transition-transform duration-200",
+                                    activeDropdown === item.label ? "rotate-180 text-slate-50" : "text-slate-500"
+                                  )}
+                                />
+                              </button>
 
-                    {/* Contact Info Section */}
-                    <div className="mt-6 pt-5 border-t border-white/10">
-                      <p
-                        className="text-[10px] uppercase tracking-[0.15em] font-semibold mb-3 px-1"
-                        style={{ color: "rgba(255,255,255,0.35)" }}
+                              <AnimatePresence>
+                                {activeDropdown === item.label && navItem?.children && (
+                                  <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="overflow-hidden"
+                                  >
+                                    <div className="ml-8 mt-2 pl-4 py-2 space-y-1.5 border-l-2 border-slate-800">
+                                      {navItem.children.map((child) => (
+                                        <Link
+                                          key={child.href}
+                                          href={child.href}
+                                          className={cn(
+                                            "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
+                                            isActivePath(child.href)
+                                              ? "bg-slate-800 text-slate-50 font-medium"
+                                              : "text-slate-400 hover:text-slate-50 hover:bg-slate-900"
+                                          )}
+                                          onClick={() => setIsOpen(false)}
+                                        >
+                                          <ChevronRight size={14} className="text-slate-500 opacity-50" />
+                                          {child.label}
+                                        </Link>
+                                      ))}
+                                    </div>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
+                            </div>
+                          ) : (
+                            <Link
+                              href={item.href}
+                              className={cn(
+                                "flex items-center gap-3 px-4 py-3.5 rounded-lg transition-colors",
+                                isActive
+                                  ? "bg-slate-800 border border-slate-700 text-slate-50"
+                                  : "bg-transparent text-slate-300 hover:bg-slate-900 border border-transparent hover:border-slate-800"
+                              )}
+                              onClick={() => setIsOpen(false)}
+                            >
+                              <div className={cn("w-8 h-8 rounded-md flex items-center justify-center shrink-0", isActive ? "bg-slate-700" : "bg-slate-800/50")}>
+                                <Icon size={18} className={isActive ? "text-slate-50" : "text-slate-400"} />
+                              </div>
+                              <span className={cn("font-medium text-[15px]", isActive ? "text-slate-50" : "text-slate-300")}>
+                                {item.label}
+                              </span>
+                            </Link>
+                          )}
+                        </motion.div>
+                      );
+                    })}
+                  </nav>
+
+                  {/* Contact Info Section */}
+                  <div className="mt-8 pt-6 border-t border-slate-800">
+                    <p className="text-[10px] uppercase tracking-[0.15em] font-semibold mb-4 px-1 text-slate-500">
+                      Contact Info
+                    </p>
+                    <div className="flex flex-col space-y-3">
+                      <a
+                        href="tel:+9779845541939"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-900 group"
                       >
-                        Contact Info
-                      </p>
-                      <div className="space-y-2.5">
-                        <a
-                          href="tel:+9779845541939"
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-white/5"
-                          style={{ color: "#93B2D6" }}
-                        >
-                          <Phone size={15} style={{ color: "#DCA963" }} />
-                          <span className="text-sm">+977 9845541939</span>
-                        </a>
-                        <a
-                          href="mailto:gstradelinkngt@gmail.com"
-                          className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all hover:bg-white/5"
-                          style={{ color: "#93B2D6" }}
-                        >
-                          <Mail size={15} style={{ color: "#DCA963" }} />
-                          <span className="text-sm">
-                            gstradelinkngt@gmail.com
-                          </span>
-                        </a>
-                        <div
-                          className="flex items-center gap-3 px-3 py-2.5"
-                          style={{ color: "#93B2D6" }}
-                        >
-                          <MapPin size={15} style={{ color: "#DCA963" }} />
-                          <span className="text-sm">Bharatpur-3, Chitwan</span>
-                        </div>
+                        <Phone size={16} className="text-amber-500 group-hover:text-amber-400" />
+                        <span className="text-sm font-medium text-slate-300 group-hover:text-slate-50">+977 9845541939</span>
+                      </a>
+                      <a
+                        href="mailto:gstradelinkngt@gmail.com"
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-900 group"
+                      >
+                        <Mail size={16} className="text-amber-500 group-hover:text-amber-400" />
+                        <span className="text-sm font-medium text-slate-300 group-hover:text-slate-50">gstradelinkngt@gmail.com</span>
+                      </a>
+                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg">
+                        <MapPin size={16} className="text-amber-500" />
+                        <span className="text-sm font-medium text-slate-400">Bharatpur-3, Chitwan</span>
                       </div>
                     </div>
                   </div>
+                </div>
 
-                  {/* Bottom CTA Buttons */}
-                  <div
-                    className="p-4 space-y-2.5"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.2) 100%)",
-                    }}
+                {/* Bottom CTA Buttons */}
+                <div className="p-6 bg-slate-900 border-t border-slate-800 flex flex-col gap-3">
+                  <a
+                    href="https://wa.me/9779845541939"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 shadow-sm"
                   >
-                    <a
-                      href="https://wa.me/9779845541939"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => setIsOpen(false)}
-                      className="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl text-sm font-bold transition-all hover:brightness-110 active:scale-[0.98]"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
-                        color: "#FFFFFF",
-                        boxShadow: "0 4px 20px rgba(37,211,102,0.35)",
-                      }}
-                    >
-                      <MessageCircle size={18} fill="white" />
-                      Chat on WhatsApp
-                    </a>
-                    <a
-                      href="tel:+9779845541939"
-                      onClick={() => setIsOpen(false)}
-                      className="w-full flex items-center justify-center gap-2.5 px-4 py-3.5 rounded-xl text-sm font-bold transition-all hover:bg-white/10 active:scale-[0.98]"
-                      style={{
-                        background: "rgba(255,255,255,0.08)",
-                        border: "1px solid rgba(255,255,255,0.15)",
-                        color: "#FFFFFF",
-                      }}
-                    >
-                      <Phone size={16} />
-                      Call Us Now
-                    </a>
-                  </div>
+                    <MessageCircle size={18} /> Chat on WhatsApp
+                  </a>
+                  <a
+                    href="tel:+9779845541939"
+                    onClick={() => setIsOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200"
+                  >
+                    <Phone size={16} /> Call Us Now
+                  </a>
                 </div>
               </motion.div>
             </>

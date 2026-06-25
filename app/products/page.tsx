@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoryFilterBar } from "@/components/products/CategoryFilterBar";
 import { createClient } from "@/lib/supabase/server";
-import { Search, Sparkles, Wrench, X } from "lucide-react";
+import { Search, Sparkles, Wrench, X, ArrowRight } from "lucide-react";
 import type { Product } from "@/types";
 import type { CategoryChip } from "@/components/products/CategoryFilterBar";
 import { PRODUCT_CATEGORIES, CATEGORY_SHORT_LABELS } from "@/lib/categories";
@@ -99,59 +99,50 @@ export default async function ProductsPage(props: {
   const activeLabel = CATEGORY_LABELS[selectedCategory];
 
   return (
-    <div className="aurora min-h-screen w-full overflow-hidden md:pb-16">
+    <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-16">
       {/* ───────────────────────────── Hero ───────────────────────────── */}
-      <section className="aurora-grid relative overflow-hidden pb-6 pt-12 sm:pt-16">
-        <div
-          className="aurora-orb aurora-orb--blue"
-          style={{ width: 360, height: 360, top: -120, left: -80 }}
-        />
-        <div
-          className="aurora-orb aurora-orb--gold"
-          style={{ width: 300, height: 300, top: -40, right: -100 }}
-        />
-
-        <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <span className="mb-4 inline-flex items-center gap-1.5 text-[0.65rem] font-bold uppercase tracking-[0.2em]" style={{ color: "#DCA963" }}>
-              <Sparkles size={12} />
+      <section className="relative overflow-hidden pb-8 pt-12 sm:pt-16 border-b border-slate-900">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="text-center flex flex-col items-center">
+            <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-slate-900 border border-slate-800 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-amber-500">
+              <Sparkles size={14} />
               Our Inventory
             </span>
 
             <h1
-              className="mb-3 font-bold text-white"
+              className="mb-4 font-bold text-slate-50"
               style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.025em", lineHeight: 1.1 }}
             >
-              Product <span className="text-gradient-gold">Catalogue</span>
+              Product <span className="text-amber-500">Catalogue</span>
             </h1>
 
             <p
-              className="mx-auto mb-7"
-              style={{ color: "#AECAE9", fontSize: "clamp(0.85rem, 1.5vw, 0.95rem)", maxWidth: "440px", lineHeight: 1.6 }}
+              className="mx-auto mb-8 max-w-md text-slate-400"
+              style={{ fontSize: "clamp(0.85rem, 1.5vw, 0.95rem)", lineHeight: 1.6 }}
             >
               Precision scales, genuine spare parts, and professional service —
               all in one place.
             </p>
 
             {/* Search */}
-            <form action="/products" method="get" className="relative mx-auto max-w-xl">
+            <form action="/products" method="get" className="relative mx-auto w-full max-w-xl">
               {selectedCategory !== "All" && (
                 <input type="hidden" name="category" value={selectedCategory} />
               )}
-              <div className="glass relative flex w-full items-center overflow-hidden rounded-full">
+              <div className="relative flex w-full items-center overflow-hidden rounded-xl bg-slate-900 border border-slate-800 shadow-sm focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500 transition-all">
                 <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-                  <Search size={18} style={{ color: "rgba(255,255,255,0.55)" }} />
+                  <Search size={18} className="text-slate-500" />
                 </span>
                 <input
                   type="text"
                   name="q"
                   defaultValue={searchQuery}
                   placeholder="Search products..."
-                  className="h-12 w-full bg-transparent pl-11 pr-[6.5rem] text-sm text-white placeholder:text-white/40 focus:outline-none"
+                  className="h-14 w-full bg-transparent pl-12 pr-[7.5rem] text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none border-none ring-0"
                 />
                 <button
                   type="submit"
-                  className="ui-btn ui-btn-sm btn-gold absolute inset-y-1.5 right-1.5"
+                  className="absolute inset-y-2 right-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-5 rounded-lg transition-colors text-sm"
                 >
                   Search
                 </button>
@@ -162,8 +153,8 @@ export default async function ProductsPage(props: {
       </section>
 
       {/* ──────────────────────────── Filter bar ──────────────────────────── */}
-      <section className="relative z-20 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="glass-strong rounded-2xl p-2 sm:p-2.5">
+      <section className="relative z-20 mx-auto max-w-7xl px-6 lg:px-8 pt-8">
+        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-2 sm:p-3 shadow-sm overflow-hidden">
           <CategoryFilterBar
             chips={categoryChips}
             selectedCategory={selectedCategory}
@@ -172,27 +163,27 @@ export default async function ProductsPage(props: {
       </section>
 
       {/* ─────────────────────────── Results bar ─────────────────────────── */}
-      <section className="mx-auto mt-6 max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <section className="mx-auto mt-6 max-w-7xl px-6 lg:px-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <p style={{ fontSize: "0.875rem", color: "#AECAE9" }}>
+            <p className="text-sm text-slate-400">
               Showing{" "}
-              <span style={{ fontWeight: 700, color: "#FFFFFF" }}>
+              <span className="font-bold text-slate-50">
                 {productList.length}
               </span>{" "}
               {productList.length === 1 ? "product" : "products"}
             </p>
 
             {selectedCategory !== "All" && (
-              <span className="glass inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold" style={{ color: "#DCA963" }}>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-800 border border-slate-700 px-3 py-1 text-[11px] font-semibold text-amber-500 uppercase tracking-wide">
                 {activeLabel}
               </span>
             )}
 
             {searchQuery && (
-              <span style={{ fontSize: "0.875rem", color: "#AECAE9" }}>
+              <span className="text-sm text-slate-400">
                 for{" "}
-                <span style={{ fontWeight: 600, fontStyle: "italic", color: "#FFFFFF" }}>
+                <span className="font-semibold italic text-slate-50">
                   &ldquo;{searchQuery}&rdquo;
                 </span>
               </span>
@@ -202,8 +193,7 @@ export default async function ProductsPage(props: {
           {hasActiveFilters && (
             <Link
               href="/products"
-              className="inline-flex items-center gap-1.5 transition-all hover:gap-2"
-              style={{ fontSize: "0.75rem", fontWeight: 600, color: "#FCA5A5", textDecoration: "none" }}
+              className="inline-flex items-center gap-1.5 transition-all hover:gap-2 text-xs font-semibold text-red-400 hover:text-red-300"
             >
               <X size={14} />
               Clear filters
@@ -213,28 +203,28 @@ export default async function ProductsPage(props: {
       </section>
 
       {/* ──────────────────────────── Product grid ──────────────────────────── */}
-      <section className="mx-auto mt-6 max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <section className="mx-auto mt-8 max-w-7xl px-6 lg:px-8 pb-16">
         {productList.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 xl:grid-cols-5">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {productList.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
-          <div className="glass mx-auto max-w-md rounded-3xl px-6 py-16 text-center sm:px-12" style={{ borderStyle: "dashed" }}>
-            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full" style={{ background: "rgba(109,148,197,0.15)" }}>
-              <Search size={28} style={{ color: "#6D94C5" }} />
+          <div className="mx-auto max-w-lg rounded-3xl bg-slate-900 border border-dashed border-slate-700 p-10 text-center sm:p-14">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-slate-800">
+              <Search size={28} className="text-slate-400" />
             </div>
-            <p className="mb-2 font-bold text-white" style={{ fontSize: "1.125rem" }}>
+            <p className="mb-3 font-bold text-slate-50 text-xl">
               No products found
             </p>
-            <p className="mb-6" style={{ fontSize: "0.875rem", color: "#AECAE9", lineHeight: 1.6 }}>
+            <p className="mb-8 text-sm text-slate-400 leading-relaxed">
               {searchQuery
                 ? `We couldn't find anything matching "${searchQuery}". Try a different search term.`
                 : "No products in this category right now. Try browsing all products."}
             </p>
             <div className="flex justify-center">
-              <Link href="/products" className="ui-btn ui-btn-md btn-gold">
+              <Link href="/products" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-6 py-3 rounded-lg transition-colors">
                 View all products
               </Link>
             </div>
@@ -244,27 +234,26 @@ export default async function ProductsPage(props: {
 
       {/* ──────────────────────────── Services CTA ──────────────────────────── */}
       {selectedCategory === "All" && !searchQuery && productList.length > 0 && (
-        <section className="mx-auto mt-10 max-w-[1400px] px-4 sm:px-6 lg:px-8">
+        <section className="mx-auto max-w-7xl px-6 lg:px-8 pb-16">
           <Link
             href="/services"
-            className="glass-strong glass-hover group flex flex-col items-center justify-between gap-4 rounded-2xl p-5 sm:flex-row sm:p-6"
-            style={{ textDecoration: "none" }}
+            className="group flex flex-col items-center justify-between gap-5 rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:flex-row sm:p-8 transition-colors hover:border-slate-700"
           >
-            <div className="flex items-center gap-4">
-              <div className="glass-gold flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl">
-                <Wrench size={22} style={{ color: "#DCA963" }} />
+            <div className="flex items-center gap-5">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 transition-transform group-hover:scale-105">
+                <Wrench size={24} className="text-amber-500" />
               </div>
               <div className="text-center sm:text-left">
-                <p className="mb-0.5 font-bold text-white" style={{ fontSize: "1rem" }}>
+                <p className="mb-1 font-bold text-slate-50 text-lg">
                   Need repair or calibration?
                 </p>
-                <p style={{ color: "#AECAE9", fontSize: "0.8rem" }}>
+                <p className="text-sm text-slate-400">
                   On-site maintenance and expert support across Chitwan
                 </p>
               </div>
             </div>
-            <span className="ui-btn ui-btn-md btn-gold shrink-0">
-              View Services <span aria-hidden="true">→</span>
+            <span className="bg-slate-800 group-hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold px-6 py-3 rounded-lg shrink-0 transition-colors flex items-center gap-2">
+              View Services <ArrowRight size={16} />
             </span>
           </Link>
         </section>

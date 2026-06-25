@@ -63,8 +63,8 @@ export function ImageDropzone({
 
     return (
         <div
-            className={`relative rounded-2xl overflow-hidden transition-all duration-200 border-2 border-dashed flex flex-col items-center justify-center
-                ${dragActive ? "border-accent-500 bg-accent-500/10 scale-[1.02]" : preview ? "border-transparent bg-transparent" : "border-primary-600/30 bg-primary-900/30 hover:bg-white/5 hover:border-primary-400/50"}
+            className={`relative rounded-md overflow-hidden transition-all duration-200 border-dashed border-2 flex flex-col items-center justify-center
+                ${dragActive ? "border-amber-500 bg-amber-500/10 scale-[1.02]" : preview ? "border-transparent bg-transparent" : "border-slate-500 bg-slate-800/40 hover:bg-slate-700/60 hover:border-slate-400"}
             `}
             style={{
                 minHeight: "260px",
@@ -97,16 +97,16 @@ export function ImageDropzone({
             ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 pointer-events-none">
                     <div
-                        className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-colors ${dragActive ? "bg-accent-500 border border-accent-400 shadow-[0_0_20px_rgba(220,169,99,0.4)]" : "bg-primary-900 border border-primary-600/30"}`}
+                        className={`w-14 h-14 rounded-xl flex items-center justify-center transition-colors ${dragActive ? "bg-amber-500 border border-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.4)]" : "bg-slate-800 border border-slate-600"}`}
                     >
-                        <Upload size={24} className={dragActive ? "text-primary-950" : "text-primary-400"} />
+                        <Upload size={24} className={dragActive ? "text-slate-900" : "text-slate-400"} />
                     </div>
                     <div className="text-center px-4">
-                        <p className={`text-sm font-semibold ${dragActive ? "text-accent-500" : "text-white/80"}`}>
+                        <p className={`text-sm font-semibold ${dragActive ? "text-amber-400" : "text-slate-200"}`}>
                             {dragActive ? "Drop to upload" : "Drop image here or click"}
                         </p>
                         <p
-                            className="text-xs mt-1.5 font-medium text-primary-200/50"
+                            className="text-xs mt-1.5 font-medium text-slate-400"
                         >
                             PNG · JPG · WebP — max 5 MB
                         </p>

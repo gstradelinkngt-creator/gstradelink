@@ -12,9 +12,9 @@ export function FieldLabel({
 }) {
     return (
         <label className="flex items-center gap-2 mb-2">
-            <Icon size={13} className="text-accent-500" />
+            <Icon size={13} className="text-amber-500" />
             <span
-                className="text-[11px] font-semibold uppercase tracking-widest text-primary-200/60"
+                className="text-[11px] font-medium uppercase tracking-widest text-slate-300"
             >
                 {children}
             </span>
@@ -26,7 +26,7 @@ export function FieldInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
     return (
         <input
             {...props}
-            className={`w-full px-4 py-3 rounded-xl bg-primary-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border border-white/5 text-white text-sm transition-all duration-300 focus:outline-none focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/20 focus:bg-primary-800 placeholder-primary-200/30 ${props.className ?? ""}`}
+            className={`w-full bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 text-sm transition-all placeholder:text-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 ${props.className ?? ""}`}
             style={props.style as React.CSSProperties}
         />
     );
@@ -38,7 +38,7 @@ export function FieldTextarea(
     return (
         <textarea
             {...props}
-            className={`w-full px-4 py-3 rounded-xl bg-primary-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border border-white/5 text-white text-sm resize-none transition-all duration-300 focus:outline-none focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/20 focus:bg-primary-800 placeholder-primary-200/30 ${props.className ?? ""}`}
+            className={`w-full bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 text-sm resize-none transition-all placeholder:text-slate-500 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 ${props.className ?? ""}`}
             style={props.style as React.CSSProperties}
         />
     );
@@ -54,13 +54,13 @@ export function FieldSelect({
         <div className="relative">
             <select
                 {...props}
-                className="w-full px-4 py-3 rounded-xl bg-primary-900 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)] border border-white/5 text-white text-sm appearance-none cursor-pointer transition-all duration-300 focus:outline-none focus:border-accent-500/50 focus:ring-2 focus:ring-accent-500/20 focus:bg-primary-800"
+                className="w-full bg-slate-800/80 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-200 text-sm appearance-none cursor-pointer transition-all focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
             >
                 {children}
             </select>
             <ChevronRight
                 size={14}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none text-primary-200/30"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 rotate-90 pointer-events-none text-slate-400"
             />
         </div>
     );

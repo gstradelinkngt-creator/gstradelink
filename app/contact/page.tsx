@@ -28,28 +28,24 @@ const WA_TEMPLATES = [
     icon: Package,
     label: "Enquire about a product",
     sub: "Ask about availability & pricing",
-    color: "#6D94C5",
     msg: "Hello GSTradeLink! I'm looking for a weighing scale. Could you help me find the right one?",
   },
   {
     icon: Wrench,
     label: "Book a repair / service",
     sub: "Scale repair or calibration",
-    color: "#DCA963",
     msg: "Hello GSTradeLink! My weighing scale needs repair/calibration. Can you help me?",
   },
   {
     icon: Star,
     label: "Request a price quote",
     sub: "Bulk order or custom requirement",
-    color: "#6D94C5",
     msg: "Hello GSTradeLink! I'd like a price quote for weighing equipment. Please share the details.",
   },
   {
     icon: Zap,
     label: "Spare parts enquiry",
     sub: "Genuine replacement parts",
-    color: "#DCA963",
     msg: "Hello GSTradeLink! I need a spare part for my weighing scale. Can you help?",
   },
 ];
@@ -75,28 +71,24 @@ const CONTACT_CARDS = [
     label: "Store Location",
     value: "Bharatpur-3, Chitwan, Nepal",
     href: "https://maps.google.com/?q=Bharatpur+Chitwan+Nepal",
-    tint: "#6D94C5",
   },
   {
     icon: Phone,
     label: "Phone / Landline",
     value: "+977 9845541939",
     href: "tel:+9779845541939",
-    tint: "#DCA963",
   },
   {
     icon: Mail,
     label: "Email Address",
     value: "gstradelinkngt@gmail.com",
     href: "mailto:gstradelinkngt@gmail.com",
-    tint: "#6D94C5",
   },
   {
     icon: Clock3,
     label: "Working Hours",
     value: "All days except Mon · 10 AM – 6 PM",
     href: null,
-    tint: "#DCA963",
   },
 ];
 
@@ -104,72 +96,68 @@ export default function ContactPage() {
   const todayLabel = getTodayLabel();
 
   return (
-    <div className="aurora min-h-screen w-full overflow-hidden md:pb-12">
+    <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-12">
       {/* ───────────────────────────── Hero ───────────────────────────── */}
-      <section className="aurora-grid relative overflow-hidden pb-16 pt-16 sm:pb-20 sm:pt-24">
-        <div className="aurora-orb aurora-orb--blue" style={{ width: 420, height: 420, top: -120, right: -80 }} />
-        <div className="aurora-orb aurora-orb--gold" style={{ width: 320, height: 320, bottom: -120, left: -60, opacity: 0.5 }} />
-
-        <div className="relative z-10 mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+      <section className="relative overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-24 border-b border-slate-900">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div className="text-center lg:text-left">
-              <span className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-[0.1em]" style={{ color: "#AECAE9" }}>
-                <CheckCircle size={11} style={{ color: "#DCA963" }} />
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-slate-900 border border-slate-800 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-widest text-slate-400">
+                <CheckCircle size={14} className="text-amber-500" />
                 Contact GSTradeLink · Bharatpur
               </span>
 
               <h1
-                className="mb-5 font-bold text-white"
-                style={{ fontSize: "clamp(2rem, 5.5vw, 3.75rem)", letterSpacing: "-0.03em", lineHeight: 1.08 }}
+                className="mb-6 font-bold text-slate-50"
+                style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.25rem)", letterSpacing: "-0.03em", lineHeight: 1.08 }}
               >
                 Get expert support{" "}
-                <span className="text-gradient-gold" style={{ fontStyle: "italic" }}>
+                <span className="text-amber-500 italic block mt-2">
                   quickly
                 </span>
               </h1>
 
               <p
-                className="mx-auto lg:mx-0"
-                style={{ fontSize: "clamp(0.88rem, 2vw, 1.05rem)", color: "#AECAE9", maxWidth: "34rem", lineHeight: 1.75, marginBottom: "40px" }}
+                className="mx-auto lg:mx-0 mb-10 text-slate-400"
+                style={{ fontSize: "clamp(1.05rem, 2vw, 1.15rem)", maxWidth: "34rem", lineHeight: 1.75 }}
               >
                 Tell us your precision weighing requirement. Our team will
                 suggest the right product, calibration schedule, or repair plan
                 — usually within a few hours.
               </p>
 
-              <div className="flex flex-col items-center justify-center gap-3 sm:flex-row lg:justify-start">
+              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
                 <a
                   href={`${WA_BASE}${encodeURIComponent("Hello GSTradeLink! I'd like some help with a weighing scale.")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ui-btn ui-btn-lg w-full text-white transition-transform hover:-translate-y-0.5 sm:w-auto"
-                  style={{ background: "linear-gradient(135deg,#25D366,#128C7E)", boxShadow: "0 10px 30px -8px rgba(37,211,102,0.5)" }}
+                  className="flex items-center justify-center gap-2.5 w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 sm:w-auto shadow-sm"
                 >
-                  <MessageCircle size={17} fill="white" /> Chat on WhatsApp
+                  <MessageCircle size={20} /> Chat on WhatsApp
                 </a>
-                <a href="tel:+9779845541939" className="ui-btn ui-btn-lg btn-glass w-full sm:w-auto">
-                  <Phone size={15} /> Call now
+                <a href="tel:+9779845541939" className="flex items-center justify-center gap-2.5 w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-8 py-4 rounded-xl transition-all sm:w-auto shadow-sm">
+                  <Phone size={18} /> Call now
                 </a>
               </div>
             </div>
 
-            {/* Focal glass visual */}
+            {/* Focal visual */}
             <div className="relative hidden items-center justify-center lg:flex">
               <div className="relative w-full max-w-sm">
-                <div className="glass-strong animate-glass-float flex aspect-square items-center justify-center rounded-[2.5rem]">
-                  <div className="glow-gold flex h-32 w-32 items-center justify-center rounded-3xl" style={{ background: "linear-gradient(135deg,#DCA963,#C28D44)" }}>
-                    <MessageCircle size={56} className="text-white" />
+                <div className="bg-slate-900 border border-slate-800 flex aspect-square items-center justify-center rounded-[3rem] shadow-xl relative z-10 hover:border-slate-700 transition-colors">
+                  <div className="flex h-36 w-36 items-center justify-center rounded-3xl bg-amber-500 shadow-lg transition-transform duration-500 hover:scale-105">
+                    <MessageCircle size={64} className="text-slate-950" />
                   </div>
-                  <div className="glass absolute -left-3 -top-3 flex h-14 w-14 items-center justify-center rounded-2xl">
-                    <Phone size={22} style={{ color: "#AECAE9" }} />
+                  <div className="absolute -left-4 -top-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-md">
+                    <Phone size={26} className="text-amber-500" />
                   </div>
-                  <div className="glass absolute -bottom-3 -right-3 flex h-12 w-12 items-center justify-center rounded-2xl">
-                    <Mail size={20} style={{ color: "#DCA963" }} />
+                  <div className="absolute -bottom-4 -right-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-md">
+                    <Mail size={24} className="text-amber-500" />
                   </div>
                 </div>
-                <div className="glass absolute -bottom-5 left-6 right-6 flex items-center gap-3 rounded-2xl px-5 py-4">
-                  <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-[#25D366]" />
-                  <span className="text-sm font-semibold text-white">Usually replies in hours</span>
+                <div className="absolute -bottom-6 left-8 right-8 flex items-center justify-center gap-3 rounded-2xl bg-slate-900 border border-slate-800 px-6 py-4 shadow-lg z-20">
+                  <span className="h-3 w-3 animate-pulse rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                  <span className="text-sm font-bold text-slate-50">Usually replies in hours</span>
                 </div>
               </div>
             </div>
@@ -178,18 +166,15 @@ export default function ContactPage() {
       </section>
 
       {/* ──────────────────────── Contact info cards ──────────────────────── */}
-      <section className="mx-auto mt-2 w-full max-w-[1200px] px-4 sm:mt-6 sm:px-6 lg:px-8 xl:px-12">
+      <section className="mx-auto mt-8 w-full max-w-7xl px-6 lg:px-8 pt-6">
         <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            {CONTACT_CARDS.map(({ icon: Icon, label, value, href, tint }) => (
-              <div key={label} className="glass glass-hover ui-card rounded-2xl p-4 sm:p-5">
-                <div
-                  className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl"
-                  style={{ background: `${tint}26`, border: `1px solid ${tint}55` }}
-                >
-                  <Icon size={18} style={{ color: tint }} />
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {CONTACT_CARDS.map(({ icon: Icon, label, value, href }) => (
+              <div key={label} className="bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors rounded-3xl p-6 sm:p-8 shadow-sm group flex flex-col items-start">
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 transition-transform group-hover:scale-110">
+                  <Icon size={24} className="text-amber-500" />
                 </div>
-                <p className="mb-1 text-[0.65rem] font-bold uppercase tracking-[0.1em]" style={{ color: "#93B2D6" }}>
+                <p className="mb-2 text-xs font-bold uppercase tracking-widest text-slate-500">
                   {label}
                 </p>
                 {href ? (
@@ -197,13 +182,13 @@ export default function ContactPage() {
                     href={href}
                     target={href.startsWith("http") ? "_blank" : undefined}
                     rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
-                    className="font-semibold text-white transition-colors hover:text-[#DCA963]"
-                    style={{ fontSize: "clamp(0.75rem, 1.5vw, 0.875rem)", lineHeight: 1.45, wordBreak: "break-word" }}
+                    className="font-bold text-slate-50 transition-colors hover:text-amber-500"
+                    style={{ fontSize: "1.05rem", lineHeight: 1.5, wordBreak: "break-word" }}
                   >
                     {value}
                   </a>
                 ) : (
-                  <p className="font-semibold text-white" style={{ fontSize: "clamp(0.75rem, 1.5vw, 0.875rem)", lineHeight: 1.45 }}>
+                  <p className="font-bold text-slate-50" style={{ fontSize: "1.05rem", lineHeight: 1.5 }}>
                     {value}
                   </p>
                 )}
@@ -214,46 +199,42 @@ export default function ContactPage() {
       </section>
 
       {/* ──────────────── WhatsApp templates + Hours & Location ──────────────── */}
-      <section className="mx-auto mt-10 w-full max-w-[1200px] px-4 sm:mt-14 sm:px-6 lg:px-8 xl:px-12">
-        <div className="grid items-start gap-6 lg:grid-cols-2 lg:gap-8">
+      <section className="mx-auto mt-14 w-full max-w-7xl px-6 lg:px-8 pb-16">
+        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
           {/* WhatsApp templates */}
           <ScrollReveal direction="left" delay={0} distance={32}>
-            <div className="glass overflow-hidden rounded-2xl">
-              <div className="flex items-center gap-3 border-b border-white/10 px-6 py-5" style={{ background: "rgba(37,211,102,0.08)" }}>
-                <span className="flex h-9 w-9 items-center justify-center rounded-full" style={{ background: "#25D366", boxShadow: "0 4px 12px rgba(37,211,102,0.4)" }}>
-                  <MessageCircle size={18} fill="white" color="white" />
+            <div className="bg-slate-900 border border-slate-800 overflow-hidden rounded-3xl shadow-sm">
+              <div className="flex items-center gap-4 border-b border-slate-800 px-8 py-6 bg-slate-800/30">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#25D366] shadow-[0_4px_12px_rgba(37,211,102,0.3)]">
+                  <MessageCircle size={24} className="text-slate-950" />
                 </span>
                 <div>
-                  <h2 className="font-bold text-white" style={{ fontSize: "1rem", lineHeight: 1.2 }}>
+                  <h2 className="font-bold text-slate-50 text-lg">
                     Message us on WhatsApp
                   </h2>
-                  <p style={{ fontSize: "0.75rem", color: "#93B2D6", marginTop: "2px" }}>
+                  <p className="text-sm text-slate-400 mt-1">
                     Tap a template — we reply within a few hours
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2.5 p-4">
-                {WA_TEMPLATES.map(({ icon: Icon, label, sub, color, msg }) => (
+              <div className="flex flex-col gap-3 p-5">
+                {WA_TEMPLATES.map(({ icon: Icon, label, sub, msg }) => (
                   <a
                     key={label}
                     href={`${WA_BASE}${encodeURIComponent(msg)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="glass glass-hover group flex items-center gap-4 rounded-xl p-3.5"
-                    style={{ textDecoration: "none" }}
+                    className="group flex items-center gap-5 rounded-2xl bg-slate-950 border border-slate-800 p-5 hover:border-slate-700 transition-colors shadow-sm"
                   >
-                    <span
-                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-transform duration-200 group-hover:scale-110"
-                      style={{ background: `${color}26`, border: `1px solid ${color}55` }}
-                    >
-                      <Icon size={17} style={{ color }} />
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 transition-transform duration-300 group-hover:scale-110">
+                      <Icon size={20} className="text-amber-500" />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="font-bold text-white" style={{ fontSize: "0.875rem", lineHeight: 1.3 }}>{label}</p>
-                      <p style={{ fontSize: "0.72rem", color: "#93B2D6", marginTop: "2px" }}>{sub}</p>
+                      <p className="font-bold text-slate-50 text-base mb-1">{label}</p>
+                      <p className="text-sm text-slate-400">{sub}</p>
                     </div>
-                    <ArrowRight size={16} style={{ color }} className="shrink-0 transition-transform duration-200 group-hover:translate-x-1" />
+                    <ArrowRight size={20} className="text-slate-500 shrink-0 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-amber-500" />
                   </a>
                 ))}
               </div>
@@ -262,45 +243,42 @@ export default function ContactPage() {
 
           {/* Hours + location */}
           <ScrollReveal direction="right" delay={80} distance={32}>
-            <div className="flex flex-col gap-5">
-              {/* Working hours "table" */}
-              <div className="glass overflow-hidden rounded-2xl">
-                <div className="flex items-center gap-3 border-b border-white/10 px-5 py-4" style={{ background: "rgba(255,255,255,0.04)" }}>
-                  <span className="flex h-9 w-9 items-center justify-center rounded-full" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)" }}>
-                    <Clock3 size={16} color="#DCA963" />
+            <div className="flex flex-col gap-8">
+              {/* Working hours */}
+              <div className="bg-slate-900 border border-slate-800 overflow-hidden rounded-3xl shadow-sm">
+                <div className="flex items-center gap-4 border-b border-slate-800 px-8 py-6 bg-slate-800/30">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700">
+                    <Clock3 size={24} className="text-amber-500" />
                   </span>
                   <div>
-                    <h2 className="font-bold text-white" style={{ fontSize: "0.95rem", lineHeight: 1.2 }}>Working Hours</h2>
-                    <p style={{ fontSize: "0.7rem", color: "#93B2D6", marginTop: "2px" }}>Store open 6 days a week</p>
+                    <h2 className="font-bold text-slate-50 text-lg">Working Hours</h2>
+                    <p className="text-sm text-slate-400 mt-1">Store open 6 days a week</p>
                   </div>
                 </div>
 
-                <div className="py-1">
+                <div className="py-2">
                   {HOURS.map(({ day, time, open }) => {
                     const isToday = day === todayLabel;
                     return (
                       <div
                         key={day}
-                        className="flex items-center justify-between px-5 py-2.5"
+                        className="flex items-center justify-between px-8 py-3.5 border-l-4 transition-colors"
                         style={{
-                          background: isToday ? "rgba(220,169,99,0.1)" : "transparent",
-                          borderLeft: isToday ? "3px solid #DCA963" : "3px solid transparent",
+                          backgroundColor: isToday ? "rgba(245, 158, 11, 0.05)" : "transparent",
+                          borderColor: isToday ? "#f59e0b" : "transparent",
                         }}
                       >
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-3">
                           {isToday && (
-                            <span
-                              className="rounded-full px-1.5 py-0.5 text-[0.55rem] font-extrabold uppercase tracking-wide"
-                              style={{ color: "#1a1206", background: "#DCA963" }}
-                            >
+                            <span className="rounded-md bg-amber-500 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-950">
                               Today
                             </span>
                           )}
-                          <span style={{ fontSize: "0.8rem", fontWeight: isToday ? 700 : 500, color: isToday ? "#FFFFFF" : "#AECAE9" }}>
+                          <span className={`text-base ${isToday ? 'font-bold text-slate-50' : 'font-medium text-slate-300'}`}>
                             {day}
                           </span>
                         </div>
-                        <span style={{ fontSize: "0.78rem", fontWeight: 600, color: open ? (isToday ? "#DCA963" : "#93B2D6") : "#FCA5A5" }}>
+                        <span className={`text-sm font-bold ${open ? (isToday ? 'text-amber-500' : 'text-slate-400') : 'text-red-400'}`}>
                           {time}
                         </span>
                       </div>
@@ -310,60 +288,45 @@ export default function ContactPage() {
               </div>
 
               {/* Location */}
-              <div className="glass overflow-hidden rounded-2xl">
+              <div className="bg-slate-900 border border-slate-800 overflow-hidden rounded-3xl shadow-sm">
                 <a
                   href="https://maps.google.com/?q=Bharatpur+Chitwan+Nepal"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative block"
-                  style={{ height: "140px", background: "linear-gradient(135deg, #142235 0%, #1d3047 100%)", textDecoration: "none" }}
+                  className="group relative block h-40 bg-slate-950"
                 >
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(109,148,197,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(109,148,197,0.12) 1px, transparent 1px)",
-                      backgroundSize: "28px 28px",
-                    }}
-                  />
-                  <div className="absolute inset-0 flex items-center">
-                    <div style={{ height: "3px", width: "100%", background: "rgba(255,255,255,0.18)" }} />
-                  </div>
-                  <div className="absolute inset-0 flex justify-center">
-                    <div style={{ width: "3px", height: "100%", background: "rgba(255,255,255,0.18)" }} />
-                  </div>
-                  <div className="absolute" style={{ left: "50%", top: "50%", transform: "translate(-50%, -100%)" }}>
-                    <div
-                      className="flex items-center justify-center"
-                      style={{ width: "36px", height: "36px", borderRadius: "50% 50% 50% 0", background: "#DCA963", transform: "rotate(-45deg)", boxShadow: "0 4px 16px rgba(220,169,99,0.5)" }}
-                    >
-                      <MapPin size={16} color="#1a1206" style={{ transform: "rotate(45deg)" }} />
+                  <div className="absolute inset-0 opacity-20" style={{
+                    backgroundImage: "linear-gradient(#f59e0b 1px, transparent 1px), linear-gradient(90deg, #f59e0b 1px, transparent 1px)",
+                    backgroundSize: "20px 20px"
+                  }} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-translate-y-1">
+                      <MapPin size={28} className="text-slate-950" />
                     </div>
                   </div>
-                  <div className="absolute inset-0 flex items-end justify-end p-3 opacity-0 transition-opacity group-hover:opacity-100" style={{ background: "rgba(8,15,24,0.25)" }}>
-                    <span className="glass-strong inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.68rem] font-bold text-white">
-                      Open in Maps <ArrowRight size={10} />
+                  <div className="absolute inset-0 flex items-end justify-end p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-slate-950/40">
+                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 border border-slate-800 px-3 py-1.5 text-xs font-bold text-slate-50">
+                      Open in Maps <ArrowRight size={12} className="text-amber-500" />
                     </span>
                   </div>
                 </a>
 
-                <div className="flex items-start gap-3 p-4">
-                  <span className="glass-gold flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-                    <MapPin size={16} style={{ color: "#DCA963" }} />
+                <div className="flex items-start gap-4 p-8 bg-slate-800/30 border-t border-slate-800">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700">
+                    <MapPin size={24} className="text-amber-500" />
                   </span>
                   <div className="flex-1">
-                    <p className="font-bold text-white" style={{ fontSize: "0.875rem" }}>GSTradeLink Store</p>
-                    <p style={{ color: "#AECAE9", fontSize: "0.78rem", marginTop: "2px", lineHeight: 1.5 }}>
+                    <p className="font-bold text-slate-50 text-lg">GSTradeLink Store</p>
+                    <p className="text-slate-400 text-sm mt-1 leading-relaxed">
                       Bharatpur-3, Chitwan, Nepal
                     </p>
                     <a
                       href="https://maps.google.com/?q=Bharatpur+Chitwan+Nepal"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-2 inline-flex items-center gap-1.5 font-bold transition-colors hover:text-white"
-                      style={{ fontSize: "0.72rem", color: "#DCA963", textDecoration: "none" }}
+                      className="mt-3 inline-flex items-center gap-2 font-bold text-amber-500 hover:text-amber-400 transition-colors text-sm"
                     >
-                      Get directions <ArrowRight size={11} />
+                      Get directions <ArrowRight size={14} />
                     </a>
                   </div>
                 </div>
@@ -374,37 +337,34 @@ export default function ContactPage() {
       </section>
 
       {/* ─────────────────────────── Bottom CTA ─────────────────────────── */}
-      <section className="mx-auto mt-10 w-full max-w-[1200px] px-4 sm:px-6 lg:px-8 xl:px-12">
+      <section className="mx-auto mt-16 w-full max-w-7xl px-6 lg:px-8 pb-20">
         <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="glass-strong relative overflow-hidden rounded-3xl px-6 py-12 sm:px-12">
-            <div className="aurora-orb aurora-orb--gold" style={{ width: 280, height: 280, top: -120, right: -40, opacity: 0.5 }} />
-            <div className="aurora-orb aurora-orb--blue" style={{ width: 240, height: 240, bottom: -120, left: -40, opacity: 0.5 }} />
-            <div className="relative z-10 flex flex-col items-center justify-between gap-6 md:flex-row md:gap-10">
-              <div className="text-center md:text-left" style={{ maxWidth: "480px" }}>
-                <p className="mb-2.5 text-[0.68rem] font-bold uppercase tracking-[0.12em]" style={{ color: "#93B2D6" }}>
+          <div className="bg-slate-900 border border-slate-800 relative overflow-hidden rounded-3xl px-8 py-16 sm:px-16 shadow-lg">
+            <div className="relative z-10 flex flex-col items-center justify-between gap-10 md:flex-row md:gap-16">
+              <div className="text-center md:text-left flex-1 max-w-xl">
+                <p className="mb-4 text-xs font-bold uppercase tracking-widest text-amber-500">
                   Fastest response
                 </p>
-                <h2 className="mb-3 font-bold text-white" style={{ fontSize: "clamp(1.4rem, 3.5vw, 2.1rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
+                <h2 className="mb-5 font-bold text-slate-50" style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
                   Ready to get a quote or book a service?
                 </h2>
-                <p style={{ color: "#AECAE9", fontSize: "clamp(0.82rem, 1.5vw, 0.9rem)", lineHeight: 1.7 }}>
+                <p className="text-slate-400 text-lg leading-relaxed">
                   We reply within a few hours. Share your requirement and we&apos;ll
                   recommend the right scale, repair plan, or spare part.
                 </p>
               </div>
 
-              <div className="flex w-full flex-col gap-3 sm:flex-row md:w-auto md:flex-col">
+              <div className="flex w-full flex-col gap-4 sm:flex-row md:w-auto md:flex-col shrink-0">
                 <a
                   href={`${WA_BASE}${encodeURIComponent("Hello GSTradeLink! I'd like to get a quote.")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ui-btn ui-btn-lg w-full text-white transition-transform hover:-translate-y-0.5 sm:flex-1 md:w-64"
-                  style={{ background: "linear-gradient(135deg,#25D366,#128C7E)", boxShadow: "0 10px 30px -8px rgba(37,211,102,0.5)" }}
+                  className="flex items-center justify-center gap-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-sm md:w-64"
                 >
-                  <MessageCircle size={17} fill="white" /> Chat on WhatsApp
+                  <MessageCircle size={20} /> Chat on WhatsApp
                 </a>
-                <Link href="/products" className="ui-btn ui-btn-lg btn-glass w-full sm:flex-1 md:w-64">
-                  Browse Products <ArrowRight size={15} />
+                <Link href="/products" className="flex items-center justify-center gap-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-8 py-4 rounded-xl transition-all shadow-sm md:w-64">
+                  Browse Products <ArrowRight size={18} />
                 </Link>
               </div>
             </div>

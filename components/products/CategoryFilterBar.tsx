@@ -86,18 +86,16 @@ export function CategoryFilterBar({
       <button
         onClick={() => scrollBy("left")}
         aria-label="Scroll categories left"
-        className="btn-glass hidden sm:flex items-center justify-center shrink-0 transition-all duration-200"
+        className="hidden sm:flex items-center justify-center shrink-0 transition-all duration-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-slate-50"
         style={{
-          width: "32px",
-          height: "32px",
+          width: "36px",
+          height: "36px",
           borderRadius: "50%",
           opacity: canScrollLeft ? 1 : 0,
           pointerEvents: canScrollLeft ? "auto" : "none",
-          color: "#AECAE9",
-          cursor: "pointer",
         }}
       >
-        <ChevronLeft size={16} strokeWidth={2} />
+        <ChevronLeft size={18} strokeWidth={2.5} />
       </button>
 
       {/* ── Scroll container ───────────────────────────────────────── */}
@@ -107,7 +105,7 @@ export function CategoryFilterBar({
           className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none z-10 transition-opacity duration-200"
           style={{
             background:
-              "linear-gradient(to right, rgba(13,22,34,0.85) 0%, transparent 100%)",
+              "linear-gradient(to right, rgb(15 23 42 / 0.9) 0%, transparent 100%)",
             opacity: canScrollLeft ? 1 : 0,
           }}
         />
@@ -115,7 +113,7 @@ export function CategoryFilterBar({
         {/* ── The scrollable chip row ───────────────────────────────── */}
         <div
           ref={scrollRef}
-          className="flex overflow-x-auto hide-scrollbar gap-2 py-1 px-1"
+          className="flex overflow-x-auto hide-scrollbar gap-2.5 py-1.5 px-1.5"
           style={{
             scrollSnapType: "x proximity",
             WebkitOverflowScrolling: "touch",
@@ -130,15 +128,12 @@ export function CategoryFilterBar({
                   key={category}
                   href={href}
                   data-active="false"
-                  className="glass-gold inline-flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 hover:-translate-y-0.5"
+                  className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 hover:-translate-y-0.5 rounded-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200"
                   style={{
-                    borderRadius: "9999px",
-                    color: "#F2D89A",
                     scrollSnapAlign: "start",
-                    textDecoration: "none",
                   }}
                 >
-                  <Wrench size={12} strokeWidth={2.5} />
+                  <Wrench size={14} strokeWidth={2.5} className="text-amber-500" />
                   {label}
                 </Link>
               );
@@ -150,21 +145,13 @@ export function CategoryFilterBar({
                 href={href}
                 data-active={isActive ? "true" : "false"}
                 className={cn(
-                  "inline-flex items-center justify-center px-4 py-2.5 text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 hover:-translate-y-0.5",
-                  !isActive && "btn-glass",
+                  "inline-flex items-center justify-center px-5 py-2.5 text-xs font-semibold whitespace-nowrap transition-all duration-200 shrink-0 hover:-translate-y-0.5 rounded-full shadow-sm",
+                  isActive
+                    ? "bg-amber-500 text-slate-950"
+                    : "bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-slate-100"
                 )}
                 style={{
-                  borderRadius: "9999px",
-                  background: isActive
-                    ? "linear-gradient(135deg,#DCA963,#C28D44)"
-                    : undefined,
-                  color: isActive ? "#1a1206" : "#AECAE9",
-                  border: isActive ? "1px solid rgba(220,169,99,0.6)" : undefined,
-                  boxShadow: isActive
-                    ? "0 8px 20px -6px rgba(220,169,99,0.55)"
-                    : undefined,
                   scrollSnapAlign: "start",
-                  textDecoration: "none",
                 }}
               >
                 {label}
@@ -178,7 +165,7 @@ export function CategoryFilterBar({
           className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none z-10 transition-opacity duration-200"
           style={{
             background:
-              "linear-gradient(to left, rgba(13,22,34,0.85) 0%, transparent 100%)",
+              "linear-gradient(to left, rgb(15 23 42 / 0.9) 0%, transparent 100%)",
             opacity: canScrollRight ? 1 : 0,
           }}
         />
@@ -188,18 +175,16 @@ export function CategoryFilterBar({
       <button
         onClick={() => scrollBy("right")}
         aria-label="Scroll categories right"
-        className="btn-glass hidden sm:flex items-center justify-center shrink-0 transition-all duration-200"
+        className="hidden sm:flex items-center justify-center shrink-0 transition-all duration-200 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-slate-50"
         style={{
-          width: "32px",
-          height: "32px",
+          width: "36px",
+          height: "36px",
           borderRadius: "50%",
           opacity: canScrollRight ? 1 : 0,
           pointerEvents: canScrollRight ? "auto" : "none",
-          color: "#AECAE9",
-          cursor: "pointer",
         }}
       >
-        <ChevronRight size={16} strokeWidth={2} />
+        <ChevronRight size={18} strokeWidth={2.5} />
       </button>
     </div>
   );
