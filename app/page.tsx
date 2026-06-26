@@ -155,7 +155,7 @@ export default async function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div className="text-center lg:text-left flex flex-col space-y-6">
-              <div>
+              <div className="flex justify-center lg:justify-start">
                 <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium sm:text-sm bg-slate-900 border border-slate-800 text-slate-300">
                   <CheckCircle size={14} className="text-amber-500" />
                   <span>Trusted Since 2015 · Bharatpur, Chitwan</span>
@@ -184,7 +184,7 @@ export default async function Home() {
                 repair services and genuine spare parts in Bharatpur.
               </p>
 
-              <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start pt-2">
+              <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start pt-6">
                 <Link
                   href="/products"
                   className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-6 py-3.5 rounded-lg transition-colors duration-200 shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto"
@@ -202,14 +202,14 @@ export default async function Home() {
               </div>
 
               {/* Mini trust row */}
-              <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-3 lg:justify-start pt-4 border-t border-slate-800/60 max-w-xl mx-auto lg:mx-0">
+              <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-4 lg:justify-start pt-6 border-t border-slate-800/60 max-w-xl mx-auto lg:mx-0 w-full">
                 {TRUST_ITEMS.map(({ Icon, label }) => (
                   <div
                     key={label}
                     className="inline-flex items-center gap-2 text-sm text-slate-400 font-medium"
                   >
-                    <Icon size={16} className="text-amber-500" />
-                    {label}
+                    <Icon size={16} className="text-amber-500 shrink-0" />
+                    <span>{label}</span>
                   </div>
                 ))}
               </div>
@@ -253,32 +253,30 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════ STATS STRIP ═══════════════════════════ */}
-      <section className="block w-full">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="bg-slate-900 border border-slate-800 grid grid-cols-3 overflow-hidden rounded-2xl shadow-lg">
+      <section className="block w-full relative z-20 bg-slate-950">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+          <div className="bg-slate-900 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 overflow-hidden rounded-2xl shadow-lg divide-y sm:divide-y-0 sm:divide-x divide-slate-800">
           {STATS.map(({ value, label, sub, Icon }, i) => (
             <div
               key={label}
-              className={`flex flex-col items-center justify-center gap-2 px-3 py-6 text-center sm:px-6 sm:py-8 ${
-                i < 2 ? "border-r border-slate-800" : ""
-              }`}
+              className="flex flex-col items-center justify-center gap-3 px-4 py-8 text-center sm:px-6 sm:py-10"
             >
-              <span className="mb-1 flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 border border-slate-700 sm:h-12 sm:w-12">
-                <Icon size={18} className="text-amber-500" />
+              <span className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 border border-slate-700 sm:h-14 sm:w-14">
+                <Icon size={20} className="text-amber-500 shrink-0" />
               </span>
               <span
                 className="font-extrabold text-slate-50 leading-none"
-                style={{ fontSize: "clamp(1.4rem, 4vw, 2.2rem)" }}
+                style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)" }}
               >
                 {value}
               </span>
               <span
                 className="font-semibold text-slate-300 leading-tight"
-                style={{ fontSize: "clamp(0.7rem, 1.5vw, 0.9rem)" }}
+                style={{ fontSize: "clamp(0.85rem, 1.5vw, 1rem)" }}
               >
                 {label}
               </span>
-              <span className="hidden text-[0.75rem] font-medium text-slate-500 sm:block">
+              <span className="text-[0.8rem] font-medium text-slate-500">
                 {sub}
               </span>
             </div>
@@ -320,13 +318,13 @@ export default async function Home() {
                     href={`/products?category=${encodeURIComponent(category)}`}
                     className="block shrink-0 rounded-2xl bg-slate-900 border border-slate-800 p-5 transition-colors hover:border-slate-700 w-[260px] group"
                   >
-                    <div className="aspect-square overflow-hidden rounded-lg bg-slate-800 relative mb-5 flex items-center justify-center">
+                    <div className="aspect-square overflow-hidden rounded-lg bg-slate-800 relative mb-5 flex items-center justify-center p-4">
                       {product?.image_url ? (
                         <Image
                           src={product.image_url}
                           alt={meta.label}
                           fill
-                          className="object-contain transition-transform duration-500 group-hover:scale-110"
+                          className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
                           sizes="260px"
                         />
                       ) : (
@@ -415,26 +413,26 @@ export default async function Home() {
                             ⚖️
                           </div>
                         )}
-                        <span className="absolute left-3 top-3 rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider bg-slate-900/90 text-slate-200 border border-slate-700 backdrop-blur-md uppercase">
+                        <span className="absolute left-3 top-3 max-w-[85%] rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider bg-slate-900/90 text-slate-200 border border-slate-700 backdrop-blur-md uppercase truncate">
                           {product.category}
                         </span>
                       </Link>
 
-                      <div className="flex flex-col flex-1">
+                      <div className="flex flex-col flex-1 mt-2">
                         <Link href={`/products/${product.id}`} className="mb-2">
                           <h3 className="line-clamp-2 font-bold text-slate-50 transition-colors group-hover:text-amber-500 text-lg">
                             {product.name}
                           </h3>
                         </Link>
                         {product.short_description && (
-                          <p className="line-clamp-2 text-slate-400 text-sm mb-6">
+                          <p className="line-clamp-3 text-slate-400 text-sm mb-6">
                             {product.short_description}
                           </p>
                         )}
-                        <div className="mt-auto grid grid-cols-2 gap-3">
+                        <div className="mt-auto pt-4 grid grid-cols-2 gap-3">
                           <Link
                             href={`/products/${product.id}`}
-                            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-4 py-2.5 rounded-lg flex items-center justify-center text-sm transition-colors"
+                            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-4 py-2.5 rounded-lg flex items-center justify-center text-sm transition-colors text-center"
                           >
                             Details
                           </Link>
@@ -442,9 +440,9 @@ export default async function Home() {
                             href={waLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-4 py-2.5 rounded-lg flex justify-center items-center gap-1.5 text-sm transition-colors shadow-sm"
+                            className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-4 py-2.5 rounded-lg flex justify-center items-center gap-1.5 text-sm transition-colors shadow-sm text-center"
                           >
-                            <MessageCircle size={15} /> Enquire
+                            <MessageCircle size={15} className="shrink-0" /> Enquire
                           </a>
                         </div>
                       </div>
@@ -480,10 +478,10 @@ export default async function Home() {
               {WHY_US.map(({ icon: Icon, title, desc }) => (
                 <div
                   key={title}
-                  className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col"
+                  className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col items-start"
                 >
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-amber-500 shrink-0">
-                    <Icon size={22} />
+                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-amber-500 shrink-0">
+                    <Icon size={24} className="shrink-0" />
                   </div>
                   <h3 className="mb-2 font-bold text-slate-50 text-lg">
                     {title}
@@ -514,20 +512,20 @@ export default async function Home() {
                 Message us on WhatsApp — we respond within 24 hours and deliver
                 across all of Chitwan.
               </p>
-              <div className="flex flex-col items-center justify-center gap-4 w-full sm:w-auto sm:flex-row">
+              <div className="flex flex-col items-center justify-center gap-4 w-full sm:w-auto sm:flex-row mt-4">
                 <a
                   href={WA}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold px-8 py-3.5 rounded-lg flex items-center justify-center gap-2.5 w-full sm:w-auto shadow-sm transition-colors"
                 >
-                  <MessageCircle size={20} /> Chat on WhatsApp
+                  <MessageCircle size={20} className="shrink-0" /> Chat on WhatsApp
                 </a>
                 <a
                   href="tel:+9779845541939"
                   className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold px-8 py-3.5 rounded-lg flex items-center justify-center gap-2.5 w-full sm:w-auto transition-colors"
                 >
-                  <Phone size={18} /> Call Now
+                  <Phone size={18} className="shrink-0" /> Call Now
                 </a>
               </div>
             </div>
