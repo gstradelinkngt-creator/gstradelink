@@ -84,12 +84,6 @@ const CONTACT_CARDS = [
     value: "gstradelinkngt@gmail.com",
     href: "mailto:gstradelinkngt@gmail.com",
   },
-  {
-    icon: Clock3,
-    label: "Working Hours",
-    value: "All days except Mon · 10 AM – 6 PM",
-    href: null,
-  },
 ];
 
 export default function ContactPage() {
@@ -98,9 +92,9 @@ export default function ContactPage() {
   return (
     <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-12">
       {/* ───────────────────────────── Hero ───────────────────────────── */}
-      <section className="relative overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-24 border-b border-slate-900">
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <section className="relative overflow-hidden py-16 md:py-24 border-b border-slate-900">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-slate-900 border border-slate-800 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-widest text-slate-400">
                 <CheckCircle size={14} className="text-amber-500" />
@@ -144,18 +138,12 @@ export default function ContactPage() {
             {/* Focal visual */}
             <div className="relative hidden items-center justify-center lg:flex">
               <div className="relative w-full max-w-sm">
-                <div className="bg-slate-900 border border-slate-800 flex aspect-square items-center justify-center rounded-[3rem] shadow-xl relative z-10 hover:border-slate-700 transition-colors">
+                <div className="bg-slate-900 border border-slate-800 flex aspect-square items-center justify-center rounded-[3rem] shadow-xl hover:border-slate-700 transition-colors">
                   <div className="flex h-36 w-36 items-center justify-center rounded-3xl bg-amber-500 shadow-lg transition-transform duration-500 hover:scale-105">
                     <MessageCircle size={64} className="text-slate-950" />
                   </div>
-                  <div className="absolute -left-4 -top-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-md">
-                    <Phone size={26} className="text-amber-500" />
-                  </div>
-                  <div className="absolute -bottom-4 -right-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-md">
-                    <Mail size={24} className="text-amber-500" />
-                  </div>
                 </div>
-                <div className="absolute -bottom-6 left-8 right-8 flex items-center justify-center gap-3 rounded-2xl bg-slate-900 border border-slate-800 px-6 py-4 shadow-lg z-20">
+                <div className="mt-4 flex items-center justify-center gap-3 rounded-2xl bg-slate-900 border border-slate-800 px-6 py-4 shadow-lg">
                   <span className="h-3 w-3 animate-pulse rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                   <span className="text-sm font-bold text-slate-50">Usually replies in hours</span>
                 </div>
@@ -166,9 +154,10 @@ export default function ContactPage() {
       </section>
 
       {/* ──────────────────────── Contact info cards ──────────────────────── */}
-      <section className="mx-auto mt-8 w-full max-w-7xl px-6 lg:px-8 pt-6">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {CONTACT_CARDS.map(({ icon: Icon, label, value, href }) => (
               <div key={label} className="bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors rounded-3xl p-6 sm:p-8 shadow-sm group flex flex-col items-start">
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 transition-transform group-hover:scale-110">
@@ -196,11 +185,13 @@ export default function ContactPage() {
             ))}
           </div>
         </ScrollReveal>
+        </div>
       </section>
 
       {/* ──────────────── WhatsApp templates + Hours & Location ──────────────── */}
-      <section className="mx-auto mt-14 w-full max-w-7xl px-6 lg:px-8 pb-16">
-        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-10">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           {/* WhatsApp templates */}
           <ScrollReveal direction="left" delay={0} distance={32}>
             <div className="bg-slate-900 border border-slate-800 overflow-hidden rounded-3xl shadow-sm">
@@ -333,14 +324,16 @@ export default function ContactPage() {
               </div>
             </div>
           </ScrollReveal>
+          </div>
         </div>
       </section>
 
       {/* ─────────────────────────── Bottom CTA ─────────────────────────── */}
-      <section className="mx-auto mt-16 w-full max-w-7xl px-6 lg:px-8 pb-20">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="bg-slate-900 border border-slate-800 relative overflow-hidden rounded-3xl px-8 py-16 sm:px-16 shadow-lg">
-            <div className="relative z-10 flex flex-col items-center justify-between gap-10 md:flex-row md:gap-16">
+          <div className="bg-slate-900 overflow-hidden border border-slate-800 rounded-3xl px-8 py-16 sm:px-16 shadow-lg">
+            <div className="flex flex-col items-center justify-between gap-10 md:flex-row md:gap-16">
               <div className="text-center md:text-left flex-1 max-w-xl">
                 <p className="mb-4 text-xs font-bold uppercase tracking-widest text-amber-500">
                   Fastest response
@@ -370,6 +363,7 @@ export default function ContactPage() {
             </div>
           </div>
         </ScrollReveal>
+        </div>
       </section>
     </div>
   );

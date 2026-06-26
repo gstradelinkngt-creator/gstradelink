@@ -51,9 +51,9 @@ export default function ServicesPage() {
   return (
     <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-12">
       {/* ───────────────────────────── Hero ───────────────────────────── */}
-      <section className="relative overflow-hidden pb-16 pt-16 sm:pb-24 sm:pt-24 border-b border-slate-900">
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <section className="relative overflow-hidden py-16 md:py-24 border-b border-slate-900">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-slate-900 border border-slate-800 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-widest text-slate-400">
                 <CheckCircle size={14} className="text-amber-500" />
@@ -113,7 +113,8 @@ export default function ServicesPage() {
       </section>
 
       {/* ──────────────────────── Services Grid ──────────────────────── */}
-      <section className="mx-auto mt-16 w-full max-w-7xl px-6 lg:px-8 pb-16">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center lg:text-left">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-50 mb-4">Our Core Services</h2>
           <p className="text-slate-400 max-w-2xl mx-auto lg:mx-0">
@@ -145,13 +146,15 @@ export default function ServicesPage() {
             ))}
           </div>
         </ScrollReveal>
+        </div>
       </section>
 
       {/* ─────────────────────────── Bottom CTA ─────────────────────────── */}
-      <section className="mx-auto mt-10 w-full max-w-7xl px-6 lg:px-8 pb-20">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="bg-slate-900 border border-slate-800 relative overflow-hidden rounded-3xl px-8 py-16 sm:px-16 shadow-lg">
-            <div className="relative z-10 flex flex-col items-center justify-between gap-10 md:flex-row md:gap-16">
+          <div className="bg-slate-900 overflow-hidden border border-slate-800 rounded-3xl px-8 py-16 sm:px-16 shadow-lg">
+            <div className="flex flex-col items-center justify-between gap-10 md:flex-row md:gap-16">
               <div className="text-center md:text-left flex-1 max-w-xl">
                 <p className="mb-4 text-xs font-bold uppercase tracking-widest text-amber-500">
                   Available Now
@@ -180,6 +183,7 @@ export default function ServicesPage() {
             </div>
           </div>
         </ScrollReveal>
+        </div>
       </section>
     </div>
   );

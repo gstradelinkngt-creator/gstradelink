@@ -6,19 +6,19 @@ import { cn } from "@/lib/utils";
 import { Eye, EyeOff, AlertCircle, CheckCircle, Info } from "lucide-react";
 
 const inputVariants = cva(
-  "flex w-full rounded-lg border bg-background-card px-3 py-2 text-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-foreground-muted focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+  "flex w-full rounded-lg border bg-slate-800/50 text-slate-100 transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-slate-500 focus:outline-none focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "border-brand-muted focus-visible:border-brand-accent focus-visible:ring-2 focus-visible:ring-brand-accent/20",
-        error: "border-danger-500 focus-visible:border-danger-500 focus-visible:ring-2 focus-visible:ring-danger-500/20 bg-danger-500/5",
-        success: "border-success-500 focus-visible:border-success-500 focus-visible:ring-2 focus-visible:ring-success-500/20 bg-success-500/5",
-        warning: "border-warning-500 focus-visible:border-warning-500 focus-visible:ring-2 focus-visible:ring-warning-500/20 bg-warning-500/5",
+        default: "border-slate-700 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/50 focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-500/50",
+        error: "border-red-500 bg-red-500/10 focus:border-red-500 focus:ring-2 focus:ring-red-500/40 focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-red-500/40",
+        success: "border-emerald-500 bg-emerald-500/10 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/40",
+        warning: "border-amber-500 bg-amber-500/10 focus:border-amber-500 focus:ring-2 focus:ring-amber-500/40 focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-500/40",
       },
       size: {
-        sm: "h-9 px-3 text-sm",
-        md: "h-10 px-3 text-sm",
-        lg: "h-11 px-4 text-base",
+        sm: "px-3 py-2 text-sm",
+        md: "px-3.5 py-2.5 text-sm",
+        lg: "px-4 py-3 text-base",
       },
     },
     defaultVariants: {
@@ -33,10 +33,10 @@ const labelVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-foreground-primary",
-        error: "text-danger-500",
-        success: "text-success-500",
-        warning: "text-warning-500",
+        default: "text-slate-200",
+        error: "text-red-400",
+        success: "text-emerald-400",
+        warning: "text-amber-400",
       },
     },
     defaultVariants: {
@@ -124,7 +124,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const getRightIcon = () => {
       if (loading) {
         return (
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-500"></div>
         );
       }
 
@@ -133,7 +133,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             onClick={togglePasswordVisibility}
-            className="text-foreground-muted hover:text-foreground-primary transition-colors focus:outline-none focus:text-foreground-primary"
+            className="text-slate-400 hover:text-slate-100 transition-colors focus:outline-none focus:text-slate-100"
             aria-label={showPassword ? "Hide password" : "Show password"}
             tabIndex={-1}
           >
@@ -178,7 +178,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
         <div className="relative">
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted pointer-events-none">
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 pointer-events-none">
               {leftIcon}
             </div>
           )}
@@ -228,10 +228,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <div
               className={cn(
                 "absolute inset-0 rounded-lg pointer-events-none border-2",
-                currentVariant === "error" && "border-danger-500/30",
-                currentVariant === "success" && "border-success-500/30",
-                currentVariant === "warning" && "border-warning-500/30",
-                currentVariant === "default" && "border-brand-accent/30"
+                currentVariant === "error" && "border-red-500/30",
+                currentVariant === "success" && "border-emerald-500/30",
+                currentVariant === "warning" && "border-amber-500/30",
+                currentVariant === "default" && "border-amber-500/30"
               )}
               aria-hidden="true"
             />
@@ -242,7 +242,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {hint && !error && !success && !warning && (
           <p
             id={`${inputId}-hint`}
-            className={cn("text-xs text-foreground-muted", hintClassName)}
+            className={cn("text-xs text-slate-400", hintClassName)}
           >
             {hint}
           </p>
@@ -418,10 +418,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             <div
               className={cn(
                 "absolute inset-0 rounded-lg pointer-events-none border-2",
-                currentVariant === "error" && "border-danger-500/30",
-                currentVariant === "success" && "border-success-500/30",
-                currentVariant === "warning" && "border-warning-500/30",
-                currentVariant === "default" && "border-brand-accent/30"
+                currentVariant === "error" && "border-red-500/30",
+                currentVariant === "success" && "border-emerald-500/30",
+                currentVariant === "warning" && "border-amber-500/30",
+                currentVariant === "default" && "border-amber-500/30"
               )}
               aria-hidden="true"
             />
@@ -429,7 +429,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
           {loading && (
             <div className="absolute right-3 top-3">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-amber-500"></div>
             </div>
           )}
         </div>
@@ -438,7 +438,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {hint && !error && !success && !warning && (
           <p
             id={`${textareaId}-hint`}
-            className={cn("text-xs text-foreground-muted", hintClassName)}
+            className={cn("text-xs text-slate-400", hintClassName)}
           >
             {hint}
           </p>

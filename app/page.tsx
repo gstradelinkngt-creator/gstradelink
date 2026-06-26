@@ -150,9 +150,9 @@ export default async function Home() {
   return (
     <div className="bg-slate-950 min-h-screen w-full overflow-hidden">
       {/* ═══════════════════════════════ HERO ═══════════════════════════════ */}
-      <section className="relative overflow-hidden border-b border-slate-900 z-10">
-        <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-24">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-10">
+      <section className="relative overflow-hidden border-b border-slate-900">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div className="text-center lg:text-left flex flex-col space-y-6">
               <div>
@@ -234,19 +234,10 @@ export default async function Home() {
                       />
                     </svg>
                   </div>
-
-                  {/* Floating verified badge */}
-                  <div className="absolute -right-4 -top-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-lg">
-                    <CheckCircle size={26} className="text-amber-500" />
-                  </div>
-                  {/* Floating location badge */}
-                  <div className="absolute -bottom-4 -left-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-lg">
-                    <MapPin size={22} className="text-slate-300" />
-                  </div>
                 </div>
 
-                {/* Open-status info chip */}
-                <div className="absolute -bottom-6 left-8 right-8 flex items-center gap-3 rounded-2xl px-5 py-4 bg-slate-900 border border-slate-800 shadow-xl">
+                {/* Trust info chip */}
+                <div className="mt-4 flex items-center gap-3 rounded-2xl px-5 py-4 bg-slate-900 border border-slate-800 shadow-xl">
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse shrink-0" />
                   <span className="text-sm font-semibold text-slate-50 truncate">
                     Precision you can trust
@@ -262,8 +253,9 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════ STATS STRIP ═══════════════════════════ */}
-      <section className="relative z-20 mx-auto -mt-6 w-full max-w-5xl px-6 sm:-mt-10">
-        <div className="bg-slate-900 border border-slate-800 grid grid-cols-3 overflow-hidden rounded-2xl shadow-lg">
+      <section className="block w-full">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="bg-slate-900 border border-slate-800 grid grid-cols-3 overflow-hidden rounded-2xl shadow-lg">
           {STATS.map(({ value, label, sub, Icon }, i) => (
             <div
               key={label}
@@ -291,12 +283,13 @@ export default async function Home() {
               </span>
             </div>
           ))}
+          </div>
         </div>
       </section>
 
       {/* ═══════════════════════════ CATEGORIES ═══════════════════════════ */}
-      <section className="relative py-16 sm:py-20 lg:py-28">
-        <div className="mx-auto w-full max-w-7xl px-6">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up" delay={0} distance={24}>
             <div className="mb-12 text-center flex flex-col space-y-3">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500">
@@ -370,8 +363,8 @@ export default async function Home() {
 
       {/* ════════════════════════ FEATURED PRODUCTS ════════════════════════ */}
       {featuredProducts.length > 0 && (
-        <section className="relative pb-16 sm:pb-24 lg:pb-28">
-          <div className="mx-auto w-full max-w-7xl px-6">
+        <section className="block w-full py-16 md:py-24">
+          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <ScrollReveal direction="up" delay={0} distance={24}>
               <div className="mb-12 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
                 <div className="flex flex-col space-y-3">
@@ -438,10 +431,10 @@ export default async function Home() {
                             {product.short_description}
                           </p>
                         )}
-                        <div className="mt-auto flex gap-3">
+                        <div className="mt-auto grid grid-cols-2 gap-3">
                           <Link
                             href={`/products/${product.id}`}
-                            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-4 py-2.5 rounded-lg flex-1 text-center text-sm transition-colors"
+                            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-4 py-2.5 rounded-lg flex items-center justify-center text-sm transition-colors"
                           >
                             Details
                           </Link>
@@ -449,7 +442,7 @@ export default async function Home() {
                             href={waLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-4 py-2.5 rounded-lg flex-1 flex justify-center items-center gap-1.5 text-sm transition-colors shadow-sm"
+                            className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-4 py-2.5 rounded-lg flex justify-center items-center gap-1.5 text-sm transition-colors shadow-sm"
                           >
                             <MessageCircle size={15} /> Enquire
                           </a>
@@ -465,8 +458,8 @@ export default async function Home() {
       )}
 
       {/* ═══════════════════════════ WHY CHOOSE US ═══════════════════════════ */}
-      <section className="relative pb-16 sm:pb-24 lg:pb-28">
-        <div className="mx-auto w-full max-w-7xl px-6">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
           <ScrollReveal direction="up" delay={0} distance={24}>
             <div className="mb-12 text-center flex flex-col space-y-3">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500">
@@ -506,10 +499,11 @@ export default async function Home() {
       </section>
 
       {/* ═══════════════════════════ FINAL CTA ═══════════════════════════ */}
-      <section className="relative px-6 pb-20 pt-4 sm:pb-28">
-        <ScrollReveal direction="up" delay={0} distance={28}>
-          <div className="relative mx-auto w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-16 text-center shadow-xl">
-            <div className="relative z-10 mx-auto max-w-xl flex flex-col items-center">
+      <section className="block w-full py-16 md:py-24">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollReveal direction="up" delay={0} distance={28}>
+            <div className="mx-auto w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-16 text-center shadow-xl">
+              <div className="mx-auto max-w-xl flex flex-col items-center">
               <span className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-slate-800 border border-slate-700 text-amber-500">
                 <MessageCircle size={14} /> Quick Response Guaranteed
               </span>
@@ -538,7 +532,8 @@ export default async function Home() {
               </div>
             </div>
           </div>
-        </ScrollReveal>
+          </ScrollReveal>
+        </div>
       </section>
     </div>
   );

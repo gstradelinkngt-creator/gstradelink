@@ -6,34 +6,34 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const buttonVariants = cva(
-  // Base styles - clean and professional
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 active:scale-[0.98]",
+  // Base styles - premium, minimalist, dark-first
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:pointer-events-none disabled:opacity-60 active:scale-[0.97]",
   {
     variants: {
       variant: {
         primary:
-          "bg-primary-600 text-white shadow-sm hover:bg-primary-700 hover:shadow-md hover:-translate-y-0.5",
+          "bg-amber-500 text-slate-900 shadow-sm hover:bg-amber-400 hover:shadow-md active:bg-amber-600",
         secondary:
-          "bg-background-primary text-foreground-primary border border-border-primary shadow-sm hover:bg-background-secondary hover:shadow-md hover:-translate-y-0.5",
+          "bg-slate-800 text-slate-100 border border-slate-700 shadow-sm hover:bg-slate-700 hover:border-slate-600 active:bg-slate-800",
         outline:
-          "border border-primary-600 text-primary-700 hover:bg-primary-50",
+          "border border-slate-600 text-slate-100 hover:bg-slate-800 hover:border-amber-500/60 active:bg-slate-800/70",
         ghost:
-          "text-foreground-secondary hover:bg-background-secondary hover:text-foreground-primary",
+          "text-slate-300 hover:bg-slate-800 hover:text-slate-50 active:bg-slate-800/70",
         danger:
-          "bg-danger-600 text-white shadow-sm hover:bg-danger-700 hover:shadow-md hover:-translate-y-0.5",
+          "bg-red-500 text-white shadow-sm hover:bg-red-400 active:bg-red-600",
         success:
-          "bg-success-600 text-white shadow-sm hover:bg-success-700 hover:shadow-md hover:-translate-y-0.5",
+          "bg-emerald-500 text-slate-900 shadow-sm hover:bg-emerald-400 active:bg-emerald-600",
         warning:
-          "bg-warning-600 text-white shadow-sm hover:bg-warning-700 hover:shadow-md hover:-translate-y-0.5",
-        link: "text-primary-600 underline-offset-4 hover:underline focus-visible:ring-primary-500",
+          "bg-amber-500 text-slate-900 shadow-sm hover:bg-amber-400 active:bg-amber-600",
+        link: "text-amber-400 underline-offset-4 hover:underline hover:text-amber-300 focus-visible:ring-amber-500/60",
       },
       size: {
-        xs: "h-8 px-3 text-xs rounded-lg",
-        sm: "h-9 px-3.5 text-xs",
-        md: "h-10 px-4 text-sm",
-        lg: "h-11 px-6 text-sm",
-        xl: "h-12 px-8 text-base rounded-2xl",
-        icon: "h-9 w-9",
+        xs: "px-3 py-1.5 text-xs rounded-lg",
+        sm: "px-4 py-2 text-xs",
+        md: "px-5 py-2.5 text-sm",
+        lg: "px-6 py-3 text-sm",
+        xl: "px-8 py-3.5 text-base rounded-2xl",
+        icon: "h-10 w-10",
       },
       fullWidth: {
         true: "w-full",

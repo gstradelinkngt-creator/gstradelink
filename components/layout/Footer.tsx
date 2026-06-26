@@ -334,10 +334,11 @@ export const Footer = ({ className }: { className?: string }) => {
       </div>
 
       {/* ── Copyright bar ────────────────────────────── */}
+      {/* Extra bottom padding (pb-24) keeps the fixed WhatsApp widget from covering footer links */}
       <div
         style={{
           borderTop: "1px solid rgba(255,255,255,0.06)",
-          padding: "18px 20px",
+          padding: "18px 20px 96px",
         }}
       >
         <div

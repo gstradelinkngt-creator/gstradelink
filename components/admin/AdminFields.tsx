@@ -11,7 +11,7 @@ export function FieldLabel({
     children: React.ReactNode;
 }) {
     return (
-        <label className="flex items-center gap-2 mb-2">
+        <label className="flex items-center gap-2">
             <Icon size={13} className="text-amber-500" />
             <span
                 className="text-[11px] font-medium uppercase tracking-widest text-slate-300"

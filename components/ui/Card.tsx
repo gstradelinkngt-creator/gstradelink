@@ -5,15 +5,15 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "rounded-xl border bg-white text-foreground-primary transition-all duration-200",
+  "rounded-xl border bg-slate-900 text-slate-100 transition-all duration-200",
   {
     variants: {
       variant: {
-        default: "border-border-primary shadow-card",
-        elevated: "border-border-primary shadow-lg",
-        outlined: "border-2 border-border-secondary shadow-none",
+        default: "border-slate-700/50 shadow-sm",
+        elevated: "bg-slate-800/80 border-slate-700/50 shadow-lg",
+        outlined: "bg-transparent border-2 border-slate-700 shadow-none",
         ghost: "border-transparent shadow-none bg-transparent",
-        gradient: "border-border-primary shadow-card bg-gradient-to-br from-white to-background-secondary",
+        gradient: "border-slate-700/50 shadow-sm bg-gradient-to-br from-slate-800/80 to-slate-900",
       },
       size: {
         sm: "p-3",
@@ -23,13 +23,13 @@ const cardVariants = cva(
       },
       hover: {
         none: "",
-        lift: "hover:shadow-md hover:-translate-y-1",
-        glow: "hover:shadow-lg hover:shadow-primary-600/10",
+        lift: "hover:shadow-lg hover:-translate-y-1 hover:border-slate-600/60",
+        glow: "hover:shadow-lg hover:shadow-amber-500/10 hover:border-amber-500/30",
         scale: "hover:scale-[1.02]",
-        subtle: "hover:bg-background-secondary/50",
+        subtle: "hover:bg-slate-800/60",
       },
       interactive: {
-        true: "cursor-pointer focus-within:ring-2 focus-within:ring-primary-600 focus-within:ring-offset-2",
+        true: "cursor-pointer focus-within:ring-2 focus-within:ring-amber-500/60 focus-within:ring-offset-2 focus-within:ring-offset-slate-900",
         false: "",
       },
     },
@@ -201,7 +201,7 @@ const CardFooter = forwardRef<HTMLDivElement, CardFooterProps>(
         className={cn(
           variantClasses[variant],
           spacingClasses[spacing],
-          "pt-3 border-t border-border-primary/50",
+          "pt-3 border-t border-slate-700/50",
           className
         )}
         {...props}

@@ -282,14 +282,14 @@ export function ManageProductsTab() {
                                     />
                                 </div>
                             </div>
-                            <div><FieldLabel icon={FileText}>Product Name</FieldLabel><FieldInput value={editName} onChange={e => setEditName(e.target.value)} placeholder="Product name" required /></div>
-                            <div>
+                            <div className="space-y-1.5"><FieldLabel icon={FileText}>Product Name</FieldLabel><FieldInput value={editName} onChange={e => setEditName(e.target.value)} placeholder="Product name" required /></div>
+                            <div className="space-y-1.5">
                                 <FieldLabel icon={Tag}>Category</FieldLabel>
                                 <FieldSelect value={editCategory} onChange={e => setEditCategory(e.target.value)}>
                                     {CATEGORY_OPTIONS.map(({ value, label }) => (<option key={value} value={value} className="bg-primary-900 text-slate-100">{label}</option>))}
                                 </FieldSelect>
                             </div>
-                            <div><FieldLabel icon={FileText}>Short Description</FieldLabel><FieldTextarea value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Key specs and features…" style={{ minHeight: "100px" }} /></div>
+                            <div className="space-y-1.5"><FieldLabel icon={FileText}>Short Description</FieldLabel><FieldTextarea value={editDesc} onChange={e => setEditDesc(e.target.value)} placeholder="Key specs and features…" style={{ minHeight: "100px" }} /></div>
                         </div>
                         <div className="px-6 py-4 border-t border-white/10 flex gap-3 shrink-0 bg-primary-900/80 backdrop-blur-md">
                             <button onClick={() => setEditingProduct(null)} className="flex-1 h-11 rounded-xl text-sm font-semibold transition-all bg-white/5 hover:bg-white/10 text-primary-200/80 hover:text-white border border-white/10">Cancel</button>

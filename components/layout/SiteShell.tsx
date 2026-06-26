@@ -23,7 +23,7 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
-      <main className="grow pb-32 md:pb-0 relative">{children}</main>
+      <main className="grow pb-28 md:pb-0">{children}</main>
       <FooterWrapper />
       <FloatingWhatsApp />
       <div className="md:hidden">

@@ -4,10 +4,12 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, Variants } from "framer-motion";
-import { ArrowRight, Package, Pencil, Trash2 } from "lucide-react";
+import { MessageCircle, Package, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import type { Product } from "@/types";
+
+const WHATSAPP_BASE = "https://wa.me/9779845541939";
 
 interface ProductCardProps {
   product: Product;
@@ -68,7 +70,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             alt={product.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-contain transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             priority={false}
           />
         ) : (
@@ -85,33 +87,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* Content */}
       <div className="flex flex-col flex-1 p-5">
-        <Link href={`/products/${product.id}`} className="flex flex-col flex-1">
+        <Link href={`/products/${product.id}`}>
           <h3
-            className="mb-2 line-clamp-2 font-bold text-slate-100 transition-colors group-hover:text-amber-500"
+            className="line-clamp-2 font-bold text-slate-100 transition-colors group-hover:text-amber-500"
             style={{ fontSize: "1.05rem", lineHeight: 1.4 }}
           >
             {product.name}
           </h3>
-          <div className="mt-auto pt-2">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 group-hover:text-slate-200 transition-colors">
-              View details
-              <ArrowRight
-                size={14}
-                className="transition-transform duration-200 group-hover:translate-x-1"
-              />
-            </span>
-          </div>
         </Link>
 
         {/* Admin actions */}
-        {showActions && (onEdit || onDelete) && (
-          <div className="mt-4 flex gap-2 pt-4 border-t border-slate-800">
+        {showActions && (onEdit || onDelete) ? (
+          <div className="mt-auto grid grid-cols-2 gap-3 pt-5 border-t border-slate-800 mt-5">
             {onEdit && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onEdit}
-                className="h-9 flex-1 text-xs bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-slate-50"
+                className="h-9 text-xs bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-slate-50"
               >
                 <Pencil size={14} className="mr-1.5" /> Edit
               </Button>
@@ -121,11 +114,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 variant="danger"
                 size="sm"
                 onClick={onDelete}
-                className="h-9 flex-1 border-none bg-red-500/10 text-xs font-medium text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                className="h-9 border-none bg-red-500/10 text-xs font-medium text-red-400 hover:bg-red-500/20 hover:text-red-300"
               >
                 <Trash2 size={14} className="mr-1.5" /> Delete
               </Button>
             )}
+          </div>
+        ) : (
+          <div className="mt-auto grid grid-cols-2 gap-3 pt-5">
+            <Link
+              href={`/products/${product.id}`}
+              className="flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700"
+            >
+              Details
+            </Link>
+            <a
+              href={`${WHATSAPP_BASE}?text=${encodeURIComponent(
+                `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`,
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-sm transition-colors hover:bg-amber-600 active:bg-amber-700"
+            >
+              <MessageCircle size={15} /> Enquire
+            </a>
           </div>
         )}
       </div>

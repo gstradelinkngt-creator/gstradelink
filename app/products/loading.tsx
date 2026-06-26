@@ -38,8 +38,8 @@ export default function Loading() {
       </section>
 
       {/* ── Product grid skeleton ───────────────────────────────── */}
-      <section className="mx-auto mt-6 max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 xl:grid-cols-5">
+      <section className="mx-auto mt-6 max-w-7xl px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 12 }).map((_, i) => (
             <div key={i} className="glass ui-card rounded-2xl">
               <div

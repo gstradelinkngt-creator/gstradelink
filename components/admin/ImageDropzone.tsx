@@ -64,7 +64,7 @@ export function ImageDropzone({
     return (
         <div
             className={`relative rounded-md overflow-hidden transition-all duration-200 border-dashed border-2 flex flex-col items-center justify-center
-                ${dragActive ? "border-amber-500 bg-amber-500/10 scale-[1.02]" : preview ? "border-transparent bg-transparent" : "border-slate-500 bg-slate-800/40 hover:bg-slate-700/60 hover:border-slate-400"}
+                ${dragActive ? "border-amber-500 bg-amber-500/10 scale-[1.02]" : preview ? "border-transparent bg-transparent" : "border-slate-600 bg-slate-800/40 hover:bg-slate-700/60 hover:border-slate-500"}
             `}
             style={{
                 minHeight: "260px",
@@ -89,7 +89,7 @@ export function ImageDropzone({
                             e.preventDefault();
                             onClear();
                         }}
-                        className="absolute top-3 right-3 z-20 w-8 h-8 rounded-xl flex items-center justify-center transition-all bg-danger-500 text-white hover:scale-110 shadow-lg"
+                        className="absolute top-3 right-3 z-20 w-8 h-8 rounded-xl flex items-center justify-center transition-all bg-red-500 text-white hover:scale-110 shadow-lg"
                     >
                         <X size={16} />
                     </button>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, Package, Users, Home, LogOut, Menu, X, Mail, ShieldCheck } from "lucide-react";
+import { Plus, Package, Users, Home, LogOut, Menu, X, ShieldCheck } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ToastProvider } from "./AdminToast";
 import { AddProductTab } from "./AddProductTab";
@@ -80,7 +80,7 @@ export function AdminShell() {
 
                 {/* ══ SIDEBAR ══════════════════════════════════════════════════════════ */}
                 <aside
-                    className={`fixed md:sticky top-0 h-screen flex flex-col w-64 shrink-0 z-50 transition-transform duration-300 ease-in-out bg-slate-900 border-r border-slate-800 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
+                    className={`fixed md:sticky top-0 h-screen flex flex-col w-64 shrink-0 z-50 transition-transform duration-300 ease-in-out bg-slate-950 border-r border-slate-800 ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}
                 >
                     {/* Brand */}
                     <div className="px-6 py-6 flex items-center justify-between border-b border-slate-800">
@@ -135,10 +135,10 @@ export function AdminShell() {
                 </aside>
 
                 {/* ══ MAIN ═══════════════════════════════════════════════════════════ */}
-                <main className="flex-1 min-w-0 flex flex-col min-h-screen relative z-10 bg-slate-950">
+                <main className="flex-1 min-w-0 flex flex-col min-h-screen relative z-10 bg-slate-900">
                     {/* Top bar */}
                     <header
-                        className="sticky top-0 z-30 px-5 sm:px-8 h-20 flex items-center justify-between gap-4 shrink-0 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800"
+                        className="sticky top-0 z-30 px-5 sm:px-8 h-20 flex items-center justify-between gap-4 shrink-0 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800"
                     >
                         <div className="flex items-center gap-4 min-w-0">
                             <button onClick={() => setSidebarOpen(true)} className="md:hidden w-10 h-10 rounded-xl flex items-center justify-center hover:bg-slate-800 text-slate-400 transition-colors shrink-0">
@@ -172,7 +172,7 @@ export function AdminShell() {
                     </header>
 
                     {/* Body */}
-                    <div className="flex-1 px-4 sm:px-8 py-8 sm:py-10 max-w-5xl mx-auto w-full">
+                    <div className="flex-1 p-4 sm:p-8 lg:p-10 max-w-5xl mx-auto w-full">
                         {activeTab === "add-product" && <AddProductTab />}
                         {activeTab === "manage-products" && <ManageProductsTab />}
                         {activeTab === "manage-users" && <ManageUsersTab />}

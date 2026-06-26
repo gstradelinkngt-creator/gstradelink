@@ -171,10 +171,10 @@ export const Navbar = () => {
         animate={{ y: 0 }}
         transition={{ type: "spring", stiffness: 100, damping: 20 }}
         className={cn(
-          "sticky top-0 z-50 w-full transition-all duration-300 border-b",
+          "sticky top-0 z-50 w-full backdrop-blur-md bg-slate-950/80 transition-all duration-300 border-b",
           isScrolled
-            ? "shadow-sm shadow-black/20 bg-slate-950/90 backdrop-blur-md border-slate-800"
-            : "bg-slate-950/70 backdrop-blur-md border-slate-800/60"
+            ? "shadow-sm shadow-black/20 border-slate-800"
+            : "border-slate-800/60"
         )}
       >
         <div className="container-fluid px-6">
@@ -381,7 +381,7 @@ export const Navbar = () => {
               {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
-                className="p-2 rounded-lg text-slate-300 hover:text-slate-50 hover:bg-slate-800/80 transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-slate-100 shadow-sm hover:bg-slate-700 hover:text-white active:scale-95 transition-all"
                 aria-label="Toggle menu"
                 aria-expanded={isOpen}
               >
