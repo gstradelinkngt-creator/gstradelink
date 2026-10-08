@@ -708,56 +708,6 @@
     gap: var(--space-1);
 }
 
-/* ===== ADMIN DARK PANEL OVERRIDES ===== */
-/*
- * Scope overrides for the dark-themed admin panel.
- * The global form-element reset uses light-mode CSS vars; this block
- * resets them inside .admin-dark so the two themes don't clash.
- */
-.admin-dark {
-    color-scheme: dark;
-}
-
-.admin-dark input,
-.admin-dark textarea,
-.admin-dark select {
-    background: rgba(30, 41, 59, 0.8); /* slate-800/80 */
-    border-color: #334155; /* slate-700 */
-    color: #e2e8f0; /* slate-200 */
-}
-
-.admin-dark input:focus,
-.admin-dark textarea:focus,
-.admin-dark select:focus {
-    border-color: #f59e0b; /* amber-500 */
-    box-shadow: 0 0 0 1px #f59e0b; /* ring-1 amber-500 */
-    background: rgba(30, 41, 59, 0.9);
-}
-
-.admin-dark input::placeholder,
-.admin-dark textarea::placeholder {
-    color: #64748b; /* slate-500 */
-}
-
-.admin-dark select option {
-    background: #1e293b; /* slate-800 */
-    color: #e2e8f0;
-}
-
-/* Admin scrollbar — dark variant */
-.admin-dark ::-webkit-scrollbar-track {
-    background: #0a1120;
-}
-
-.admin-dark ::-webkit-scrollbar-thumb {
-    background: rgba(62, 94, 133, 0.4);
-    border-color: #0a1120;
-}
-
-.admin-dark ::-webkit-scrollbar-thumb:hover {
-    background: rgba(62, 94, 133, 0.7);
-}
-
 /* ===== PRINT ===== */
 @media print {
     *,

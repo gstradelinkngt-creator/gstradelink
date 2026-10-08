@@ -35,7 +35,7 @@ export async function proxy(request: NextRequest) {
     if (userError || !user) {
       console.log("[middleware] No user found or error:", userError?.message || "User is null", "Redirecting to login");
       const loginUrl = new URL("/admin/login", request.url);
-      loginUrl.searchParams.set("next", pathname);
+      loginUrl.searchParams.set("next", pathname + request.nextUrl.search);
       return redirectWithCookies(loginUrl);
     }
 
@@ -65,11 +65,11 @@ export async function proxy(request: NextRequest) {
         console.warn("[middleware] profiles insert failed:", insertError.message);
       } else if (assignedRole !== "admin") {
         console.log(`[middleware] New user ${user.email} is not admin, redirecting to home.`);
-        return redirectWithCookies(new URL("/?auth=not-authorized", request.url));
+        return redirectWithCookies(new URL("/admin/login?error=not_admin", request.url));
       }
     } else if (profile.role !== "admin") {
       console.log(`[middleware] User ${user.email} has role '${profile.role}', denying admin access.`);
-      return redirectWithCookies(new URL("/?auth=not-authorized", request.url));
+      return redirectWithCookies(new URL("/admin/login?error=not_admin", request.url));
     }
 
     // Admin user authenticated successfully

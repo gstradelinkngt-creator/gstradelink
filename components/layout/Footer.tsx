@@ -76,7 +76,7 @@ export const Footer = ({ className }: { className?: string }) => {
           <div className="flex items-center gap-3">
             <span className="font-mono uppercase tracking-wider">Bharatpur · Chitwan · Nepal</span>
             {/* Discreet admin access */}
-            <Link href="/admin/login" aria-label="Admin login" className="text-white/25 transition-colors hover:text-white/60">
+            <Link href="/admin" aria-label="Admin" className="text-white/25 transition-colors hover:text-white/60">
               <Lock size={11} />
             </Link>
           </div>

@@ -43,7 +43,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         <ToastContext.Provider value={{ toast }}>
             {children}
             {/* Toast stack */}
-            <div className="fixed top-4 right-4 z-[99] flex flex-col gap-2 pointer-events-none max-w-sm w-full">
+            <div className="pointer-events-none fixed bottom-4 right-4 z-[99] flex w-[calc(100%-2rem)] max-w-sm flex-col gap-2">
                 {toasts.map((t) => (
                     <ToastItem key={t.id} toast={t} onDismiss={dismiss} />
                 ))}
@@ -63,30 +63,22 @@ function ToastItem({ toast: t, onDismiss }: { toast: Toast; onDismiss: (id: numb
 
     return (
         <div
-            className="pointer-events-auto flex items-center gap-3 px-4 py-3.5 rounded-2xl animate-in slide-in-from-right-5 fade-in duration-300"
-            style={{
-                background: isSuccess ? "rgba(34,197,94,0.12)" : "rgba(239,68,68,0.12)",
-                border: `1px solid ${isSuccess ? "rgba(34,197,94,0.2)" : "rgba(239,68,68,0.2)"}`,
-                backdropFilter: "blur(16px)",
-            }}
+            role="status"
+            className="pointer-events-auto flex items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3.5 shadow-float animate-fade-in"
         >
             {isSuccess ? (
-                <CheckCircle2 size={16} className="shrink-0" style={{ color: "#4ADE80" }} />
+                <CheckCircle2 size={18} className="shrink-0 text-wa" />
             ) : (
-                <XCircle size={16} className="shrink-0" style={{ color: "#F87171" }} />
+                <XCircle size={18} className="shrink-0 text-red-600" />
             )}
-            <p
-                className="flex-1 text-sm"
-                style={{ color: isSuccess ? "#86EFAC" : "#FCA5A5" }}
-            >
-                {t.message}
-            </p>
+            <p className="flex-1 text-sm text-ink">{t.message}</p>
             <button
+                type="button"
                 onClick={() => onDismiss(t.id)}
-                className="shrink-0 opacity-40 hover:opacity-80 transition-opacity"
-                style={{ color: isSuccess ? "#86EFAC" : "#FCA5A5" }}
+                aria-label="Dismiss"
+                className="shrink-0 text-ink-mute transition-colors hover:text-ink"
             >
-                <X size={14} />
+                <X size={15} />
             </button>
         </div>
     );

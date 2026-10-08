@@ -5,12 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, LogOut, Menu, Phone, Shield, X } from "lucide-react";
-import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { ChevronDown, LayoutDashboard, LogOut, Menu, Phone, Shield, X } from "lucide-react";
 import { cn, getStoreOpenState } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
 import { PRODUCT_CATEGORIES, CATEGORY_ADMIN_LABELS } from "@/lib/categories";
 import { SITE } from "@/lib/site";
+import { useSessionRole } from "@/lib/admin/useSessionRole";
 
 const CATEGORY_LINKS = PRODUCT_CATEGORIES.map((c) => ({
   label: CATEGORY_ADMIN_LABELS[c],
@@ -32,7 +32,6 @@ export const Navbar = () => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [storeOpen, setStoreOpen] = useState<boolean | null>(null);
-  const [user, setUser] = useState<SupabaseUser | null>(null);
 
   useEffect(() => {
     const update = () => setStoreOpen(getStoreOpenState().open);
@@ -41,17 +40,7 @@ export const Navbar = () => {
     return () => clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-    });
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+  const { user, isAdmin } = useSessionRole();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -94,7 +83,6 @@ export const Navbar = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    setUser(null);
     setUserMenuOpen(false);
     router.refresh();
   };
@@ -204,9 +192,15 @@ export const Navbar = () => {
             <Phone size={15} /> <span className="hidden lg:inline">{SITE.phoneDisplay}</span>
             <span className="lg:hidden">Call</span>
           </a>
-          <Link href="/contact" className="btn-ink hidden h-10 px-4 text-sm md:inline-flex">
-            Get a quote
-          </Link>
+          {isAdmin ? (
+            <Link href="/admin" className="btn-ink hidden h-10 px-4 text-sm md:inline-flex">
+              <LayoutDashboard size={15} /> Manage products
+            </Link>
+          ) : (
+            <Link href="/contact" className="btn-ink hidden h-10 px-4 text-sm md:inline-flex">
+              Get a quote
+            </Link>
+          )}
 
           {user && (
             <div className="relative">
@@ -238,9 +232,11 @@ export const Navbar = () => {
                     className="absolute right-0 top-full mt-3 w-60 rounded-2xl border border-line bg-surface p-2 shadow-float"
                   >
                     <p className="truncate px-3 py-2 text-xs text-ink-mute">{user.email}</p>
-                    <Link href="/admin" className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">
-                      <Shield size={16} /> Admin panel
-                    </Link>
+                    {isAdmin && (
+                      <Link href="/admin" className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">
+                        <Shield size={16} /> Admin panel
+                      </Link>
+                    )}
                     <button
                       type="button"
                       onClick={handleSignOut}
@@ -316,6 +312,12 @@ export const Navbar = () => {
                     </li>
                   ))}
                 </ul>
+
+                {isAdmin && (
+                  <Link href="/admin" className="btn-ink mt-6 h-12 w-full text-sm">
+                    <LayoutDashboard size={16} /> Manage products
+                  </Link>
+                )}
 
                 <p className="eyebrow mt-8 px-3">Shop by category</p>
                 <ul className="mt-2 grid grid-cols-2 gap-2">

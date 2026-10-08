@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductCard } from "@/components/products/ProductCard";
+import { AdminEditLink } from "@/components/admin/AdminEditLink";
 import { CATEGORY_ADMIN_LABELS, type ProductCategory } from "@/lib/categories";
 import { SITE, productEnquiry } from "@/lib/site";
 import type { Product } from "@/types";
@@ -61,6 +62,7 @@ export default async function ProductDetailPage(props: {
 
   return (
     <div className="pb-20">
+      <AdminEditLink productId={product.id} />
       {/* ── Breadcrumb ──────────────────────────────────────── */}
       <nav aria-label="Breadcrumb" className="container-site pt-6">
         <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ink-mute">

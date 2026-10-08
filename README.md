@@ -1,42 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GSTradeLink
 
-## Getting Started
+Website and product catalogue for **GSTradeLink**, Bharatpur-3, Chitwan — digital
+scales, beam balances, spare parts, calibration and repair.
 
-First, run the development server:
+Live: <https://www.gstradelink.com.np>
+
+**Maintained by OMX Lab.**
+
+## Stack
+
+- [Next.js 16](https://nextjs.org) (App Router) + React 19 + Tailwind CSS v4
+- [Supabase](https://supabase.com) — Postgres (products, profiles), Storage (product photos), Google sign-in
+- Deployed on [Vercel](https://vercel.com) — every push to `main` deploys to production
+
+## Local development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local` with:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Variable | Used by |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | everything |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | everything |
+| `SUPABASE_SERVICE_ROLE_KEY` | server only — deleting user accounts in the admin panel |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The same variables must be set in the Vercel project for production.
 
-## Learn More
+## Admin panel
 
-To learn more about Next.js, take a look at the following resources:
+- Go to **/admin** (or the lock icon in the site footer) and sign in with Google.
+  Sessions persist, so a returning admin lands straight on the dashboard.
+- **Products** — add, edit, hide/show and delete products. Photos are resized in the
+  browser before upload, and the public pages refresh immediately after each change.
+- **Team** — everyone who signs in appears here; use *Make admin* to grant access.
+  The very first account to sign in becomes admin automatically.
+- While signed in as an admin, the public site shows a *Manage products* button in the
+  header and an *Edit this product* button on product pages.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/                  routes (public pages, /admin, /auth/callback, /api/admin/*)
+components/layout/    navbar, footer, mobile bottom bar
+components/products/  product card, category filter
+components/admin/     admin panel
+lib/site.ts           business contact details (phone, WhatsApp, address, hours)
+lib/categories.ts     product categories (mirrors the DB CHECK constraint)
+supabase/migrations/  database schema and row-level security
+proxy.ts              protects /admin/* (session + admin role check)
+```
 
-## Deploy on Vercel
+## Maintainer
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# -gstradelink
-# -gstradelink
-# -gstradelink
-# gstradelink
-# gstradelink
-# gstradelink
+OMX Lab — maintenance, fixes and feature work for this project.

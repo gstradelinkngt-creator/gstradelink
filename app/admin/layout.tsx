@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 
 /**
- * Admin layout — intentionally stripped of the public site's Navbar/Footer
- * (handled by SiteShell in the root layout). Sets noindex so search engines
- * never index admin pages.
+ * Admin layout — the public Navbar/Footer are skipped by SiteShell for
+ * /admin routes. noindex keeps admin pages out of search engines.
  */
 export const metadata: Metadata = {
   title: "Admin | GSTradeLink",
@@ -15,15 +14,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  // SiteShell (root layout) detects /admin pathname and renders
-  // children directly — no public Navbar or Footer is injected.
-  // The admin-dark class activates dark-scoped CSS var overrides so
-  // global light-mode input/select styles don't bleed into the dark UI.
-  return <div className="admin-dark">{children}</div>;
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return <div className="min-h-dvh bg-paper">{children}</div>;
 }
-

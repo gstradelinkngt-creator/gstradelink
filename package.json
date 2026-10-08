@@ -2,6 +2,13 @@
   "name": "digital-beam-balance",
   "version": "0.1.0",
   "private": true,
+  "description": "GSTradeLink — weighing scale sales, calibration and repair, Bharatpur, Chitwan.",
+  "author": "OMX Lab",
+  "maintainers": [
+    {
+      "name": "OMX Lab"
+    }
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
