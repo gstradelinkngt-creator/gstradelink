@@ -1,147 +1,111 @@
-"use client";
-
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { motion, Variants } from "framer-motion";
-import { MessageCircle, Package, Pencil, Trash2 } from "lucide-react";
+import { ArrowUpRight, MessageCircle, Package, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
+import { CATEGORY_SHORT_LABELS } from "@/lib/categories";
+import { productEnquiry } from "@/lib/site";
 import type { Product } from "@/types";
 
-const WHATSAPP_BASE = "https://wa.me/9779845541939";
-
 interface ProductCardProps {
-  product: Product;
+  product: Pick<Product, "id" | "name" | "category" | "image_url"> &
+    Partial<Pick<Product, "short_description" | "is_active">>;
   className?: string;
   onEdit?: () => void;
   onDelete?: () => void;
   showActions?: boolean;
+  /** Eager-load the image (above-the-fold cards). */
+  priority?: boolean;
 }
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-};
-
-// Short category labels for cleaner display
-const getCategoryLabel = (category: string) => {
-  const labels: Record<string, string> = {
-    "Precision & Pocket Mini Scales": "Precision",
-    "Kitchen & Compact Tabletop Scales": "Kitchen",
-    "Portable & Luggage Scales": "Luggage",
-    "Heavy-Duty Hanging & Crane Scales": "Industrial",
-    "Personal Health & Bathroom Scales": "Health",
-    "Packaging & Miscellaneous Equipment": "Packaging",
-  };
-  return labels[category] || category.split(" ")[0];
-};
-
-export const ProductCard: React.FC<ProductCardProps> = ({
+export const ProductCard = ({
   product,
   className,
   onEdit,
   onDelete,
   showActions = false,
-}) => {
+  priority = false,
+}: ProductCardProps) => {
+  const label = CATEGORY_SHORT_LABELS[product.category] ?? product.category;
+
   return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
+    <article
       className={cn(
-        "bg-slate-900 border border-slate-800 transition-colors hover:border-slate-700 group rounded-2xl flex flex-col overflow-hidden shadow-sm hover:shadow-md",
-        !product.is_active && "opacity-60",
+        "group relative flex flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-lift",
+        product.is_active === false && "opacity-60",
         className,
       )}
     >
-      {/* Image */}
       <Link
         href={`/products/${product.id}`}
-        className="relative block aspect-[4/3] bg-slate-800 overflow-hidden shrink-0"
+        className="relative block aspect-[4/3] overflow-hidden bg-paper-2"
+        tabIndex={-1}
+        aria-hidden
       >
         {product.image_url ? (
           <Image
             src={product.image_url}
-            alt={product.name}
+            alt=""
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-            priority={false}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            priority={priority}
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center">
-            <Package size={40} className="text-slate-600" />
-          </div>
+          <span className="flex h-full w-full items-center justify-center">
+            <Package size={36} className="text-ink-mute" />
+          </span>
         )}
-
-        {/* Category badge */}
-        <span className="absolute left-3 top-3 rounded-md bg-slate-900/90 backdrop-blur-sm border border-slate-700 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-slate-300">
-          {getCategoryLabel(product.category)}
+        <span className="absolute left-2 top-2 rounded-md sm:left-3 sm:top-3 bg-white/90 px-2 py-1 font-mono text-[0.62rem] font-medium uppercase tracking-wider text-ink backdrop-blur">
+          {label}
         </span>
       </Link>
 
-      {/* Content */}
-      <div className="flex flex-col flex-1 p-5">
-        <Link href={`/products/${product.id}`}>
-          <h3
-            className="line-clamp-2 font-bold text-slate-100 transition-colors group-hover:text-amber-500"
-            style={{ fontSize: "1.05rem", lineHeight: 1.4 }}
-          >
+      <div className="flex flex-1 flex-col p-3 sm:p-5">
+        <h3 className="font-body text-[0.9rem] font-semibold leading-snug tracking-normal text-ink sm:text-[1rem]">
+          <Link href={`/products/${product.id}`} className="after:absolute after:inset-0 after:content-['']">
             {product.name}
-          </h3>
-        </Link>
+          </Link>
+        </h3>
+        {product.short_description && (
+          <p className="mt-1.5 line-clamp-2 hidden text-sm leading-relaxed text-ink-soft sm:block">{product.short_description}</p>
+        )}
 
-        {/* Admin actions */}
         {showActions && (onEdit || onDelete) ? (
-          <div className="mt-auto grid grid-cols-2 gap-3 pt-5 border-t border-slate-800 mt-5">
+          <div className="relative z-10 mt-auto grid grid-cols-2 gap-2 pt-4">
             {onEdit && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onEdit}
-                className="h-9 text-xs bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700 hover:text-slate-50"
-              >
-                <Pencil size={14} className="mr-1.5" /> Edit
-              </Button>
+              <button type="button" onClick={onEdit} className="btn-line h-9 text-xs">
+                <Pencil size={14} /> Edit
+              </button>
             )}
             {onDelete && (
-              <Button
-                variant="danger"
-                size="sm"
+              <button
+                type="button"
                 onClick={onDelete}
-                className="h-9 border-none bg-red-500/10 text-xs font-medium text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                className="inline-flex h-9 items-center justify-center gap-1.5 rounded-xl bg-red-50 text-xs font-semibold text-red-600 hover:bg-red-100"
               >
-                <Trash2 size={14} className="mr-1.5" /> Delete
-              </Button>
+                <Trash2 size={14} /> Delete
+              </button>
             )}
           </div>
         ) : (
-          <div className="mt-auto grid grid-cols-2 gap-3 pt-5">
-            <Link
-              href={`/products/${product.id}`}
-              className="flex items-center justify-center rounded-lg bg-slate-800 border border-slate-700 px-4 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-700"
-            >
+          <div className="mt-auto flex items-center justify-between gap-2 pt-3 sm:pt-4">
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-ink sm:text-sm">
               Details
-            </Link>
+              <ArrowUpRight size={15} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </span>
             <a
-              href={`${WHATSAPP_BASE}?text=${encodeURIComponent(
-                `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`,
-              )}`}
+              href={productEnquiry(product.name)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-semibold text-slate-950 shadow-sm transition-colors hover:bg-amber-600 active:bg-amber-700"
+              className="relative z-10 inline-flex h-9 items-center gap-1.5 rounded-lg bg-wa/10 px-2.5 text-xs font-semibold text-wa-deep transition-colors hover:bg-wa hover:text-white"
+              aria-label={`Enquire about ${product.name} on WhatsApp`}
             >
-              <MessageCircle size={15} /> Enquire
+              <MessageCircle size={14} /> <span className="hidden sm:inline">Enquire</span>
             </a>
           </div>
         )}
       </div>
-    </motion.div>
+    </article>
   );
 };
 

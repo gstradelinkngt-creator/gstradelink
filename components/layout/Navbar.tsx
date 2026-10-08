@@ -1,47 +1,38 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-  Menu,
-  X,
-  Phone,
-  ChevronDown,
-  ChevronRight,
-  Home,
-  Package,
-  Wrench,
-  Mail,
-  MapPin,
-  Clock,
-  MessageCircle,
-  User,
-  LogOut,
-  Shield,
-} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown, LogOut, Menu, Phone, Shield, X } from "lucide-react";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { cn, getStoreOpenState } from "@/lib/utils";
 import { supabase } from "@/lib/supabase";
-import type { User as SupabaseUser } from "@supabase/supabase-js";
+import { PRODUCT_CATEGORIES, CATEGORY_ADMIN_LABELS } from "@/lib/categories";
+import { SITE } from "@/lib/site";
 
-interface NavItem {
-  label: string;
-  href: string;
-  children?: NavItem[];
-}
+const CATEGORY_LINKS = PRODUCT_CATEGORIES.map((c) => ({
+  label: CATEGORY_ADMIN_LABELS[c],
+  href: `/products?category=${encodeURIComponent(c)}`,
+}));
+
+const NAV = [
+  { label: "Home", href: "/" },
+  { label: "Products", href: "/products", children: CATEGORY_LINKS },
+  { label: "Services", href: "/services" },
+  { label: "Contact", href: "/contact" },
+];
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [user, setUser] = useState<SupabaseUser | null>(null);
-  const [showUserMenu, setShowUserMenu] = useState(false);
-  
-  const [storeOpen, setStoreOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [storeOpen, setStoreOpen] = useState<boolean | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
 
   useEffect(() => {
     const update = () => setStoreOpen(getStoreOpenState().open);
@@ -54,574 +45,326 @@ export const Navbar = () => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close everything on navigation (state adjusted during render, not in an effect)
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setMenuOpen(false);
+    setProductsOpen(false);
+    setUserMenuOpen(false);
+  }
+
+  // Close desktop popovers on outside click
+  useEffect(() => {
+    if (!productsOpen && !userMenuOpen) return;
+    const close = () => {
+      setProductsOpen(false);
+      setUserMenuOpen(false);
+    };
+    document.addEventListener("click", close);
+    return () => document.removeEventListener("click", close);
+  }, [productsOpen, userMenuOpen]);
+
+  // Lock scroll + Escape for the mobile sheet
+  useEffect(() => {
+    if (!menuOpen) return;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    setShowUserMenu(false);
+    setUserMenuOpen(false);
     router.refresh();
   };
 
-  const navItems: NavItem[] = [
-    { label: "Home", href: "/" },
-    {
-      label: "Products",
-      href: "/products",
-      children: [
-        { label: "All Products", href: "/products" },
-        { label: "Precision Scales", href: "/products?category=Precision%20%26%20Pocket%20Mini%20Scales" },
-        { label: "Kitchen Scales", href: "/products?category=Kitchen%20%26%20Compact%20Tabletop%20Scales" },
-        { label: "Luggage Scales", href: "/products?category=Portable%20%26%20Luggage%20Scales" },
-        { label: "Industrial & Crane Scales", href: "/products?category=Heavy-Duty%20Hanging%20%26%20Crane%20Scales" },
-        { label: "Health & Baby", href: "/products?category=Personal%20Health%20%26%20Bathroom%20Scales" },
-      ],
-    },
-    { label: "Services", href: "/services" },
-    { label: "Contact", href: "/contact" },
-  ];
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-    setActiveDropdown(null);
-    setShowUserMenu(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    const handleClickOutside = () => {
-      setActiveDropdown(null);
-      setShowUserMenu(false);
-    };
-    if (activeDropdown || showUserMenu) {
-      document.addEventListener("click", handleClickOutside);
-      return () => document.removeEventListener("click", handleClickOutside);
-    }
-  }, [activeDropdown, showUserMenu]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      document.body.style.overflow = "";
-      return;
-    }
-
-    document.body.style.overflow = "hidden";
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setIsOpen(false);
-    };
-
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
-
-  const toggleMenu = () => setIsOpen((v) => !v);
-
-  const toggleDropdown = (label: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setActiveDropdown((prev) => (prev === label ? null : label));
-  };
-
-  const isActivePath = (href: string) => {
-    if (href === "/") return pathname === "/";
-    const hrefPath = href.split("?")[0];
-    return pathname.startsWith(hrefPath);
-  };
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <div>
-      {/* Top contact bar */}
-      <div className="hidden xl:block py-2.5 border-b border-slate-800 bg-slate-950">
-        <div className="container-fluid px-6">
-          <div className="flex items-center justify-between text-sm text-slate-300">
-            <div className="flex items-center space-x-6">
-              <div className="flex items-center space-x-2 font-medium">
-                <Phone size={14} className="text-slate-400" />
-                <span>+977 9845541939</span>
-              </div>
-              <span className="text-slate-700">•</span>
-              <span className="text-slate-400">Open all days except Monday · 10:00 AM – 6:00 PM</span>
-            </div>
-            <a
-              href="https://wa.me/9779845541939"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-sm font-medium text-amber-500 hover:text-amber-400 transition-colors"
-            >
-              <span>Fast response on WhatsApp ↗</span>
-            </a>
-          </div>
-        </div>
-      </div>
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full border-b transition-[background-color,border-color,box-shadow] duration-300",
+        scrolled
+          ? "border-line bg-paper/85 shadow-[0_1px_0_rgb(17_26_39/0.02)] backdrop-blur-xl"
+          : "border-transparent bg-paper",
+      )}
+    >
+      <nav className="container-site flex h-16 items-center justify-between gap-6 md:h-[72px]" aria-label="Main">
+        {/* Logo */}
+        <Link href="/" className="group flex items-center gap-3" aria-label="GSTradeLink home">
+          <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-line bg-white p-1 transition-transform duration-300 group-hover:-rotate-3">
+            <Image src="/logo.png" alt="" width={40} height={40} className="h-full w-full object-contain" priority />
+          </span>
+          <span className="leading-none">
+            <span className="block font-display text-[1.15rem] font-bold tracking-tight text-ink">GSTradeLink</span>
+            <span className="mt-1 block font-mono text-[0.62rem] uppercase tracking-[0.14em] text-ink-mute">
+              Weighing · Chitwan
+            </span>
+          </span>
+        </Link>
 
-      {/* Main Navigation */}
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
-        className={cn(
-          "sticky top-0 z-50 w-full backdrop-blur-md bg-slate-950/80 transition-all duration-300 border-b",
-          isScrolled
-            ? "shadow-sm shadow-black/20 border-slate-800"
-            : "border-slate-800/60"
-        )}
-      >
-        <div className="container-fluid px-6">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <Link
-              href="/"
-              className="flex items-center gap-3 group"
-              onClick={() => setIsOpen(false)}
-            >
-              <div className="aspect-square h-12 w-12 overflow-hidden rounded-lg bg-slate-800 flex items-center justify-center p-1.5 border border-slate-700/60 shadow-sm transition-transform duration-300 group-hover:scale-105">
-                <Image
-                  src="/logo.png"
-                  alt="GSTradeLink Logo"
-                  width={200}
-                  height={56}
-                  className="w-full h-full object-contain"
-                  priority
-                />
-              </div>
-              <div className="hidden sm:block">
-                <div className="font-bold text-xl text-slate-50 tracking-tight transition-colors">
-                  GSTradeLink
-                </div>
-                <div className="text-[10px] uppercase tracking-widest font-semibold text-slate-400">
-                  Bharatpur · Chitwan
-                </div>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
-              {navItems.map((item) => (
-                <div key={item.label} className="relative">
-                  {item.children ? (
-                    <div className="relative">
-                      <button
-                        onClick={(e) => toggleDropdown(item.label, e)}
-                        className={cn(
-                          "flex items-center gap-1.5 px-2 py-2 text-sm font-medium transition-colors",
-                          isActivePath(item.href)
-                            ? "text-slate-50 font-semibold"
-                            : "text-slate-300 hover:text-slate-50"
-                        )}
-                      >
-                        <span>{item.label}</span>
-                        <ChevronDown
-                          size={16}
-                          className={cn(
-                            "transition-transform duration-200",
-                            activeDropdown === item.label && "rotate-180"
-                          )}
-                        />
-                      </button>
-
-                      <AnimatePresence>
-                        {activeDropdown === item.label && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                            transition={{ duration: 0.15 }}
-                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 rounded-lg p-2 z-50 bg-slate-900 border border-slate-800 shadow-xl overflow-hidden"
-                          >
-                            {item.children.map((child) => (
-                              <Link
-                                key={child.href}
-                                href={child.href}
-                                className={cn(
-                                  "block px-4 py-2.5 rounded-lg text-sm transition-colors",
-                                  isActivePath(child.href)
-                                    ? "font-semibold text-slate-50 bg-slate-800"
-                                    : "font-medium text-slate-300 hover:text-slate-50 hover:bg-slate-800/60"
-                                )}
-                              >
-                                {child.label}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "px-2 py-2 text-sm font-medium transition-colors",
-                        isActivePath(item.href)
-                          ? "text-slate-50 font-semibold"
-                          : "text-slate-300 hover:text-slate-50"
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </div>
-              ))}
-
-              <div className="ml-4 pl-8 border-l border-slate-800 flex items-center gap-4">
-                <a
-                  href="https://wa.me/9779845541939"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold px-5 py-2 rounded-lg transition-colors duration-200 shadow-sm flex items-center justify-center gap-2 whitespace-nowrap text-sm"
-                >
-                  Get Quote
-                </a>
-
-                {/* Auth: Avatar / Login */}
-                {user ? (
-                  <div className="relative">
-                    <button
-                      onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-amber-500/50 bg-slate-800 border border-slate-700 text-slate-50 overflow-hidden"
-                      title={user.email ?? "Account"}
-                    >
-                      {user.user_metadata?.avatar_url ? (
-                        <Image src={user.user_metadata.avatar_url} alt="Avatar" width={40} height={40} className="w-full h-full object-cover" />
-                      ) : (
-                        user.email?.[0]?.toUpperCase() ?? <User size={16} />
-                      )}
-                    </button>
-                    <AnimatePresence>
-                      {showUserMenu && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                          animate={{ opacity: 1, y: 0, scale: 1 }}
-                          exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                          transition={{ duration: 0.15 }}
-                          className="absolute top-full right-0 mt-3 w-56 rounded-lg p-2 z-50 bg-slate-900 border border-slate-800 shadow-xl"
-                        >
-                          <div className="px-3 py-2 mb-2 border-b border-slate-800">
-                            <p className="text-xs font-semibold text-slate-50 truncate">{user.email}</p>
-                          </div>
-                          <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-slate-50 hover:bg-slate-800/80 transition-colors" onClick={() => setShowUserMenu(false)}>
-                            <Shield size={16} /> Admin Panel
-                          </Link>
-                          <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-red-400 hover:bg-slate-800/80 transition-colors mt-1">
-                            <LogOut size={16} /> Sign Out
-                          </button>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <Link
-                    href="/admin/login"
-                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-slate-50"
-                    title="Admin Login"
-                  >
-                    <User size={16} />
-                  </Link>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 lg:hidden">
-              {/* Auth: Avatar / Login for Mobile */}
-              {user ? (
-                <div className="relative">
+        {/* Desktop links */}
+        <ul className="hidden items-center gap-1 lg:flex">
+          {NAV.map((item) => (
+            <li key={item.href} className="relative">
+              {item.children ? (
+                <>
                   <button
-                    onClick={(e) => { e.stopPropagation(); setShowUserMenu(v => !v); }}
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold transition-all hover:ring-2 hover:ring-amber-500/50 bg-slate-800 border border-slate-700 text-slate-50 overflow-hidden"
-                    title={user.email ?? "Account"}
-                  >
-                    {user.user_metadata?.avatar_url ? (
-                      <Image src={user.user_metadata.avatar_url} alt="Avatar" width={36} height={36} className="w-full h-full object-cover" />
-                    ) : (
-                      user.email?.[0]?.toUpperCase() ?? <User size={14} />
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setProductsOpen((v) => !v);
+                      setUserMenuOpen(false);
+                    }}
+                    aria-expanded={productsOpen}
+                    aria-haspopup="true"
+                    className={cn(
+                      "relative flex items-center gap-1 rounded-lg px-3.5 py-2 text-[0.92rem] font-medium transition-colors",
+                      isActive(item.href) ? "text-ink" : "text-ink-soft hover:text-ink",
                     )}
+                  >
+                    {item.label}
+                    <ChevronDown size={15} className={cn("transition-transform", productsOpen && "rotate-180")} />
+                    {isActive(item.href) && <ActiveMark />}
                   </button>
                   <AnimatePresence>
-                    {showUserMenu && (
+                    {productsOpen && (
                       <motion.div
-                        initial={{ opacity: 0, y: -10, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
                         transition={{ duration: 0.15 }}
-                        className="absolute top-full right-0 mt-3 w-56 rounded-lg p-2 z-50 bg-slate-900 border border-slate-800 shadow-xl"
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute left-1/2 top-full mt-3 w-72 -translate-x-1/2 rounded-2xl border border-line bg-surface p-2 shadow-float"
                       >
-                        <div className="px-3 py-2 mb-2 border-b border-slate-800">
-                          <p className="text-xs font-semibold text-slate-50 truncate">{user.email}</p>
-                        </div>
-                        <Link href="/admin" className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-slate-50 hover:bg-slate-800/80 transition-colors" onClick={() => setShowUserMenu(false)}>
-                          <Shield size={16} /> Admin Panel
+                        <Link
+                          href="/products"
+                          className="flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-semibold text-ink hover:bg-paper"
+                        >
+                          All products
+                          <span className="font-mono text-[0.65rem] uppercase tracking-wider text-ink-mute">Catalogue</span>
                         </Link>
-                        <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-300 hover:text-red-400 hover:bg-slate-800/80 transition-colors mt-1">
-                          <LogOut size={16} /> Sign Out
-                        </button>
+                        <div className="my-1 h-px bg-line" />
+                        {item.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            className="block rounded-xl px-3 py-2 text-sm text-ink-soft transition-colors hover:bg-paper hover:text-ink"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </div>
+                </>
               ) : (
                 <Link
-                  href="/admin/login"
-                  className="w-9 h-9 rounded-full flex items-center justify-center transition-all bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-slate-50"
-                  title="Admin Login"
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={cn(
+                    "relative block rounded-lg px-3.5 py-2 text-[0.92rem] font-medium transition-colors",
+                    isActive(item.href) ? "text-ink" : "text-ink-soft hover:text-ink",
+                  )}
                 >
-                  <User size={14} />
+                  {item.label}
+                  {isActive(item.href) && <ActiveMark />}
                 </Link>
               )}
+            </li>
+          ))}
+        </ul>
 
-              {/* Mobile Menu Button */}
+        {/* Right side */}
+        <div className="flex items-center gap-2">
+          <StoreStatus open={storeOpen} className="hidden xl:inline-flex" />
+          <a href={SITE.phoneHref} className="btn-line hidden h-10 px-4 text-sm md:inline-flex">
+            <Phone size={15} /> <span className="hidden lg:inline">{SITE.phoneDisplay}</span>
+            <span className="lg:hidden">Call</span>
+          </a>
+          <Link href="/contact" className="btn-ink hidden h-10 px-4 text-sm md:inline-flex">
+            Get a quote
+          </Link>
+
+          {user && (
+            <div className="relative">
               <button
-                onClick={toggleMenu}
-                className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-800 border border-slate-700 text-slate-100 shadow-sm hover:bg-slate-700 hover:text-white active:scale-95 transition-all"
-                aria-label="Toggle menu"
-                aria-expanded={isOpen}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setUserMenuOpen((v) => !v);
+                  setProductsOpen(false);
+                }}
+                className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-line bg-surface text-sm font-semibold text-ink"
+                aria-label="Account menu"
+                aria-expanded={userMenuOpen}
               >
-                <motion.div
-                  animate={{ rotate: isOpen ? 90 : 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isOpen ? <X size={24} /> : <Menu size={24} />}
-                </motion.div>
+                {user.user_metadata?.avatar_url ? (
+                  <Image src={user.user_metadata.avatar_url} alt="" width={40} height={40} className="h-full w-full object-cover" />
+                ) : (
+                  user.email?.[0]?.toUpperCase()
+                )}
               </button>
+              <AnimatePresence>
+                {userMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.15 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="absolute right-0 top-full mt-3 w-60 rounded-2xl border border-line bg-surface p-2 shadow-float"
+                  >
+                    <p className="truncate px-3 py-2 text-xs text-ink-mute">{user.email}</p>
+                    <Link href="/admin" className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-ink hover:bg-paper">
+                      <Shield size={16} /> Admin panel
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleSignOut}
+                      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-ink-soft hover:bg-red-50 hover:text-red-600"
+                    >
+                      <LogOut size={16} /> Sign out
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        <AnimatePresence>
-          {isOpen && (
-            <>
-              {/* Backdrop */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
-                onClick={() => setIsOpen(false)}
-              />
-
-              {/* Sidebar Panel */}
-              <motion.div
-                initial={{ opacity: 0, x: "100%" }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: "100%" }}
-                transition={{ type: "spring", stiffness: 350, damping: 35 }}
-                className="fixed top-0 right-0 h-full w-[85%] max-w-[360px] z-50 lg:hidden bg-slate-950 border-l border-slate-800 shadow-2xl flex flex-col"
-              >
-                {/* Header with Logo */}
-                <div className="relative px-6 pt-6 pb-5">
-                  <button
-                    onClick={() => setIsOpen(false)}
-                    className="absolute top-5 right-5 w-9 h-9 rounded-lg flex items-center justify-center transition-all bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-800"
-                  >
-                    <X size={20} />
-                  </button>
-
-                  <div className="flex items-center gap-3">
-                    <div className="aspect-square h-12 w-12 overflow-hidden rounded-lg bg-slate-800 flex items-center justify-center p-1.5 border border-slate-700/60 shadow-sm shrink-0">
-                      <Image
-                        src="/logo.png"
-                        alt="GSTradeLink Logo"
-                        width={48}
-                        height={48}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                    <div>
-                      <div className="font-bold text-xl text-slate-50 tracking-tight">
-                        GSTradeLink
-                      </div>
-                      <div className="text-[10px] uppercase tracking-[0.15em] font-semibold text-amber-500 mt-0.5">
-                        Bharatpur · Chitwan
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Quick Info Bar */}
-                <div className="mx-6 mb-6 px-4 py-3 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={cn("w-2 h-2 rounded-full", storeOpen ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" : "bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.5)]")}
-                    />
-                    <span className="text-slate-300 font-medium">
-                      {storeOpen ? "Open now" : "Closed now"}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5 text-slate-400">
-                    <Clock size={14} />
-                    <span>10 AM – 6 PM</span>
-                  </div>
-                </div>
-
-                {/* Navigation Items */}
-                <div className="flex-1 overflow-y-auto px-6 pb-6">
-                  <nav className="flex flex-col space-y-2">
-                    {[
-                      { icon: Home, label: "Home", href: "/" },
-                      {
-                        icon: Package,
-                        label: "Products",
-                        href: "/products",
-                        hasChildren: true,
-                      },
-                      { icon: Wrench, label: "Services", href: "/services" },
-                      { icon: Mail, label: "Contact", href: "/contact" },
-                    ].map((item, index) => {
-                      const Icon = item.icon;
-                      const isActive = isActivePath(item.href);
-                      const navItem = navItems.find((n) => n.label === item.label);
-                      const hasChildren = item.hasChildren && navItem?.children;
-
-                      return (
-                        <motion.div
-                          key={item.label}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.1 + index * 0.05 }}
-                        >
-                          {hasChildren ? (
-                            <div className="flex flex-col">
-                              <button
-                                onClick={(e) => toggleDropdown(item.label, e)}
-                                className={cn(
-                                  "w-full flex items-center gap-3 px-4 py-3.5 rounded-lg transition-colors",
-                                  isActive
-                                    ? "bg-slate-800 border border-slate-700 text-slate-50"
-                                    : "bg-transparent text-slate-300 hover:bg-slate-900 border border-transparent hover:border-slate-800"
-                                )}
-                              >
-                                <div className={cn("w-8 h-8 rounded-md flex items-center justify-center shrink-0", isActive ? "bg-slate-700" : "bg-slate-800/50")}>
-                                  <Icon size={18} className={isActive ? "text-slate-50" : "text-slate-400"} />
-                                </div>
-                                <span className={cn("flex-1 text-left font-medium text-[15px]", isActive ? "text-slate-50" : "text-slate-300")}>
-                                  {item.label}
-                                </span>
-                                <ChevronDown
-                                  size={16}
-                                  className={cn(
-                                    "transition-transform duration-200",
-                                    activeDropdown === item.label ? "rotate-180 text-slate-50" : "text-slate-500"
-                                  )}
-                                />
-                              </button>
-
-                              <AnimatePresence>
-                                {activeDropdown === item.label && navItem?.children && (
-                                  <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.2 }}
-                                    className="overflow-hidden"
-                                  >
-                                    <div className="ml-8 mt-2 pl-4 py-2 space-y-1.5 border-l-2 border-slate-800">
-                                      {navItem.children.map((child) => (
-                                        <Link
-                                          key={child.href}
-                                          href={child.href}
-                                          className={cn(
-                                            "flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors",
-                                            isActivePath(child.href)
-                                              ? "bg-slate-800 text-slate-50 font-medium"
-                                              : "text-slate-400 hover:text-slate-50 hover:bg-slate-900"
-                                          )}
-                                          onClick={() => setIsOpen(false)}
-                                        >
-                                          <ChevronRight size={14} className="text-slate-500 opacity-50" />
-                                          {child.label}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  </motion.div>
-                                )}
-                              </AnimatePresence>
-                            </div>
-                          ) : (
-                            <Link
-                              href={item.href}
-                              className={cn(
-                                "flex items-center gap-3 px-4 py-3.5 rounded-lg transition-colors",
-                                isActive
-                                  ? "bg-slate-800 border border-slate-700 text-slate-50"
-                                  : "bg-transparent text-slate-300 hover:bg-slate-900 border border-transparent hover:border-slate-800"
-                              )}
-                              onClick={() => setIsOpen(false)}
-                            >
-                              <div className={cn("w-8 h-8 rounded-md flex items-center justify-center shrink-0", isActive ? "bg-slate-700" : "bg-slate-800/50")}>
-                                <Icon size={18} className={isActive ? "text-slate-50" : "text-slate-400"} />
-                              </div>
-                              <span className={cn("font-medium text-[15px]", isActive ? "text-slate-50" : "text-slate-300")}>
-                                {item.label}
-                              </span>
-                            </Link>
-                          )}
-                        </motion.div>
-                      );
-                    })}
-                  </nav>
-
-                  {/* Contact Info Section */}
-                  <div className="mt-8 pt-6 border-t border-slate-800">
-                    <p className="text-[10px] uppercase tracking-[0.15em] font-semibold mb-4 px-1 text-slate-500">
-                      Contact Info
-                    </p>
-                    <div className="flex flex-col space-y-3">
-                      <a
-                        href="tel:+9779845541939"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-900 group"
-                      >
-                        <Phone size={16} className="text-amber-500 group-hover:text-amber-400" />
-                        <span className="text-sm font-medium text-slate-300 group-hover:text-slate-50">+977 9845541939</span>
-                      </a>
-                      <a
-                        href="mailto:gstradelinkngt@gmail.com"
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors hover:bg-slate-900 group"
-                      >
-                        <Mail size={16} className="text-amber-500 group-hover:text-amber-400" />
-                        <span className="text-sm font-medium text-slate-300 group-hover:text-slate-50">gstradelinkngt@gmail.com</span>
-                      </a>
-                      <div className="flex items-center gap-3 px-3 py-2.5 rounded-lg">
-                        <MapPin size={16} className="text-amber-500" />
-                        <span className="text-sm font-medium text-slate-400">Bharatpur-3, Chitwan</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom CTA Buttons */}
-                <div className="p-6 bg-slate-900 border-t border-slate-800 flex flex-col gap-3">
-                  <a
-                    href="https://wa.me/9779845541939"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsOpen(false)}
-                    className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 shadow-sm"
-                  >
-                    <MessageCircle size={18} /> Chat on WhatsApp
-                  </a>
-                  <a
-                    href="tel:+9779845541939"
-                    onClick={() => setIsOpen(false)}
-                    className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200"
-                  >
-                    <Phone size={16} /> Call Us Now
-                  </a>
-                </div>
-              </motion.div>
-            </>
           )}
-        </AnimatePresence>
-      </motion.nav>
-    </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen(true)}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-ink lg:hidden"
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+          >
+            <Menu size={20} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile sheet */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-sm lg:hidden"
+              onClick={() => setMenuOpen(false)}
+            />
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 380, damping: 38 }}
+              className="fixed inset-y-0 right-0 z-50 flex w-[88%] max-w-sm flex-col bg-paper shadow-float lg:hidden"
+            >
+              <div className="flex h-16 items-center justify-between border-b border-line px-5">
+                <StoreStatus open={storeOpen} />
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-ink"
+                  aria-label="Close menu"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-5 py-6">
+                <ul className="space-y-1">
+                  {NAV.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "flex items-baseline justify-between rounded-xl px-3 py-3 font-display text-2xl font-semibold tracking-tight",
+                          isActive(item.href) ? "bg-surface text-ink" : "text-ink-soft",
+                        )}
+                      >
+                        {item.label}
+                        {isActive(item.href) && <span className="h-2 w-2 rounded-full bg-signal" />}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <p className="eyebrow mt-8 px-3">Shop by category</p>
+                <ul className="mt-2 grid grid-cols-2 gap-2">
+                  {CATEGORY_LINKS.map((c) => (
+                    <li key={c.href}>
+                      <Link
+                        href={c.href}
+                        className="block rounded-xl border border-line bg-surface px-3 py-2.5 text-sm font-medium text-ink"
+                      >
+                        {c.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 border-t border-line p-5">
+                <a href={SITE.phoneHref} className="btn-line h-12 text-sm">
+                  <Phone size={16} /> Call
+                </a>
+                <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-wa h-12 text-sm">
+                  WhatsApp
+                </a>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
+
+function ActiveMark() {
+  return <span className="absolute inset-x-3.5 -bottom-[13px] h-[2px] rounded-full bg-signal md:-bottom-[17px]" />;
+}
+
+export function StoreStatus({ open, className }: { open: boolean | null; className?: string }) {
+  if (open === null) return null;
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 font-mono text-[0.68rem] uppercase tracking-wider text-ink-soft",
+        className,
+      )}
+    >
+      <span className={cn("relative h-2 w-2 rounded-full", open ? "bg-wa" : "bg-red-500")}>
+        {open && <span className="absolute inset-0 animate-ping rounded-full bg-wa/60" />}
+      </span>
+      {open ? "Open now" : "Closed now"}
+    </span>
+  );
+}

@@ -1,54 +1,28 @@
 export default function Loading() {
   return (
-    <div className="aurora min-h-screen w-full overflow-hidden md:pb-16">
-      {/* ── Hero skeleton ───────────────────────────────────────── */}
-      <section className="aurora-grid relative overflow-hidden pb-6 pt-12 sm:pt-16">
-        <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center text-center">
-            <div className="mb-4 h-2.5 w-24 animate-pulse rounded-full bg-white/10" />
-            <div className="mb-3 h-9 w-64 max-w-full animate-pulse rounded-lg bg-white/10" />
-            <div className="mb-7 h-3 w-80 max-w-full animate-pulse rounded-full bg-white/[0.07]" />
-            <div className="glass h-12 w-full max-w-xl animate-pulse rounded-full" />
-          </div>
+    <div className="pb-20" aria-busy="true" aria-label="Loading products">
+      <section className="container-site pt-10 md:pt-14">
+        <div className="h-3 w-32 animate-pulse rounded-full bg-paper-2" />
+        <div className="mt-4 h-12 w-72 max-w-full animate-pulse rounded-xl bg-paper-2" />
+        <div className="mt-4 h-4 w-96 max-w-full animate-pulse rounded-full bg-paper-2" />
+      </section>
+
+      <div className="mt-8 border-y border-line">
+        <div className="container-site flex gap-2 overflow-hidden py-2.5">
+          {[48, 88, 72, 76, 84, 104, 92].map((w, i) => (
+            <div key={i} className="h-9 shrink-0 animate-pulse rounded-full bg-paper-2" style={{ width: w }} />
+          ))}
         </div>
-      </section>
+      </div>
 
-      {/* ── Filter bar skeleton ─────────────────────────────────── */}
-      <section className="relative z-20 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="glass-strong rounded-2xl p-2 sm:p-2.5">
-          <div className="flex items-center gap-2 overflow-hidden">
-            {[52, 76, 68, 72, 82, 82, 78].map((w, i) => (
-              <div
-                key={i}
-                className="h-9 shrink-0 animate-pulse rounded-full"
-                style={{
-                  width: `${w}px`,
-                  background:
-                    i === 0 ? "rgba(220,169,99,0.35)" : "rgba(255,255,255,0.07)",
-                }}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Result count skeleton ───────────────────────────────── */}
-      <section className="mx-auto mt-6 max-w-[1400px] px-4 sm:px-6 lg:px-8">
-        <div className="h-3.5 w-36 animate-pulse rounded-full bg-white/[0.08]" />
-      </section>
-
-      {/* ── Product grid skeleton ───────────────────────────────── */}
-      <section className="mx-auto mt-6 max-w-7xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="glass ui-card rounded-2xl">
-              <div
-                className="ui-media ui-media-4-3 animate-pulse"
-                style={{ background: `rgba(255,255,255,${0.04 + (i % 3) * 0.02})` }}
-              />
-              <div className="ui-card-body p-4">
-                <div className="mb-2 h-3.5 w-full animate-pulse rounded-full bg-white/10" />
-                <div className="h-3 w-2/3 animate-pulse rounded-full bg-white/[0.07]" />
+      <section className="container-site mt-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="overflow-hidden rounded-2xl border border-line bg-surface">
+              <div className="aspect-[4/3] animate-pulse bg-paper-2" />
+              <div className="space-y-2 p-4">
+                <div className="h-4 w-4/5 animate-pulse rounded-full bg-paper-2" />
+                <div className="h-3 w-1/2 animate-pulse rounded-full bg-paper-2" />
               </div>
             </div>
           ))}

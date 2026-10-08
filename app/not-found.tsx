@@ -1,37 +1,27 @@
 import Link from "next/link";
-import { Search } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="aurora relative flex min-h-[80vh] w-full items-center justify-center overflow-hidden p-6">
-      <div className="aurora-orb aurora-orb--blue" style={{ width: 360, height: 360, top: -100, left: -80 }} />
-      <div className="aurora-orb aurora-orb--gold" style={{ width: 300, height: 300, bottom: -120, right: -80, opacity: 0.5 }} />
-
-      <div className="glass-strong relative z-10 w-full max-w-md rounded-3xl px-8 py-12 text-center">
-        <div
-          className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full"
-          style={{ background: "rgba(109,148,197,0.16)", border: "1px solid rgba(109,148,197,0.3)" }}
-        >
-          <Search size={36} style={{ color: "#DCA963" }} />
-        </div>
-
-        <h1 className="mb-2 font-bold text-white" style={{ fontSize: "2rem", lineHeight: 1.2 }}>
-          Page Not Found
-        </h1>
-        <p style={{ color: "#AECAE9", fontSize: "1rem", lineHeight: 1.6 }}>
-          We couldn&apos;t find the page you were looking for. It might have been
-          removed, renamed, or didn&apos;t exist in the first place.
-        </p>
-
-        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <Link href="/" className="ui-btn ui-btn-md btn-gold w-full sm:w-auto">
-            Return Home
-          </Link>
-          <Link href="/products" className="ui-btn ui-btn-md btn-glass w-full sm:w-auto">
-            View Catalogue
-          </Link>
-        </div>
+    <section className="container-site flex min-h-[70vh] flex-col items-start justify-center py-20">
+      <p className="font-mono text-sm text-signal-deep">Error 404</p>
+      <div className="mt-4 rounded-xl bg-[#c9d8c1] px-5 py-3 font-mono text-5xl font-medium tabular-nums text-[#1f2a1d] shadow-inner">
+        0.000<span className="ml-1 text-2xl">g</span>
       </div>
-    </div>
+      <h1 className="mt-8 max-w-xl text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-[-0.03em] text-ink">
+        Nothing on the scale here.
+      </h1>
+      <p className="mt-4 max-w-md text-lg text-ink-soft">
+        This page doesn&apos;t exist or has moved. Try the catalogue, or head back home.
+      </p>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Link href="/products" className="btn-ink h-12 px-6">
+          Browse products
+        </Link>
+        <Link href="/" className="btn-line h-12 px-6">
+          <ArrowLeft size={17} /> Back home
+        </Link>
+      </div>
+    </section>
   );
 }

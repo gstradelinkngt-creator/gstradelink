@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import {
-  ArrowLeft,
-  MessageCircle,
-  ShieldCheck,
-  Truck,
-  Wrench,
-  Phone
-} from "lucide-react";
+import { ArrowLeft, MessageCircle, Package, Phone, ShieldCheck, Truck, Wrench } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProductCard } from "@/components/products/ProductCard";
+import { CATEGORY_ADMIN_LABELS, type ProductCategory } from "@/lib/categories";
+import { SITE, productEnquiry } from "@/lib/site";
+import type { Product } from "@/types";
 
 export const revalidate = 60;
 
@@ -49,128 +46,122 @@ export default async function ProductDetailPage(props: {
 
   if (error || !product) notFound();
 
-  const waMsg = `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`;
-  const waLink = `https://wa.me/9779845541939?text=${encodeURIComponent(waMsg)}`;
+  // A few related items from the same category
+  const { data: related } = await supabase
+    .from("products")
+    .select("id, name, short_description, category, image_url")
+    .eq("category", product.category)
+    .eq("is_active", true)
+    .neq("id", product.id)
+    .order("created_at", { ascending: false })
+    .limit(4);
+
+  const categoryHref = `/products?category=${encodeURIComponent(product.category)}`;
+  const categoryLabel = CATEGORY_ADMIN_LABELS[product.category as ProductCategory] ?? product.category;
 
   return (
-    <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-16">
-      {/* ── Breadcrumb bar ──────────────────────────────────────── */}
-      <section className="border-b border-slate-900 bg-slate-950 relative z-10">
-        <div className="mx-auto w-full max-w-7xl px-6 py-4 lg:px-8">
-          <div className="flex items-center justify-between gap-3 text-sm">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 font-medium text-slate-400 hover:text-slate-200 transition-colors"
-            >
-              <ArrowLeft size={16} />
-              <span>Back to catalogue</span>
+    <div className="pb-20">
+      {/* ── Breadcrumb ──────────────────────────────────────── */}
+      <nav aria-label="Breadcrumb" className="container-site pt-6">
+        <ol className="flex flex-wrap items-center gap-1.5 text-sm text-ink-mute">
+          <li>
+            <Link href="/products" className="inline-flex items-center gap-1.5 hover:text-ink">
+              <ArrowLeft size={15} /> Catalogue
             </Link>
+          </li>
+          <li aria-hidden>/</li>
+          <li>
+            <Link href={categoryHref} className="hover:text-ink">
+              {categoryLabel}
+            </Link>
+          </li>
+          <li aria-hidden className="hidden sm:block">/</li>
+          <li className="hidden max-w-[16rem] truncate text-ink sm:block" aria-current="page">
+            {product.name}
+          </li>
+        </ol>
+      </nav>
 
-            <span className="hidden rounded-full bg-slate-900 border border-slate-800 px-3 py-1 text-xs font-semibold text-slate-400 sm:inline-block">
-              {product.category}
-            </span>
-          </div>
+      {/* ── Product ─────────────────────────────────────────── */}
+      <section className="container-site mt-6 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <div className="relative aspect-square overflow-hidden rounded-[1.75rem] border border-line bg-paper-2 lg:sticky lg:top-28 lg:self-start">
+          {product.image_url ? (
+            <Image
+              src={product.image_url}
+              alt={product.name}
+              fill
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              priority
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <Package size={56} className="text-ink-mute" />
+            </div>
+          )}
         </div>
-      </section>
 
-      {/* ── Product content ─────────────────────────────────────── */}
-      <section className="relative z-10 mx-auto w-full max-w-7xl px-6 pt-8 sm:pt-12 lg:px-8 pb-16">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-14">
-          {/* Left — Image + trust chips */}
-          <div className="flex flex-col gap-6">
-            <div className="rounded-3xl bg-slate-900 border border-slate-800 p-2 sm:p-4 shadow-xl">
-              <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-slate-800">
-                {product.image_url ? (
-                  <Image
-                    src={product.image_url}
-                    alt={product.name}
-                    fill
-                    className="object-contain transition-transform duration-500 hover:scale-105"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    priority
-                  />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-6xl text-slate-600">
-                    ⚖️
-                  </div>
-                )}
-              </div>
-            </div>
+        <article className="flex flex-col lg:py-4">
+          <Link href={categoryHref} className="eyebrow self-start hover:text-ink">
+            {categoryLabel}
+          </Link>
+          <h1 className="mt-3 text-[clamp(2rem,4.4vw,3.25rem)] font-bold leading-[1.04] tracking-[-0.03em] text-ink">
+            {product.name}
+          </h1>
+          <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-soft">
+            {product.short_description ||
+              "Reliable weighing instrument for retail, kitchen and workshop use. Ask us for exact capacity and readability options."}
+          </p>
 
-            {/* Trust chips */}
-            <div className="flex flex-wrap gap-3">
-              {["Calibratable", "Warranty support", "On-site service"].map(
-                (chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full bg-slate-900 border border-slate-800 px-4 py-2 text-xs font-semibold text-slate-300 shadow-sm"
-                  >
-                    {chip}
-                  </span>
-                ),
-              )}
-            </div>
-          </div>
-
-          {/* Right — Info & CTA */}
-          <article className="flex flex-col py-2 sm:py-6">
-            <span className="mb-5 self-start rounded-full bg-slate-900 border border-slate-800 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-500 shadow-sm">
-              {product.category}
-            </span>
-
-            <h1
-              className="font-bold leading-tight tracking-tight text-slate-50"
-              style={{ fontSize: "clamp(2rem, 4vw, 3rem)", letterSpacing: "-0.025em" }}
-            >
-              {product.name}
-            </h1>
-
-            <p
-              className="mt-6 max-w-2xl text-slate-400"
-              style={{ fontSize: "clamp(0.95rem, 1.5vw, 1.1rem)", lineHeight: 1.7 }}
-            >
-              {product.short_description ||
-                "High-precision weighing instrument designed for retail, industrial, and professional workflows."}
+          <div className="mt-8 rounded-2xl border border-line bg-surface p-5">
+            <p className="font-display text-lg font-semibold tracking-tight text-ink">Price &amp; availability</p>
+            <p className="mt-1 text-sm text-ink-soft">
+              Prices change with stock — message us and we&apos;ll reply with today&apos;s price, usually within a few hours.
             </p>
+            <div className="mt-5 grid gap-2 sm:grid-cols-2">
+              <a href={productEnquiry(product.name)} target="_blank" rel="noopener noreferrer" className="btn-wa h-12">
+                <MessageCircle size={18} /> Ask on WhatsApp
+              </a>
+              <a href={SITE.phoneHref} className="btn-line h-12">
+                <Phone size={17} /> Call the shop
+              </a>
+            </div>
+          </div>
 
-            {/* Feature list */}
-            <div className="mt-10 space-y-4">
-              {[
-                { icon: ShieldCheck, text: "Genuine products with trusted after-sales support." },
-                { icon: Wrench, text: "Setup, maintenance, and repair services available." },
-                { icon: Truck, text: "Fast delivery and support in Bharatpur and nearby areas." },
-              ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-start gap-4 rounded-2xl bg-slate-900 border border-slate-800 px-5 py-4 shadow-sm transition-colors hover:border-slate-700">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-800 border border-slate-700">
-                    <Icon size={20} className="text-amber-500" />
-                  </span>
-                  <span className="text-slate-300 font-medium text-sm leading-relaxed self-center">
-                    {text}
-                  </span>
+          <ul className="mt-8 divide-y divide-line border-y border-line">
+            {[
+              { icon: ShieldCheck, title: "Genuine product", text: "Sold with after-sales support from our Bharatpur shop." },
+              { icon: Wrench, title: "Calibration & repair", text: "Setup, calibration and repair available from our workshop." },
+              { icon: Truck, title: "Delivery around Chitwan", text: "Pick up in-store or ask about delivery and on-site setup." },
+            ].map(({ icon: Icon, title, text }) => (
+              <li key={title} className="flex gap-4 py-4">
+                <Icon size={20} className="mt-0.5 shrink-0 text-signal-deep" />
+                <div>
+                  <p className="font-semibold text-ink">{title}</p>
+                  <p className="mt-0.5 text-sm text-ink-soft">{text}</p>
                 </div>
-              ))}
-            </div>
-
-            {/* CTA buttons */}
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row">
-              <a
-                href={waLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2.5 bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold px-6 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-sm"
-              >
-                <MessageCircle size={20} /> Chat on WhatsApp
-              </a>
-              <a 
-                href="tel:+9779845541939" 
-                className="flex-1 flex items-center justify-center gap-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-6 py-4 rounded-xl transition-all"
-              >
-                <Phone size={18} /> Call for pricing
-              </a>
-            </div>
-          </article>
-        </div>
+              </li>
+            ))}
+          </ul>
+        </article>
       </section>
+
+      {/* ── Related ─────────────────────────────────────────── */}
+      {related && related.length > 0 && (
+        <section className="container-site mt-20">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="text-[clamp(1.5rem,3vw,2.25rem)] font-bold tracking-[-0.03em] text-ink">More {categoryLabel.toLowerCase()}</h2>
+            <Link href={categoryHref} className="shrink-0 text-sm font-semibold text-ink underline decoration-ink/30 underline-offset-4 hover:decoration-ink">
+              View all
+            </Link>
+          </div>
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+            {related.map((p) => (
+              <ProductCard key={p.id} product={p as Product} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

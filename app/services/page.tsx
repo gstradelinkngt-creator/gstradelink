@@ -1,188 +1,143 @@
 import type { Metadata } from "next";
-import {
-  Wrench,
-  CheckCircle,
-  Package,
-  Settings,
-  Scale,
-  ShieldCheck,
-  ArrowRight,
-  MessageCircle,
-} from "lucide-react";
 import Link from "next/link";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { ArrowRight, Check, MessageCircle, Phone } from "lucide-react";
+import { SITE, waLink } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: "Repair & Calibration Services",
   description:
-    "Professional weighing scale calibration, repair services, and genuine spare parts in Bharatpur, Chitwan.",
+    "Weighing scale calibration, repair for all brands, genuine spare parts and installation in Bharatpur, Chitwan.",
 };
 
 const SERVICES = [
   {
-    icon: ShieldCheck,
-    title: "OIML Certification & Calibration",
-    desc: "Government-approved calibration services ensuring your weighing scales meet all legal metrology standards for commercial trading. We handle the paperwork and certification process.",
-    features: ["Standardized weight testing", "Certificate issuance", "Annual renewal tracking"],
+    title: "Calibration & OIML certification",
+    desc: "Your scale tested against certified standard weights and adjusted to legal metrology tolerances. We prepare the certificate and remind you when renewal is due.",
+    features: ["Standard-weight testing", "Certificate issued", "Annual renewal reminders"],
+    msg: "Hello GSTradeLink! I need my scale calibrated / certified.",
   },
   {
-    icon: Wrench,
-    title: "Expert Scale Repair",
-    desc: "Fast and reliable repair services for all major brands of digital scales and beam balances. Our experienced technicians can fix load cells, displays, and motherboard issues.",
-    features: ["On-site diagnostics", "Motherboard repairs", "Load cell replacement"],
+    title: "Repair for every brand",
+    desc: "Dead displays, drifting readings, broken keypads, failed load cells or boards — fixed by experienced technicians, for all major brands.",
+    features: ["On-site diagnostics", "Load cell & board repair", "Most jobs done in 24 hours"],
+    msg: "Hello GSTradeLink! My weighing scale needs repair.",
   },
   {
-    icon: Package,
-    title: "Genuine Spare Parts",
-    desc: "We stock a comprehensive range of genuine spare parts including batteries, adaptors, load cells, displays, and keypads to ensure your equipment runs smoothly without downtime.",
+    title: "Genuine spare parts",
+    desc: "Batteries, adaptors, load cells, displays, pans and keypads kept in stock, so your counter isn't left without a scale.",
     features: ["Original manufacturer parts", "Batteries & chargers", "Component upgrades"],
+    msg: "Hello GSTradeLink! I need a spare part for my scale.",
   },
   {
-    icon: Settings,
-    title: "Installation & Setup",
-    desc: "Complete setup and configuration for heavy-duty industrial platforms and complex weighing systems, including software integration and user training.",
-    features: ["Platform assembly", "Indicator configuration", "Staff training"],
+    title: "Installation & setup",
+    desc: "Platform and industrial scales assembled, levelled and configured on site — including indicator setup and a walkthrough for your staff.",
+    features: ["On-site assembly", "Indicator configuration", "Staff training"],
+    msg: "Hello GSTradeLink! I need a scale installed on site.",
   },
 ];
 
-const WA_BASE = "https://wa.me/9779845541939?text=";
+const STEPS = [
+  { t: "Tell us the problem", d: "Send a photo or short video on WhatsApp, or bring the scale to the shop." },
+  { t: "We diagnose and fix it", d: "Our technicians find the fault and repair it — most issues within 24 hours." },
+  { t: "Collect it calibrated", d: "Repaired, tested against standard weights, and ready to use." },
+];
 
 export default function ServicesPage() {
   return (
-    <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-12">
-      {/* ───────────────────────────── Hero ───────────────────────────── */}
-      <section className="relative overflow-hidden py-16 md:py-24 border-b border-slate-900">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="text-center lg:text-left">
-              <span className="mb-6 inline-flex items-center gap-2 rounded-full bg-slate-900 border border-slate-800 px-4 py-1.5 text-[0.7rem] font-bold uppercase tracking-widest text-slate-400">
-                <CheckCircle size={14} className="text-amber-500" />
-                Expert Services · Bharatpur
-              </span>
-
-              <h1
-                className="mb-6 font-bold text-slate-50"
-                style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.25rem)", letterSpacing: "-0.03em", lineHeight: 1.08 }}
-              >
-                Calibration & <br className="hidden lg:block" />
-                <span className="text-amber-500 italic block mt-2">
-                  Repair Services
-                </span>
-              </h1>
-
-              <p
-                className="mx-auto lg:mx-0 mb-10 text-slate-400"
-                style={{ fontSize: "clamp(1.05rem, 2vw, 1.15rem)", maxWidth: "34rem", lineHeight: 1.75 }}
-              >
-                From government-approved OIML calibration to motherboard repairs and spare part replacements, our technicians keep your business weighing accurately.
-              </p>
-
-              <div className="flex flex-col items-center justify-center gap-4 sm:flex-row lg:justify-start">
-                <a
-                  href={`${WA_BASE}${encodeURIComponent("Hello GSTradeLink! I need to book a repair/calibration service.")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 sm:w-auto shadow-sm"
-                >
-                  <Wrench size={20} /> Book a Service
-                </a>
-                <Link href="/contact" className="flex items-center justify-center gap-2.5 w-full bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-8 py-4 rounded-xl transition-all sm:w-auto shadow-sm">
-                  <MessageCircle size={18} /> Contact Us
-                </Link>
-              </div>
-            </div>
-
-            {/* Focal visual */}
-            <div className="relative hidden items-center justify-center lg:flex">
-              <div className="relative w-full max-w-sm">
-                <div className="bg-slate-900 border border-slate-800 flex aspect-square items-center justify-center rounded-[3rem] shadow-xl relative z-10 hover:border-slate-700 transition-colors">
-                  <div className="flex h-36 w-36 items-center justify-center rounded-3xl bg-amber-500 shadow-lg transition-transform duration-500 hover:scale-105">
-                    <Scale size={64} className="text-slate-950" />
-                  </div>
-                  <div className="absolute -left-4 -top-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-md">
-                    <ShieldCheck size={26} className="text-amber-500" />
-                  </div>
-                  <div className="absolute -bottom-4 -right-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-md">
-                    <Wrench size={24} className="text-amber-500" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ──────────────────────── Services Grid ──────────────────────── */}
-      <section className="block w-full py-16 md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center lg:text-left">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-50 mb-4">Our Core Services</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto lg:mx-0">
-            We provide end-to-end support for your weighing equipment. Whether you need a quick battery replacement or a full industrial platform installation, we are ready to help.
+    <div className="pb-20">
+      {/* ── Hero ─────────────────────────────────────────── */}
+      <section className="container-site grid gap-10 pb-16 pt-10 md:pt-16 lg:grid-cols-[1.2fr_1fr] lg:items-end lg:gap-16">
+        <div>
+          <p className="eyebrow flex items-center gap-2">
+            <span className="h-px w-6 bg-signal" /> Workshop · Bharatpur
           </p>
+          <h1 className="mt-6 text-[clamp(2.5rem,6vw,4.5rem)] font-bold leading-[1.02] tracking-[-0.035em] text-ink">
+            Repair and calibration for every scale.
+          </h1>
         </div>
-
-        <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            {SERVICES.map((service, index) => (
-              <div key={index} className="bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors rounded-3xl p-8 shadow-sm flex flex-col group">
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 transition-transform group-hover:scale-110 shrink-0">
-                  <service.icon size={28} className="text-amber-500" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-50 mb-3">{service.title}</h3>
-                <p className="text-slate-400 leading-relaxed mb-6 flex-1">
-                  {service.desc}
-                </p>
-                
-                <ul className="space-y-3 mt-auto pt-6 border-t border-slate-800">
-                  {service.features.map((feature, fIndex) => (
-                    <li key={fIndex} className="flex items-start gap-3">
-                      <CheckCircle size={18} className="text-emerald-500 mt-0.5 shrink-0" />
-                      <span className="text-sm font-medium text-slate-300">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+        <div>
+          <p className="text-lg leading-relaxed text-ink-soft">
+            From a jeweller&apos;s 0.001 g balance to a 300 kg crane scale — we fix it, certify it and keep it weighing
+            accurately.
+          </p>
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <a
+              href={waLink("Hello GSTradeLink! I need to book a repair/calibration service.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-wa h-12 px-6"
+            >
+              <MessageCircle size={18} /> Book a service
+            </a>
+            <a href={SITE.phoneHref} className="btn-line h-12 px-6">
+              <Phone size={17} /> {SITE.phoneDisplay}
+            </a>
           </div>
-        </ScrollReveal>
+        </div>
+      </section>
+      <div className="ruler" aria-hidden />
+
+      {/* ── Services ─────────────────────────────────────── */}
+      <section className="container-site py-20 md:py-24">
+        <ol className="grid gap-4 md:grid-cols-2">
+          {SERVICES.map((s, i) => (
+            <li key={s.title} className="flex flex-col rounded-[1.75rem] border border-line bg-surface p-6 sm:p-8">
+              <span className="font-mono text-sm text-signal-deep">{String(i + 1).padStart(2, "0")}</span>
+              <h2 className="mt-4 font-display text-2xl font-semibold tracking-tight text-ink">{s.title}</h2>
+              <p className="mt-3 leading-relaxed text-ink-soft">{s.desc}</p>
+              <ul className="mt-6 space-y-2.5 border-t border-line pt-6">
+                {s.features.map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm font-medium text-ink">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-wa/10">
+                      <Check size={12} strokeWidth={3} className="text-wa-deep" />
+                    </span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={waLink(s.msg)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group mt-auto inline-flex items-center gap-1.5 pt-8 text-sm font-semibold text-ink"
+              >
+                <span className="border-b border-ink/30 pb-0.5 group-hover:border-ink">Ask about this</span>
+                <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+              </a>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      {/* ── How it works ─────────────────────────────────── */}
+      <section className="bg-ink text-white">
+        <div className="container-site py-20 md:py-24">
+          <p className="eyebrow !text-white/50">How it works</p>
+          <h2 className="mt-4 max-w-xl text-[clamp(1.85rem,3.6vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.03em]">
+            How a repair works.
+          </h2>
+          <ol className="mt-12 grid gap-8 md:grid-cols-3 md:gap-6">
+            {STEPS.map((s, i) => (
+              <li key={s.t} className="border-t border-white/15 pt-6">
+                <span className="font-mono text-sm text-signal">Step {i + 1}</span>
+                <h3 className="mt-3 font-display text-xl font-semibold tracking-tight">{s.t}</h3>
+                <p className="mt-2 leading-relaxed text-white/60">{s.d}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
-      {/* ─────────────────────────── Bottom CTA ─────────────────────────── */}
-      <section className="block w-full py-16 md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ScrollReveal direction="up" delay={0} distance={24}>
-          <div className="bg-slate-900 overflow-hidden border border-slate-800 rounded-3xl px-8 py-16 sm:px-16 shadow-lg">
-            <div className="flex flex-col items-center justify-between gap-10 md:flex-row md:gap-16">
-              <div className="text-center md:text-left flex-1 max-w-xl">
-                <p className="mb-4 text-xs font-bold uppercase tracking-widest text-amber-500">
-                  Available Now
-                </p>
-                <h2 className="mb-5 font-bold text-slate-50" style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)", letterSpacing: "-0.025em", lineHeight: 1.15 }}>
-                  Need immediate scale repairs?
-                </h2>
-                <p className="text-slate-400 text-lg leading-relaxed">
-                  Drop off your scale at our Bharatpur store or request a technician to visit your site. We fix most issues within 24 hours.
-                </p>
-              </div>
-
-              <div className="flex w-full flex-col gap-4 sm:flex-row md:w-auto md:flex-col shrink-0">
-                <a
-                  href={`${WA_BASE}${encodeURIComponent("Hello GSTradeLink! I'd like to book an immediate service.")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-8 py-4 rounded-xl transition-all hover:-translate-y-0.5 shadow-sm md:w-64"
-                >
-                  <MessageCircle size={20} /> Chat on WhatsApp
-                </a>
-                <Link href="/products" className="flex items-center justify-center gap-2.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-bold px-8 py-4 rounded-xl transition-all shadow-sm md:w-64">
-                  Browse Spare Parts <ArrowRight size={18} />
-                </Link>
-              </div>
-            </div>
+      {/* ── CTA ──────────────────────────────────────────── */}
+      <section className="container-site mt-20">
+        <div className="flex flex-col gap-6 rounded-[1.75rem] border border-line bg-surface p-7 sm:p-10 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 className="text-[clamp(1.5rem,3vw,2.25rem)] font-bold tracking-[-0.03em] text-ink">Need a replacement instead?</h2>
+            <p className="mt-2 text-ink-soft">Browse the scales and spare parts we keep in stock.</p>
           </div>
-        </ScrollReveal>
+          <Link href="/products" className="btn-ink h-12 shrink-0 px-6">
+            Browse products <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
     </div>

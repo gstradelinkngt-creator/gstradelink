@@ -1,77 +1,59 @@
 "use client";
 
-import { Home, Package, Phone } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Home, LayoutGrid, MessageCircle, Phone, Wrench } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { SITE } from "@/lib/site";
 
+const ITEMS = [
+  { icon: Home, href: "/", label: "Home" },
+  { icon: LayoutGrid, href: "/products", label: "Products" },
+  { icon: Wrench, href: "/services", label: "Repair" },
+  { icon: Phone, href: SITE.phoneHref, label: "Call", external: true },
+];
+
+/** Mobile-only bottom bar: page shortcuts + a prominent WhatsApp action. */
 export const BottomNav = () => {
   const pathname = usePathname();
 
-  const navItems = [
-    { icon: Home, href: "/", label: "Home", external: false },
-    { icon: Package, href: "/products", label: "Catalogue", external: false },
-    { icon: Phone, href: "tel:+9779845541939", label: "Call", external: true },
-  ];
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-2 bg-gradient-to-t from-slate-950 via-slate-950/90 to-transparent pointer-events-none flex justify-center">
-      <div
-        className="bg-slate-900 border border-slate-800 flex items-center justify-around w-full max-w-sm px-2 py-2.5 shadow-2xl pointer-events-auto rounded-2xl"
-      >
-        {navItems.map((item, index) => {
-          const Icon = item.icon;
-          const isActive = item.external
-            ? false
-            : item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href) && item.href !== "/";
-
-          const itemClassName = cn(
-            "relative flex flex-col items-center justify-center gap-1 min-w-[64px] px-2 py-2 rounded-xl transition-all duration-300",
-            isActive 
-              ? "text-amber-500 bg-slate-800" 
-              : "text-slate-400 hover:text-slate-300 hover:bg-slate-800/50"
+    <nav
+      aria-label="Quick actions"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-paper/90 px-3 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl"
+    >
+      <div className="mx-auto flex max-w-md items-center gap-1">
+        {ITEMS.map(({ icon: Icon, href, label, external }) => {
+          const active = !external && (href === "/" ? pathname === "/" : pathname.startsWith(href));
+          const cls = cn(
+            "flex flex-1 flex-col items-center gap-1 rounded-xl py-1.5 text-[0.68rem] font-medium transition-colors",
+            active ? "text-ink" : "text-ink-mute",
           );
-
-          const content = (
+          const inner = (
             <>
-              <Icon
-                size={22}
-                strokeWidth={isActive ? 2.5 : 2}
-                className="transition-transform duration-300 active:scale-95"
-              />
-              <span className="text-[10px] font-semibold leading-none tracking-wide whitespace-nowrap">
-                {item.label}
-              </span>
+              <Icon size={20} strokeWidth={active ? 2.4 : 1.8} />
+              {label}
             </>
           );
-
-          if (item.external) {
-            return (
-              <a
-                key={index}
-                href={item.href}
-                className={itemClassName}
-                aria-label={item.label}
-              >
-                {content}
-              </a>
-            );
-          }
-
-          return (
-            <Link
-              key={index}
-              href={item.href}
-              className={itemClassName}
-              aria-label={item.label}
-            >
-              {content}
+          return external ? (
+            <a key={label} href={href} className={cls}>
+              {inner}
+            </a>
+          ) : (
+            <Link key={label} href={href} className={cls} aria-current={active ? "page" : undefined}>
+              {inner}
             </Link>
           );
         })}
+        <a
+          href={SITE.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn-wa ml-1 h-12 flex-[1.3] text-sm"
+        >
+          <MessageCircle size={18} /> Chat
+        </a>
       </div>
-    </div>
+    </nav>
   );
 };

@@ -2,10 +2,11 @@ import Link from "next/link";
 import { ProductCard } from "@/components/products/ProductCard";
 import { CategoryFilterBar } from "@/components/products/CategoryFilterBar";
 import { createClient } from "@/lib/supabase/server";
-import { Search, Sparkles, Wrench, X, ArrowRight } from "lucide-react";
+import { ArrowRight, MessageCircle, Search, Wrench, X } from "lucide-react";
 import type { Product } from "@/types";
 import type { CategoryChip } from "@/components/products/CategoryFilterBar";
-import { PRODUCT_CATEGORIES, CATEGORY_SHORT_LABELS } from "@/lib/categories";
+import { PRODUCT_CATEGORIES, CATEGORY_SHORT_LABELS, CATEGORY_ADMIN_LABELS } from "@/lib/categories";
+import { waLink } from "@/lib/site";
 
 export const revalidate = 60;
 
@@ -79,181 +80,141 @@ export default async function ProductsPage(props: {
     return query ? `/products?${query}` : "/products";
   };
 
-  const categoryChips: CategoryChip[] = [
-    ...FILTER_CATEGORIES.map((cat) => ({
-      category: cat,
-      label: CATEGORY_LABELS[cat],
-      href: buildCategoryHref(cat),
-      isService: false,
-    })),
-    // Services chip — links directly to the services page (not a product filter)
-    {
-      category: "services-link",
-      label: "Services",
-      href: "/services",
-      isService: true,
-    },
-  ];
+  const categoryChips: CategoryChip[] = FILTER_CATEGORIES.map((cat) => ({
+    category: cat,
+    label: CATEGORY_LABELS[cat],
+    href: buildCategoryHref(cat),
+  }));
 
   const hasActiveFilters = selectedCategory !== "All" || Boolean(searchQuery);
   const activeLabel = CATEGORY_LABELS[selectedCategory];
 
   return (
-    <div className="bg-slate-950 min-h-screen w-full overflow-hidden md:pb-16">
-      {/* ───────────────────────────── Hero ───────────────────────────── */}
-      <section className="relative overflow-hidden pb-8 pt-12 sm:pt-16 border-b border-slate-900">
-        <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center flex flex-col items-center">
-            <span className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-slate-900 border border-slate-800 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-amber-500">
-              <Sparkles size={14} />
-              Our Inventory
-            </span>
-
-            <h1
-              className="mb-4 font-bold text-slate-50"
-              style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)", letterSpacing: "-0.025em", lineHeight: 1.1 }}
-            >
-              Product <span className="text-amber-500">Catalogue</span>
+    <div className="pb-20">
+      {/* ───────────────────────────── Header ───────────────────────────── */}
+      <section className="container-site pt-10 md:pt-14">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <p className="eyebrow">Catalogue · {productList.length} {productList.length === 1 ? "item" : "items"}</p>
+            <h1 className="mt-3 text-[clamp(2.25rem,5vw,3.5rem)] font-bold leading-[1.02] tracking-[-0.035em] text-ink">
+              {selectedCategory === "All" ? "All products" : CATEGORY_ADMIN_LABELS[selectedCategory]}
             </h1>
-
-            <p
-              className="mx-auto mb-8 max-w-md text-slate-400"
-              style={{ fontSize: "clamp(0.85rem, 1.5vw, 0.95rem)", lineHeight: 1.6 }}
-            >
-              Precision scales, genuine spare parts, and professional service —
-              all in one place.
+            <p className="mt-3 text-ink-soft">
+              Ask on WhatsApp for today&apos;s price and stock — most items are ready to pick up in Bharatpur.
             </p>
-
-            {/* Search */}
-            <form action="/products" method="get" className="relative mx-auto w-full max-w-xl">
-              {selectedCategory !== "All" && (
-                <input type="hidden" name="category" value={selectedCategory} />
-              )}
-              <div className="relative flex w-full items-center overflow-hidden rounded-xl bg-slate-900 border border-slate-800 shadow-sm focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500 transition-all">
-                <span className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-                  <Search size={18} className="text-slate-500" />
-                </span>
-                <input
-                  type="text"
-                  name="q"
-                  defaultValue={searchQuery}
-                  placeholder="Search products..."
-                  className="h-14 w-full bg-transparent pl-12 pr-[7.5rem] text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none border-none ring-0"
-                />
-                <button
-                  type="submit"
-                  className="absolute inset-y-2 right-2 bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-5 rounded-lg transition-colors text-sm"
-                >
-                  Search
-                </button>
-              </div>
-            </form>
           </div>
+
+          <form action="/products" method="get" role="search" className="w-full lg:max-w-sm">
+            {selectedCategory !== "All" && <input type="hidden" name="category" value={selectedCategory} />}
+            <label htmlFor="product-search" className="sr-only">
+              Search products
+            </label>
+            <div className="flex h-12 items-center gap-2 rounded-xl border border-line-strong bg-surface pl-4 pr-1.5 transition-shadow focus-within:border-ink focus-within:shadow-lift">
+              <Search size={18} className="shrink-0 text-ink-mute" />
+              <input
+                id="product-search"
+                type="search"
+                name="q"
+                defaultValue={searchQuery}
+                placeholder="Search by name or capacity…"
+                className="h-full min-w-0 flex-1 bg-transparent text-[0.95rem] text-ink focus:outline-none"
+              />
+              <button type="submit" className="btn-ink h-9 px-4 text-sm">
+                Search
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
       {/* ──────────────────────────── Filter bar ──────────────────────────── */}
-      <section className="relative z-20 mx-auto max-w-7xl px-6 lg:px-8 pt-8">
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-2 sm:p-3 shadow-sm overflow-hidden">
-          <CategoryFilterBar
-            chips={categoryChips}
-            selectedCategory={selectedCategory}
-          />
+      <div className="sticky top-16 z-30 mt-8 border-y border-line bg-paper/90 backdrop-blur-xl md:top-[72px]">
+        <div className="container-site py-2.5">
+          <CategoryFilterBar chips={categoryChips} selectedCategory={selectedCategory} />
         </div>
-      </section>
+      </div>
 
       {/* ─────────────────────────── Results bar ─────────────────────────── */}
-      <section className="mx-auto mt-6 max-w-7xl px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-sm text-slate-400">
-              Showing{" "}
-              <span className="font-bold text-slate-50">
-                {productList.length}
-              </span>{" "}
-              {productList.length === 1 ? "product" : "products"}
-            </p>
-
-            {selectedCategory !== "All" && (
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-800 border border-slate-700 px-3 py-1 text-[11px] font-semibold text-amber-500 uppercase tracking-wide">
-                {activeLabel}
-              </span>
-            )}
-
+      {hasActiveFilters && (
+        <div className="container-site mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-ink-soft">
+          <span>
+            <span className="font-semibold text-ink">{productList.length}</span>{" "}
+            {productList.length === 1 ? "result" : "results"}
             {searchQuery && (
-              <span className="text-sm text-slate-400">
-                for{" "}
-                <span className="font-semibold italic text-slate-50">
-                  &ldquo;{searchQuery}&rdquo;
-                </span>
-              </span>
+              <>
+                {" "}for <span className="font-semibold text-ink">&ldquo;{searchQuery}&rdquo;</span>
+              </>
             )}
-          </div>
-
-          {hasActiveFilters && (
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-1.5 transition-all hover:gap-2 text-xs font-semibold text-red-400 hover:text-red-300"
-            >
-              <X size={14} />
-              Clear filters
-            </Link>
-          )}
+            {selectedCategory !== "All" && (
+              <>
+                {" "}in <span className="font-semibold text-ink">{activeLabel}</span>
+              </>
+            )}
+          </span>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-1 rounded-full border border-line bg-surface px-3 py-1 text-xs font-semibold text-ink hover:border-ink"
+          >
+            <X size={13} /> Clear
+          </Link>
         </div>
-      </section>
+      )}
 
       {/* ──────────────────────────── Product grid ──────────────────────────── */}
-      <section className="mx-auto mt-8 max-w-7xl px-6 lg:px-8 pb-16">
+      <section className="container-site mt-6">
         {productList.length > 0 ? (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {productList.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 xl:grid-cols-4">
+            {productList.map((product, i) => (
+              <ProductCard key={product.id} product={product} priority={i < 4} />
             ))}
           </div>
         ) : (
-          <div className="mx-auto max-w-lg rounded-3xl bg-slate-900 border border-dashed border-slate-700 p-10 text-center sm:p-14">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-slate-800">
-              <Search size={28} className="text-slate-400" />
+          <div className="mx-auto max-w-lg rounded-[1.75rem] border border-dashed border-line-strong bg-surface px-6 py-14 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-paper-2">
+              <Search size={24} className="text-ink-mute" />
             </div>
-            <p className="mb-3 font-bold text-slate-50 text-xl">
-              No products found
-            </p>
-            <p className="mb-8 text-sm text-slate-400 leading-relaxed">
+            <p className="mt-5 font-display text-xl font-semibold text-ink">Nothing matches that yet</p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
               {searchQuery
-                ? `We couldn't find anything matching "${searchQuery}". Try a different search term.`
-                : "No products in this category right now. Try browsing all products."}
+                ? `We couldn't find "${searchQuery}" in the catalogue. We stock more than we list — ask us directly.`
+                : "No products in this category right now. Ask us — we can usually source it."}
             </p>
-            <div className="flex justify-center">
-              <Link href="/products" className="bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold px-6 py-3 rounded-lg transition-colors">
+            <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">
+              <Link href="/products" className="btn-line h-11 px-5 text-sm">
                 View all products
               </Link>
+              <a
+                href={waLink(`Hello GSTradeLink! I'm looking for: ${searchQuery || activeLabel}`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-wa h-11 px-5 text-sm"
+              >
+                <MessageCircle size={16} /> Ask on WhatsApp
+              </a>
             </div>
           </div>
         )}
       </section>
 
       {/* ──────────────────────────── Services CTA ──────────────────────────── */}
-      {selectedCategory === "All" && !searchQuery && productList.length > 0 && (
-        <section className="mx-auto max-w-7xl px-6 lg:px-8 pb-16">
+      {!hasActiveFilters && productList.length > 0 && (
+        <section className="container-site mt-16">
           <Link
             href="/services"
-            className="group flex flex-col items-center justify-between gap-5 rounded-2xl bg-slate-900 border border-slate-800 p-6 sm:flex-row sm:p-8 transition-colors hover:border-slate-700"
+            className="group flex flex-col gap-5 rounded-[1.75rem] bg-ink p-7 text-white sm:flex-row sm:items-center sm:justify-between sm:p-10"
           >
-            <div className="flex items-center gap-5">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 transition-transform group-hover:scale-105">
-                <Wrench size={24} className="text-amber-500" />
-              </div>
-              <div className="text-center sm:text-left">
-                <p className="mb-1 font-bold text-slate-50 text-lg">
-                  Need repair or calibration?
-                </p>
-                <p className="text-sm text-slate-400">
-                  On-site maintenance and expert support across Chitwan
-                </p>
+            <div className="flex items-start gap-5">
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                <Wrench size={22} className="text-signal" />
+              </span>
+              <div>
+                <p className="font-display text-2xl font-semibold tracking-tight">Already own a scale?</p>
+                <p className="mt-1 text-white/60">We repair and calibrate every brand — in the shop or on site.</p>
               </div>
             </div>
-            <span className="bg-slate-800 group-hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold px-6 py-3 rounded-lg shrink-0 transition-colors flex items-center gap-2">
-              View Services <ArrowRight size={16} />
+            <span className="inline-flex shrink-0 items-center gap-2 font-semibold">
+              Repair &amp; calibration
+              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
             </span>
           </Link>
         </section>

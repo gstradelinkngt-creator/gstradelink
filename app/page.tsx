@@ -1,538 +1,314 @@
-import { createClient } from "@/lib/supabase/server";
-import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowRight,
-  CheckCircle,
-  Phone,
-  Wrench,
-  Shield,
-  Star,
-  MapPin,
-  Clock,
-  ChevronRight,
-  MessageCircle,
-  Users,
-  Award,
-  Zap,
-} from "lucide-react";
-import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { InteractiveMarquee } from "@/components/ui/InteractiveMarquee";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight, MapPin, MessageCircle, Phone } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
+import { ProductCard } from "@/components/products/ProductCard";
+import { PRODUCT_CATEGORIES, CATEGORY_ADMIN_LABELS, type ProductCategory } from "@/lib/categories";
+import { SITE } from "@/lib/site";
+import { HoursTable } from "@/components/site/HoursTable";
+import type { Product } from "@/types";
 
 export const revalidate = 60;
 
-async function getFeaturedCategories() {
-  const supabase = await createClient();
-  const categories = [
-    "Precision & Pocket Mini Scales",
-    "Kitchen & Compact Tabletop Scales",
-    "Portable & Luggage Scales",
-    "Heavy-Duty Hanging & Crane Scales",
-    "Personal Health & Bathroom Scales",
-    "Packaging & Miscellaneous Equipment",
-  ] as const;
-  const results = await Promise.all(
-    categories.map(async (cat) => {
-      const { data } = await supabase
-        .from("products")
-        .select("id, name, category, image_url")
-        .eq("category", cat)
-        .eq("is_active", true)
-        .order("created_at", { ascending: false })
-        .limit(1)
-        .single();
-      return { category: cat, product: data };
-    })
-  );
-  return results;
-}
+type HomeProduct = Pick<Product, "id" | "name" | "short_description" | "category" | "image_url">;
 
-async function getFeaturedProducts() {
+async function getProducts(): Promise<HomeProduct[]> {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("products")
     .select("id, name, short_description, category, image_url")
     .eq("is_active", true)
-    .order("created_at", { ascending: false })
-    .limit(6);
-  return data ?? [];
+    .order("created_at", { ascending: false });
+  if (error) console.error("Error fetching products:", error);
+  return (data ?? []) as HomeProduct[];
 }
 
-const CATEGORY_META: Record<
-  string,
-  { label: string; emoji: string; desc: string }
-> = {
-  "Precision & Pocket Mini Scales": {
-    label: "Precision Scales",
-    emoji: "💎",
-    desc: "High accuracy up to 0.001g",
-  },
-  "Kitchen & Compact Tabletop Scales": {
-    label: "Kitchen Scales",
-    emoji: "🥗",
-    desc: "For homes & bakeries",
-  },
-  "Portable & Luggage Scales": {
-    label: "Luggage Scales",
-    emoji: "🧳",
-    desc: "Travel & handheld",
-  },
-  "Heavy-Duty Hanging & Crane Scales": {
-    label: "Crane & Industrial",
-    emoji: "🏗️",
-    desc: "Heavy-duty platforms",
-  },
-  "Personal Health & Bathroom Scales": {
-    label: "Health & Baby",
-    emoji: "👶",
-    desc: "Personal weighing",
-  },
-  "Packaging & Miscellaneous Equipment": {
-    label: "Packaging Equip",
-    emoji: "📦",
-    desc: "Sealers & blowers",
-  },
+const CATEGORY_BLURB: Record<ProductCategory, string> = {
+  "Precision & Pocket Mini Scales": "Jewellery, lab and pocket scales down to 0.001 g",
+  "Kitchen & Compact Tabletop Scales": "Counter scales for shops, kitchens and bakeries",
+  "Portable & Luggage Scales": "Handheld hanging scales for travel and trade",
+  "Heavy-Duty Hanging & Crane Scales": "Crane and hanging scales up to 300 kg",
+  "Personal Health & Bathroom Scales": "Bathroom, health and baby scales",
+  "Packaging & Miscellaneous Equipment": "Impulse sealers and packing tools",
 };
 
-const TRUST_ITEMS = [
-  { Icon: Shield, label: "Authorized dealer" },
-  { Icon: Wrench, label: "Expert repair" },
-  { Icon: CheckCircle, label: "OIML calibration" },
+const SERVICES = [
+  { title: "Calibration & certification", desc: "OIML-standard testing with certificates accepted for commercial trade." },
+  { title: "Repair, any brand", desc: "Load cells, displays, keypads and boards diagnosed and fixed — most within 24 hours." },
+  { title: "Genuine spare parts", desc: "Batteries, adaptors, load cells and pans kept in stock at the shop." },
+  { title: "Installation & training", desc: "Platform and industrial scales set up on site, with staff walkthroughs." },
 ];
 
-const STATS = [
-  { value: "500+", label: "Happy Customers", sub: "Businesses served", Icon: Users },
-  { value: "8+", label: "Years Experience", sub: "In Bharatpur since 2015", Icon: Award },
-  { value: "24h", label: "Response Time", sub: "Fast on-site service", Icon: Zap },
+const REASONS = [
+  { k: "Since 2015", v: "A decade of selling and fixing scales in Bharatpur." },
+  { k: "Walk-in shop", v: "See and test a scale before you buy it." },
+  { k: "On-site visits", v: "Technicians travel across Chitwan for bigger installs." },
+  { k: "Fast replies", v: "WhatsApp and phone enquiries answered the same day." },
 ];
-
-const WHY_US = [
-  {
-    icon: Wrench,
-    title: "Expert Repair",
-    desc: "All major brands serviced by certified technicians with years of hands-on experience.",
-  },
-  {
-    icon: Shield,
-    title: "Genuine Parts",
-    desc: "Authorized distributor stocking only original, manufacturer-approved spare parts.",
-  },
-  {
-    icon: CheckCircle,
-    title: "OIML Calibration",
-    desc: "Govt-recognized calibration certificates accepted by legal & commercial authorities.",
-  },
-  {
-    icon: Clock,
-    title: "24h Response",
-    desc: "Fast on-site service across all of Chitwan — we come to you when you need us most.",
-  },
-  {
-    icon: Star,
-    title: "500+ Customers",
-    desc: "Serving retail shops, factories, and institutions across Chitwan since 2015.",
-  },
-  {
-    icon: MapPin,
-    title: "Walk-in Store",
-    desc: "Visit us at Bharatpur-3, Chitwan — showroom open Sun–Sat (except Mon), 10 AM – 6 PM.",
-  },
-];
-
-const WA = "https://wa.me/9779845541939";
 
 export default async function Home() {
-  const [featuredCategories, featuredProducts] = await Promise.all([
-    getFeaturedCategories(),
-    getFeaturedProducts(),
-  ]);
+  const products = await getProducts();
+
+  const withImage = products.filter((p) => p.image_url);
+  const hero = withImage.slice(0, 3);
+  const featured = products.slice(0, 8);
+
+  const categories = PRODUCT_CATEGORIES.map((category) => {
+    const inCat = products.filter((p) => p.category === category);
+    return {
+      category,
+      count: inCat.length,
+      image: inCat.find((p) => p.image_url)?.image_url ?? null,
+    };
+  });
 
   return (
-    <div className="bg-slate-950 min-h-screen w-full overflow-hidden">
-      {/* ═══════════════════════════════ HERO ═══════════════════════════════ */}
-      <section className="relative overflow-hidden border-b border-slate-900">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Content */}
-            <div className="text-center lg:text-left flex flex-col space-y-6">
-              <div className="flex justify-center lg:justify-start">
-                <span className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium sm:text-sm bg-slate-900 border border-slate-800 text-slate-300">
-                  <CheckCircle size={14} className="text-amber-500" />
-                  <span>Trusted Since 2015 · Bharatpur, Chitwan</span>
+    <>
+      {/* ───────────────────────────── Hero ───────────────────────────── */}
+      <section className="relative overflow-hidden">
+        <div className="container-site grid items-center gap-12 pb-16 pt-10 md:pt-16 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-24">
+          <div>
+            <p className="eyebrow flex items-center gap-2">
+              <span className="h-px w-6 bg-signal" />
+              Authorized dealer · {SITE.address.replace(", Nepal", "")}
+            </p>
+            <h1 className="mt-6 text-[clamp(2.6rem,6.2vw,4.75rem)] font-bold leading-[1.02] tracking-[-0.035em] text-ink">
+              Scales that weigh it <span className="relative whitespace-nowrap">
+                right
+                <svg aria-hidden viewBox="0 0 200 12" className="absolute -bottom-1 left-0 h-3 w-full text-signal" preserveAspectRatio="none">
+                  <path d="M2 8c40-6 120-8 196-2" stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round" />
+                </svg>
+              </span>
+              , every time.
+            </h1>
+            <p className="mt-6 max-w-[34rem] text-lg leading-relaxed text-ink-soft">
+              Digital scales and beam balances for shops, kitchens, jewellers and warehouses — plus calibration,
+              repair and genuine spare parts from our shop in Bharatpur.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link href="/products" className="btn-ink h-13 px-6 text-[0.95rem]">
+                Browse {products.length > 0 ? `${products.length} products` : "products"} <ArrowRight size={18} />
+              </Link>
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer" className="btn-line h-13 px-6 text-[0.95rem]">
+                <MessageCircle size={18} className="text-wa" /> Ask on WhatsApp
+              </a>
+            </div>
+
+            <dl className="mt-12 grid max-w-lg grid-cols-3 border-t border-line pt-6">
+              {[
+                { v: "0.001 g", k: "Finest readability" },
+                { v: "300 kg", k: "Heaviest crane scale" },
+                { v: `${new Date().getFullYear() - SITE.since}+ yrs`, k: "In Bharatpur" },
+              ].map(({ v, k }) => (
+                <div key={k} className="pr-3">
+                  <dt className="sr-only">{k}</dt>
+                  <dd className="font-mono text-lg font-medium tabular-nums text-ink sm:text-xl">{v}</dd>
+                  <dd className="mt-1 text-xs leading-snug text-ink-mute">{k}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          {/* Product mosaic */}
+          {hero.length === 3 && (
+            <div className="relative mx-auto grid w-full max-w-xl grid-cols-[1.25fr_1fr] gap-3 sm:gap-4">
+              <Link
+                href={`/products/${hero[0].id}`}
+                className="group relative row-span-2 aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-paper-2 shadow-float"
+              >
+                <Image src={hero[0].image_url!} alt={hero[0].name} fill priority sizes="(max-width: 1024px) 55vw, 32vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+                <span className="absolute inset-x-3 bottom-3 rounded-xl bg-white/90 px-3 py-2 text-sm font-semibold text-ink backdrop-blur">
+                  <span className="line-clamp-1">{hero[0].name}</span>
                 </span>
-              </div>
-
-              <h1
-                className="font-bold tracking-tight text-slate-50"
-                style={{ fontSize: "clamp(2.2rem, 5.5vw, 4rem)", lineHeight: 1.1 }}
-              >
-                <span>Professional </span>
-                <span className="text-amber-500">Weighing</span>
-                <br className="hidden sm:block" />
-                <span> Solutions in </span>
-                <span className="text-amber-500">Chitwan</span>
-              </h1>
-
-              <p
-                className="mx-auto max-w-xl lg:mx-0 text-slate-400"
-                style={{
-                  fontSize: "clamp(0.95rem, 2vw, 1.1rem)",
-                  lineHeight: 1.7,
-                }}
-              >
-                Authorized dealer for digital scales &amp; beam balances. Expert
-                repair services and genuine spare parts in Bharatpur.
-              </p>
-
-              <div className="flex flex-col justify-center gap-4 sm:flex-row lg:justify-start pt-6">
-                <Link
-                  href="/products"
-                  className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-6 py-3.5 rounded-lg transition-colors duration-200 shadow-sm flex items-center justify-center gap-2 w-full sm:w-auto"
-                >
-                  Shop Products <ArrowRight size={18} />
+              </Link>
+              {hero.slice(1).map((p) => (
+                <Link key={p.id} href={`/products/${p.id}`} className="group relative aspect-square overflow-hidden rounded-[1.5rem] bg-paper-2 shadow-lift">
+                  <Image src={p.image_url!} alt={p.name} fill priority sizes="(max-width: 1024px) 40vw, 24vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
                 </Link>
-                <a
-                  href={WA}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-6 py-3.5 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 w-full sm:w-auto"
-                >
-                  <MessageCircle size={18} /> WhatsApp Us
-                </a>
-              </div>
+              ))}
 
-              {/* Mini trust row */}
-              <div className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-4 lg:justify-start pt-6 border-t border-slate-800/60 max-w-xl mx-auto lg:mx-0 w-full">
-                {TRUST_ITEMS.map(({ Icon, label }) => (
-                  <div
-                    key={label}
-                    className="inline-flex items-center gap-2 text-sm text-slate-400 font-medium"
-                  >
-                    <Icon size={16} className="text-amber-500 shrink-0" />
-                    <span>{label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Focal visual (desktop) */}
-            <div className="relative hidden items-center justify-center lg:flex z-10">
-              <div className="relative w-full max-w-sm">
-                <div className="relative flex aspect-square items-center justify-center rounded-3xl bg-slate-900 border border-slate-800 shadow-xl p-8 z-10">
-                  <div className="flex h-36 w-36 items-center justify-center rounded-2xl bg-slate-800 border border-slate-700 shadow-inner">
-                    <svg
-                      className="h-20 w-20 text-slate-300"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={1.4}
-                    >
-                      <path
-                         strokeLinecap="round"
-                         strokeLinejoin="round"
-                         d="M12 3v17.25m0 0c-1.472 0-2.882.265-4.185.75C6.583 21.58 5 22.328 5 23.25v.75c0 .414.336.75.75.75h12.5c.414 0 .75-.336.75-.75v-.75c0-.922-1.583-1.67-2.815-2.25C15.882 20.515 14.472 20.25 13 20.25H12zM12 3L8.25 8.25h7.5L12 3z"
-                      />
-                    </svg>
-                  </div>
+              {/* LCD readout chip */}
+              <div className="absolute -bottom-5 left-4 flex items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3 shadow-float sm:-left-6">
+                <div className="rounded-lg bg-[#c9d8c1] px-3 py-1.5 font-mono text-xl font-medium tabular-nums tracking-tight text-[#1f2a1d] shadow-inner">
+                  0.001<span className="ml-1 text-sm">g</span>
                 </div>
-
-                {/* Trust info chip */}
-                <div className="mt-4 flex items-center gap-3 rounded-2xl px-5 py-4 bg-slate-900 border border-slate-800 shadow-xl">
-                  <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)] animate-pulse shrink-0" />
-                  <span className="text-sm font-semibold text-slate-50 truncate">
-                    Precision you can trust
-                  </span>
-                  <span className="ml-auto text-xs font-medium text-slate-400 shrink-0">
-                    Mon–Sat
-                  </span>
+                <div className="text-xs leading-tight text-ink-soft">
+                  Precision
+                  <br />
+                  <span className="font-semibold text-ink">you can test in-store</span>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
+        <div className="ruler" aria-hidden />
       </section>
 
-      {/* ═══════════════════════════ STATS STRIP ═══════════════════════════ */}
-      <section className="block w-full relative z-20 bg-slate-950">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-          <div className="bg-slate-900 border border-slate-800 grid grid-cols-1 sm:grid-cols-3 overflow-hidden rounded-2xl shadow-lg divide-y sm:divide-y-0 sm:divide-x divide-slate-800">
-          {STATS.map(({ value, label, sub, Icon }, i) => (
-            <div
-              key={label}
-              className="flex flex-col items-center justify-center gap-3 px-4 py-8 text-center sm:px-6 sm:py-10"
-            >
-              <span className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-slate-800 border border-slate-700 sm:h-14 sm:w-14">
-                <Icon size={20} className="text-amber-500 shrink-0" />
-              </span>
-              <span
-                className="font-extrabold text-slate-50 leading-none"
-                style={{ fontSize: "clamp(1.8rem, 4vw, 2.5rem)" }}
+      {/* ─────────────────────────── Categories ─────────────────────────── */}
+      <section className="container-site py-20 md:py-28">
+        <SectionHead
+          eyebrow="Shop by category"
+          title="Find the right scale for the job"
+          action={{ href: "/products", label: "Full catalogue" }}
+        />
+        <ul className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+          {categories.map(({ category, count, image }) => (
+            <li key={category}>
+              <Link
+                href={`/products?category=${encodeURIComponent(category)}`}
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface transition-[box-shadow,border-color] duration-300 hover:border-line-strong hover:shadow-lift sm:flex-row"
               >
-                {value}
-              </span>
-              <span
-                className="font-semibold text-slate-300 leading-tight"
-                style={{ fontSize: "clamp(0.85rem, 1.5vw, 1rem)" }}
-              >
-                {label}
-              </span>
-              <span className="text-[0.8rem] font-medium text-slate-500">
-                {sub}
-              </span>
-            </div>
+                <span className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-paper-2 sm:aspect-auto sm:w-[42%]">
+                  {image && (
+                    <Image src={image} alt="" fill sizes="(max-width: 640px) 50vw, 18vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.05]" />
+                  )}
+                </span>
+                <span className="flex flex-1 flex-col p-4 sm:p-5">
+                  <span className="font-display text-[1.05rem] font-semibold leading-tight tracking-tight text-ink sm:text-lg">
+                    {CATEGORY_ADMIN_LABELS[category]}
+                  </span>
+                  <span className="mt-1.5 hidden text-sm leading-snug text-ink-soft sm:block">{CATEGORY_BLURB[category]}</span>
+                  <span className="mt-auto flex items-center justify-between pt-4 font-mono text-[0.7rem] uppercase tracking-wider text-ink-mute">
+                    {count} {count === 1 ? "model" : "models"}
+                    <ArrowUpRight size={16} className="text-ink transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </span>
+                </span>
+              </Link>
+            </li>
           ))}
-          </div>
-        </div>
+        </ul>
       </section>
 
-      {/* ═══════════════════════════ CATEGORIES ═══════════════════════════ */}
-      <section className="block w-full py-16 md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal direction="up" delay={0} distance={24}>
-            <div className="mb-12 text-center flex flex-col space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500">
-                What We Offer
-              </p>
-              <h2 className="font-bold text-slate-50" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
-                Browse by Category
-              </h2>
-              <p className="mx-auto max-w-md text-slate-400 text-base">
-                From retail counters to heavy-duty industrial platforms — we have
-                it all.
-              </p>
+      {/* ──────────────────────── Latest products ──────────────────────── */}
+      {featured.length > 0 && (
+        <section className="border-y border-line bg-paper-2/60">
+          <div className="container-site py-20 md:py-28">
+            <SectionHead
+              eyebrow="New in the shop"
+              title="Latest arrivals"
+              action={{ href: "/products", label: "See all products" }}
+            />
+            <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+              {featured.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
-          </ScrollReveal>
-
-          <div className="relative w-full">
-            <InteractiveMarquee
-              speed={35}
-              gap={24}
-              pauseOnInteractionDuration={3000}
-              className="py-4 px-2"
-            >
-              {featuredCategories.map(({ category, product }, idx) => {
-                const meta = CATEGORY_META[category];
-                return (
-                  <Link
-                    key={`${category}-${idx}`}
-                    href={`/products?category=${encodeURIComponent(category)}`}
-                    className="block shrink-0 rounded-2xl bg-slate-900 border border-slate-800 p-5 transition-colors hover:border-slate-700 w-[260px] group"
-                  >
-                    <div className="aspect-square overflow-hidden rounded-lg bg-slate-800 relative mb-5 flex items-center justify-center p-4">
-                      {product?.image_url ? (
-                        <Image
-                          src={product.image_url}
-                          alt={meta.label}
-                          fill
-                          className="object-contain p-2 transition-transform duration-500 group-hover:scale-110"
-                          sizes="260px"
-                        />
-                      ) : (
-                        <div className="text-5xl">
-                          {meta.emoji}
-                        </div>
-                      )}
-                    </div>
-                    
-                    <div className="flex flex-col">
-                      <span className="font-bold text-slate-50 text-base mb-1 line-clamp-1">
-                        {meta.label}
-                      </span>
-                      <span className="text-slate-400 text-sm line-clamp-1">
-                        {meta.desc}
-                      </span>
-                      <span className="mt-3 flex items-center gap-1 font-semibold text-amber-500 text-sm">
-                        View all <ChevronRight size={14} />
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </InteractiveMarquee>
-
-            <div className="mt-6 flex items-center justify-center gap-3 text-xs font-medium text-slate-500">
-              <span className="inline-block h-px w-8 bg-slate-800" />
-              <span>Drag to explore</span>
-              <span className="inline-block h-px w-8 bg-slate-800" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════ FEATURED PRODUCTS ════════════════════════ */}
-      {featuredProducts.length > 0 && (
-        <section className="block w-full py-16 md:py-24">
-          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            <ScrollReveal direction="up" delay={0} distance={24}>
-              <div className="mb-12 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-                <div className="flex flex-col space-y-3">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500">
-                    Top Picks
-                  </p>
-                  <h2 className="font-bold text-slate-50" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
-                    Featured Products
-                  </h2>
-                  <p className="text-slate-400 text-base">
-                    Our most popular weighing equipment
-                  </p>
-                </div>
-                <Link
-                  href="/products"
-                  className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-amber-500 hover:text-amber-400 transition-colors"
-                >
-                  Browse all products
-                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
-            </ScrollReveal>
-
-            <ScrollReveal direction="up" delay={60} distance={20}>
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {featuredProducts.map((product) => {
-                  const waMsg = `Hello GSTradeLink! I'm interested in the ${product.name}. Could you please share availability and pricing?`;
-                  const waLink = `${WA}?text=${encodeURIComponent(waMsg)}`;
-                  return (
-                    <div
-                      key={product.id}
-                      className="bg-slate-900 border border-slate-800 rounded-2xl p-5 sm:p-6 flex flex-col group transition-colors hover:border-slate-700"
-                    >
-                      <Link
-                        href={`/products/${product.id}`}
-                        className="aspect-square overflow-hidden rounded-lg bg-slate-800 relative mb-5 block"
-                      >
-                        {product.image_url ? (
-                          <Image
-                            src={product.image_url}
-                            alt={product.name}
-                            fill
-                            className="object-contain transition-transform duration-500 group-hover:scale-105"
-                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center text-5xl">
-                            ⚖️
-                          </div>
-                        )}
-                        <span className="absolute left-3 top-3 max-w-[85%] rounded-md px-2.5 py-1 text-[10px] font-bold tracking-wider bg-slate-900/90 text-slate-200 border border-slate-700 backdrop-blur-md uppercase truncate">
-                          {product.category}
-                        </span>
-                      </Link>
-
-                      <div className="flex flex-col flex-1 mt-2">
-                        <Link href={`/products/${product.id}`} className="mb-2">
-                          <h3 className="line-clamp-2 font-bold text-slate-50 transition-colors group-hover:text-amber-500 text-lg">
-                            {product.name}
-                          </h3>
-                        </Link>
-                        {product.short_description && (
-                          <p className="line-clamp-3 text-slate-400 text-sm mb-6">
-                            {product.short_description}
-                          </p>
-                        )}
-                        <div className="mt-auto pt-4 grid grid-cols-2 gap-3">
-                          <Link
-                            href={`/products/${product.id}`}
-                            className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium px-4 py-2.5 rounded-lg flex items-center justify-center text-sm transition-colors text-center"
-                          >
-                            Details
-                          </Link>
-                          <a
-                            href={waLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-semibold px-4 py-2.5 rounded-lg flex justify-center items-center gap-1.5 text-sm transition-colors shadow-sm text-center"
-                          >
-                            <MessageCircle size={15} className="shrink-0" /> Enquire
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </ScrollReveal>
           </div>
         </section>
       )}
 
-      {/* ═══════════════════════════ WHY CHOOSE US ═══════════════════════════ */}
-      <section className="block w-full py-16 md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal direction="up" delay={0} distance={24}>
-            <div className="mb-12 text-center flex flex-col space-y-3">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500">
-                Our Strengths
-              </p>
-              <h2 className="font-bold text-slate-50" style={{ fontSize: "clamp(1.5rem, 4vw, 2.4rem)" }}>
-                Why Choose GSTradeLink?
-              </h2>
-              <p className="mx-auto max-w-md text-slate-400 text-base">
-                8+ years of weighing expertise in Bharatpur — built on trust,
-                quality, and service.
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" delay={80} distance={20}>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {WHY_US.map(({ icon: Icon, title, desc }) => (
-                <div
-                  key={title}
-                  className="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col items-start"
-                >
-                  <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-amber-500 shrink-0">
-                    <Icon size={24} className="shrink-0" />
-                  </div>
-                  <h3 className="mb-2 font-bold text-slate-50 text-lg">
-                    {title}
-                  </h3>
-                  <p className="text-slate-400 text-sm leading-relaxed">
-                    {desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════ FINAL CTA ═══════════════════════════ */}
-      <section className="block w-full py-16 md:py-24">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-          <ScrollReveal direction="up" delay={0} distance={28}>
-            <div className="mx-auto w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl p-8 sm:p-16 text-center shadow-xl">
-              <div className="mx-auto max-w-xl flex flex-col items-center">
-              <span className="mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider bg-slate-800 border border-slate-700 text-amber-500">
-                <MessageCircle size={14} /> Quick Response Guaranteed
-              </span>
-              <h2 className="mb-4 font-bold text-slate-50" style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)" }}>
-                Ready to get a quote?
-              </h2>
-              <p className="mb-10 text-slate-400 text-base sm:text-lg max-w-md mx-auto">
-                Message us on WhatsApp — we respond within 24 hours and deliver
-                across all of Chitwan.
-              </p>
-              <div className="flex flex-col items-center justify-center gap-4 w-full sm:w-auto sm:flex-row mt-4">
-                <a
-                  href={WA}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-slate-950 font-bold px-8 py-3.5 rounded-lg flex items-center justify-center gap-2.5 w-full sm:w-auto shadow-sm transition-colors"
-                >
-                  <MessageCircle size={20} className="shrink-0" /> Chat on WhatsApp
-                </a>
-                <a
-                  href="tel:+9779845541939"
-                  className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-semibold px-8 py-3.5 rounded-lg flex items-center justify-center gap-2.5 w-full sm:w-auto transition-colors"
-                >
-                  <Phone size={18} className="shrink-0" /> Call Now
-                </a>
-              </div>
+      {/* ──────────────────────── Services (ink band) ──────────────────────── */}
+      <section className="bg-ink text-white">
+        <div className="container-site grid gap-12 py-20 md:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+          <div>
+            <p className="eyebrow !text-white/50">Workshop</p>
+            <h2 className="mt-4 text-[clamp(2rem,4.2vw,3.25rem)] font-bold leading-[1.05] tracking-[-0.03em]">
+              Scale acting up? We repair and calibrate every brand.
+            </h2>
+            <p className="mt-5 max-w-md text-white/65">
+              Bring it to the shop or have a technician visit your site. Most issues are fixed within 24 hours.
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href={`${SITE.whatsapp}?text=${encodeURIComponent("Hello GSTradeLink! My weighing scale needs repair/calibration.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-wa h-12 px-6"
+              >
+                <MessageCircle size={18} /> Book a repair
+              </a>
+              <Link
+                href="/services"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-white/20 px-6 font-semibold text-white transition-colors hover:border-white/50"
+              >
+                All services <ArrowRight size={17} />
+              </Link>
             </div>
           </div>
-          </ScrollReveal>
+
+          <ol className="divide-y divide-white/10 border-y border-white/10">
+            {SERVICES.map((s, i) => (
+              <li key={s.title} className="grid grid-cols-[3rem_1fr] gap-4 py-6">
+                <span className="font-mono text-sm text-signal">{String(i + 1).padStart(2, "0")}</span>
+                <div>
+                  <h3 className="font-display text-xl font-semibold tracking-tight">{s.title}</h3>
+                  <p className="mt-1.5 text-[0.95rem] leading-relaxed text-white/60">{s.desc}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
+
+      {/* ──────────────────────── Why us + visit ──────────────────────── */}
+      <section className="container-site py-20 md:py-28">
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+          <div>
+            <SectionHead eyebrow="Why GSTradeLink" title="A local shop that stands behind what it sells" />
+            <dl className="mt-10 grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {REASONS.map(({ k, v }) => (
+                <div key={k} className="border-t border-ink pt-4">
+                  <dt className="font-display text-lg font-semibold tracking-tight text-ink">{k}</dt>
+                  <dd className="mt-1.5 text-[0.95rem] leading-relaxed text-ink-soft">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="rounded-[1.75rem] border border-line bg-surface p-6 sm:p-8">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="eyebrow">Visit the shop</p>
+                <p className="mt-3 font-display text-2xl font-semibold tracking-tight text-ink">{SITE.address}</p>
+              </div>
+              <a
+                href={SITE.mapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-signal-soft text-signal-deep transition-colors hover:bg-signal hover:text-white"
+                aria-label="Open in Google Maps"
+              >
+                <MapPin size={20} />
+              </a>
+            </div>
+            <HoursTable className="mt-6" />
+            <div className="mt-6 grid gap-2 sm:grid-cols-2">
+              <a href={SITE.phoneHref} className="btn-ink h-12 text-sm">
+                <Phone size={16} /> {SITE.phoneDisplay}
+              </a>
+              <a href={SITE.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn-line h-12 text-sm">
+                Get directions <ArrowUpRight size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function SectionHead({
+  eyebrow,
+  title,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  action?: { href: string; label: string };
+}) {
+  return (
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="max-w-2xl">
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="mt-3 text-[clamp(1.85rem,3.6vw,2.75rem)] font-bold leading-[1.08] tracking-[-0.03em] text-ink">{title}</h2>
+      </div>
+      {action && (
+        <Link href={action.href} className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-ink">
+          <span className="border-b border-ink/30 pb-0.5 transition-colors group-hover:border-ink">{action.label}</span>
+          <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+        </Link>
+      )}
     </div>
   );
 }
